@@ -30,9 +30,6 @@ import java.util.List;
  */
 public class ENAConstants
 {
-    public static final String RECORD_STATUS = "status";
-    public static final String RECORD_STATUS_DEL = "deleted";
-    
     public static final String PROVIDER = "European Nucleotide Archive (ENA)";
     public static final String TITLE = "Sequence: %s.%s";
     public static final String SIZE_PREFIX = "Sequence length: ";

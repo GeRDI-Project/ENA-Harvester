@@ -45,7 +45,10 @@ import java.util.*;
 
 /**
  * A harvester for the ENA Database 
+ * There are parameters to setup a harvestable range: accfrom and accto. See ENAParameterConstants
  * (https://www.ebi.ac.uk/ena/data/view/Taxon:Human,Taxon:Cat,Taxon:Mouse,Taxon:Zebrafish,Taxon:Bacillus%20Subtilis).
+ * To harvest only house mouse taxon: https://www.ebi.ac.uk/ena/data/view/Taxon:10090&portal=sequence_release&display=xml
+ * useage hint: how many records are available for a single result set -> use the "resultcount" parameter
  *
  * @author Jan Frömberg
  */
@@ -55,7 +58,7 @@ public class EnaHarvester extends AbstractListHarvester<Element>
     private final SimpleDateFormat dateFormat;
 
     /**
-     * This is as contructor to initialize the Harvester.
+     * This is the constructor to initialize the Harvester.
      */
     public EnaHarvester()
     {
@@ -102,7 +105,8 @@ public class EnaHarvester extends AbstractListHarvester<Element>
     /**
      * Harvest the ENA DB
      * create document for each entry-tag
-     * example entry: <entry accession="BC003740" version="1" entryVersion="15" dataClass="STD" taxonomicDivision="MUS" moleculeType="mRNA" sequenceLength="2141" topology="linear"
+     * example entry: <entry accession="BC003740" version="1" entryVersion="15" dataClass="STD" 
+     * taxonomicDivision="MUS" moleculeType="mRNA" sequenceLength="2141" topology="linear"
      * firstPublic="2001-03-17" firstPublicRelease="67" lastUpdated="2008-09-24" lastUpdatedRelease="97">
      * 
      * @param entry

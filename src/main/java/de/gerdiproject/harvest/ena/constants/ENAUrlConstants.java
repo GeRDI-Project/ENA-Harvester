@@ -25,14 +25,9 @@ package de.gerdiproject.harvest.ena.constants;
  */
 public class ENAUrlConstants
 {
-    // QUERY
-    public static final String DATE_FROM_QUERY = "&from=";
-    public static final String DATE_TO_QUERY = "&until=";
-    public static final String METADATA_PREFIX_QUERY = "&metadataPrefix=";
-
     // URLs
+	//private static final String PROVIDER_URL = "https://www.ebi.ac.uk/ena";
     public final static String BASE_URL = "https://www.ebi.ac.uk/ena/data/view/%s-%s&display=xml&header=true";
-    //private static final String PROVIDER_URL = "https://www.ebi.ac.uk/ena";
     public static final String VIEW_URL = "https://www.ebi.ac.uk/ena/data/view/%s";
     public static final String VIEW_URL_TEXT = "https://www.ebi.ac.uk/ena/data/view/%s&display=text";
     public static final String VIEW_URL_XML = "https://www.ebi.ac.uk/ena/data/view/%s&display=xml";
