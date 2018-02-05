@@ -1,4 +1,4 @@
-# GeRDI Harvester Image for OAI-PMH Harvesters
+# GeRDI Harvester Image for ENA Harvesters
 
 FROM jetty:9.4.7-alpine
 

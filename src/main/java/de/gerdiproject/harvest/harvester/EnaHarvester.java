@@ -48,7 +48,7 @@ import java.util.*;
  * There are parameters to setup a harvestable range: accfrom and accto. See ENAParameterConstants
  * (https://www.ebi.ac.uk/ena/data/view/Taxon:Human,Taxon:Cat,Taxon:Mouse,Taxon:Zebrafish,Taxon:Bacillus%20Subtilis).
  * To harvest only house mouse taxon: https://www.ebi.ac.uk/ena/data/view/Taxon:10090&portal=sequence_release&display=xml
- * useage hint: how many records are available for a single result set -> use the "resultcount" parameter
+ * usage hint: how many records are available for a single result set -> use the "resultcount" parameter
  *
  * @author Jan Frömberg
  */
@@ -68,6 +68,9 @@ public class EnaHarvester extends AbstractListHarvester<Element>
         dateFormat = new SimpleDateFormat("yyyy'-'MM'-'dd");
     }
 
+    /**
+     * Set the ENA ACCESSION-Range Properties (e.g. BC003740-BC093740) and check if they are set. If not, run init() to reset the parameters.
+     */
     @Override
     public void setProperty(String key, String value)
     {
@@ -80,21 +83,22 @@ public class EnaHarvester extends AbstractListHarvester<Element>
     }
 
     /**
-     * Grab stuff from a domain URL
+     * Grab ENA-DB-Entries from a parameterized (properties) domain URL (XML)
      * @return A collection of elements
      */
     @Override
     protected Collection<Element> loadEntries()
     {
         String domainsUrl = String.format(ENAUrlConstants.BASE_URL, getProperty(ENAParameterConstants.PROPERTY_FROM_KEY), getProperty(ENAParameterConstants.PROPERTY_TO_KEY));
-        //logger.info(domainsUrl);
         Document doc = httpRequester.getHtmlFromUrl(domainsUrl);
-        //logger.info("Document null?: " + (doc == null));
-        //logger.info(doc.html());
-        //logger.info("found " + doc.select("entry").size() + " documents from " + domainsUrl);
+
         return doc.select("entry");
     }
 
+    /**
+     * Function for creating the ENA Resource Type
+     * @return a Sequencing Data ResourceType for the ENA DB
+     */
     private static ResourceType createResourceType()
     {
         ResourceType resourceType = new ResourceType(ENAConstants.SEQ_DATA, ResourceTypeGeneral.Dataset);
@@ -104,12 +108,12 @@ public class EnaHarvester extends AbstractListHarvester<Element>
 
     /**
      * Harvest the ENA DB
-     * create document for each entry-tag
+     * This method creates a searchable gerdi-json-datacite-document for each entry-element
      * example entry: <entry accession="BC003740" version="1" entryVersion="15" dataClass="STD" 
      * taxonomicDivision="MUS" moleculeType="mRNA" sequenceLength="2141" topology="linear"
      * firstPublic="2001-03-17" firstPublicRelease="67" lastUpdated="2008-09-24" lastUpdatedRelease="97">
      * 
-     * @param entry
+     * @param entry, An single entry-Element derived from the collection via loadEntries() with its sub-Elements
      * @return
      */
     @Override
@@ -135,7 +139,7 @@ public class EnaHarvester extends AbstractListHarvester<Element>
         Title mainTitle = new Title(String.format(ENAConstants.TITLE, accession, version));
         document.setTitles(Arrays.asList(mainTitle));
 
-        // get source ; TODO: what to do?
+        // get source ; TODO: what to do? include it in a further release
         //Source source = new Source(String.format(VIEW_URL_XML, accession), PROVIDER);
         //source.setProviderURI(PROVIDER_URL);
         //document.setSources(source);
