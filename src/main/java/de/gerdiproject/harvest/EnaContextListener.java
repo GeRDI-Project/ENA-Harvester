@@ -20,6 +20,7 @@ package de.gerdiproject.harvest;
 
 import de.gerdiproject.harvest.config.parameters.AbstractParameter;
 import de.gerdiproject.harvest.config.parameters.StringParameter;
+import de.gerdiproject.harvest.ena.constants.ENAParameterConstants;
 import de.gerdiproject.harvest.harvester.EnaHarvester;
 
 import java.util.Arrays;
@@ -34,19 +35,17 @@ import javax.servlet.annotation.WebListener;
  */
 @WebListener
 public class EnaContextListener extends ContextListener<EnaHarvester>
-{
-	private final static String ENTRY_DEFAULT_FROM = "BC003738";
-    private final static String ENTRY_DEFAULT_TO = "BC003838";
-    public final static String PROPERTY_FROM = "accfrom";
-    public final static String PROPERTY_TO = "accto";
-	
+{	
     @Override
     protected List<AbstractParameter<?>> getHarvesterSpecificParameters()
     {
-        //StringParameter versionParam = new StringParameter("version", "v1");
-        //StringParameter languageParam = new StringParameter("language", "de");
-        StringParameter propertyFrom = new StringParameter(PROPERTY_FROM, ENTRY_DEFAULT_FROM);
-        StringParameter propertyTo = new StringParameter(PROPERTY_TO, ENTRY_DEFAULT_TO);
+        StringParameter propertyFrom = new StringParameter(
+            ENAParameterConstants.PROPERTY_FROM_KEY,
+            ENAParameterConstants.ENTRY_DEFAULT_FROM);
+
+        StringParameter propertyTo = new StringParameter(
+            ENAParameterConstants.PROPERTY_TO_KEY,
+            ENAParameterConstants.ENTRY_DEFAULT_TO);
 
         return Arrays.asList(propertyFrom, propertyTo);
     }

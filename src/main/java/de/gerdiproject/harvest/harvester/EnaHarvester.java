@@ -18,8 +18,10 @@
  */
 package de.gerdiproject.harvest.harvester;
 
-import de.gerdiproject.harvest.EnaContextListener;
 import de.gerdiproject.harvest.IDocument;
+import de.gerdiproject.harvest.ena.constants.ENAConstants;
+import de.gerdiproject.harvest.ena.constants.ENAParameterConstants;
+import de.gerdiproject.harvest.ena.constants.ENAUrlConstants;
 import de.gerdiproject.json.datacite.*;
 import de.gerdiproject.json.datacite.Date;
 import de.gerdiproject.json.datacite.abstr.AbstractDate;
@@ -42,44 +44,21 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * A harvester for the ENA Database (https://www.ebi.ac.uk/ena/data/view/Taxon:Human,Taxon:Cat,Taxon:Mouse,Taxon:Zebrafish,Taxon:Bacillus%20Subtilis).
+ * A harvester for the ENA Database 
+ * There are parameters to setup a harvestable range: accfrom and accto. See ENAParameterConstants
+ * (https://www.ebi.ac.uk/ena/data/view/Taxon:Human,Taxon:Cat,Taxon:Mouse,Taxon:Zebrafish,Taxon:Bacillus%20Subtilis).
+ * To harvest only house mouse taxon: https://www.ebi.ac.uk/ena/data/view/Taxon:10090&portal=sequence_release&display=xml
+ * usage hint: how many records are available for a single result set -> use the "resultcount" parameter
  *
  * @author Jan Frömberg
  */
 public class EnaHarvester extends AbstractListHarvester<Element>
 {
-    private final static String BASE_URL = "https://www.ebi.ac.uk/ena/data/view/%s-%s&display=xml&header=true";
-
-    private static final String PROVIDER = "European Nucleotide Archive (ENA)";
-    //private static final String PROVIDER_URL = "https://www.ebi.ac.uk/ena";
-
-    private static final List<String> FORMATS = Collections.unmodifiableList(Arrays.asList("XML", "FASTA", "TEXT"));
     private static final ResourceType RESOURCE_TYPE = createResourceType();
-
-    private static final String VIEW_URL = "https://www.ebi.ac.uk/ena/data/view/%s";
-    private static final String VIEW_URL_TEXT = "https://www.ebi.ac.uk/ena/data/view/%s&display=text";
-    private static final String VIEW_URL_XML = "https://www.ebi.ac.uk/ena/data/view/%s&display=xml";
-    private static final String VIEW_URL_FASTA = "https://www.ebi.ac.uk/ena/data/view/%s&display=fasta";
-
-    private static final String DOWNLOAD_URL_TEXT = VIEW_URL_TEXT + "&download=txt&filename=%s.txt";
-    private static final String DOWNLOAD_URL_XML = VIEW_URL_XML + "&download=xml&filename=%s.xml";
-    private static final String DOWNLOAD_URL_FASTA = VIEW_URL_FASTA + "&download=fasta&filename=%s.fasta";
-
-    private static final String VERSION_HISTORY_URL = "https://www.ebi.ac.uk/cgi-bin/sva/sva.pl?search=Go&amp;query=%s";
-    private static final String TAXON_URL = "https://www.ebi.ac.uk/ena/data/view/Taxon:%s";
-
-    private static final String THUMBNAIL_URL = "https://www.ebi.ac.uk/ena/data/view/graphics/%s&showSequence=false&featureRange=1-%s";
-    private static final String LOGO_URL = "https://www.ebi.ac.uk/web_guidelines/images/logos/ena/ENA-logo.png";
-
-    private static final String TITLE = "Sequence: %s.%s";
-    private static final String SIZE_PREFIX = "Sequence length: ";
-
     private final SimpleDateFormat dateFormat;
 
-
     /**
-     * Default Constructor. Sets language to "en" and version to "v1". Version
-     * and language are essential parts of the URL.
+     * This is the constructor to initialize the Harvester.
      */
     public EnaHarvester()
     {
@@ -89,47 +68,52 @@ public class EnaHarvester extends AbstractListHarvester<Element>
         dateFormat = new SimpleDateFormat("yyyy'-'MM'-'dd");
     }
 
+    /**
+     * Set the ENA ACCESSION-Range Properties (e.g. BC003740-BC093740) and check if they are set. If not, run init() to reset the parameters.
+     */
     @Override
     public void setProperty(String key, String value)
     {
         super.setProperty(key, value);
 
-        if (getProperty(EnaContextListener.PROPERTY_FROM ) != null 
-        		&& getProperty(EnaContextListener.PROPERTY_TO ) != null 
-        		&& (key.equals(EnaContextListener.PROPERTY_FROM) || key.equals(EnaContextListener.PROPERTY_TO)))
+        if (getProperty(ENAParameterConstants.PROPERTY_FROM_KEY ) != null 
+        		&& getProperty(ENAParameterConstants.PROPERTY_TO_KEY ) != null 
+        		&& (key.equals(ENAParameterConstants.PROPERTY_FROM_KEY) || key.equals(ENAParameterConstants.PROPERTY_TO_KEY)))
             init();
     }
 
     /**
-     * Grap stuff from URL
+     * Grab ENA-DB-Entries from a parameterized (properties) domain URL (XML)
      * @return A collection of elements
      */
     @Override
     protected Collection<Element> loadEntries()
     {
-        String domainsUrl = String.format(BASE_URL, getProperty(EnaContextListener.PROPERTY_FROM), getProperty(EnaContextListener.PROPERTY_TO));
-        //logger.info(domainsUrl);
+        String domainsUrl = String.format(ENAUrlConstants.BASE_URL, getProperty(ENAParameterConstants.PROPERTY_FROM_KEY), getProperty(ENAParameterConstants.PROPERTY_TO_KEY));
         Document doc = httpRequester.getHtmlFromUrl(domainsUrl);
-        //logger.info("Document null?: " + (doc == null));
-        //logger.info(doc.html());
-        //logger.info("found " + doc.select("entry").size() + " documents from " + domainsUrl);
+
         return doc.select("entry");
     }
 
+    /**
+     * Function for creating the ENA Resource Type
+     * @return a Sequencing Data ResourceType for the ENA DB
+     */
     private static ResourceType createResourceType()
     {
-        ResourceType resourceType = new ResourceType("Sequencing Data", ResourceTypeGeneral.Dataset);
+        ResourceType resourceType = new ResourceType(ENAConstants.SEQ_DATA, ResourceTypeGeneral.Dataset);
 
         return resourceType;
     }
 
     /**
      * Harvest the ENA DB
-     * create document for each entry-tag
-     * example entry: <entry accession="BC003740" version="1" entryVersion="15" dataClass="STD" taxonomicDivision="MUS" moleculeType="mRNA" sequenceLength="2141" topology="linear"
+     * This method creates a searchable gerdi-json-datacite-document for each entry-element
+     * example entry: <entry accession="BC003740" version="1" entryVersion="15" dataClass="STD" 
+     * taxonomicDivision="MUS" moleculeType="mRNA" sequenceLength="2141" topology="linear"
      * firstPublic="2001-03-17" firstPublicRelease="67" lastUpdated="2008-09-24" lastUpdatedRelease="97">
      * 
-     * @param entry
+     * @param entry, An single entry-Element derived from the collection via loadEntries() with its sub-Elements
      * @return
      */
     @Override
@@ -138,24 +122,24 @@ public class EnaHarvester extends AbstractListHarvester<Element>
         // get attributes
         Elements children = entry.children();
         Attributes attributes = entry.attributes();
-        String version = attributes.get("version");
-        String accession = attributes.get("accession");
+        String version = attributes.get(ENAConstants.VERSION);
+        String accession = attributes.get(ENAConstants.ACCESSION);
 
         DataCiteJson document = new DataCiteJson();
         document.setVersion(version);
-        document.setPublisher(PROVIDER);
-        document.setFormats(FORMATS);
+        document.setPublisher(ENAConstants.PROVIDER);
+        document.setFormats(ENAConstants.FORMATS);
         document.setResourceType(RESOURCE_TYPE);
 
         // get size
-        String sequenceLength = SIZE_PREFIX + attributes.get("sequenceLength");
+        String sequenceLength = ENAConstants.SIZE_PREFIX + attributes.get(ENAConstants.SEQUENCE_LENGTH);
         document.setSizes(Arrays.asList(sequenceLength));
 
         // get titles
-        Title mainTitle = new Title(String.format(TITLE, accession, version));
+        Title mainTitle = new Title(String.format(ENAConstants.TITLE, accession, version));
         document.setTitles(Arrays.asList(mainTitle));
 
-        // get source ; TODO: what to do?
+        // get source ; TODO: what to do? include it in a further release
         //Source source = new Source(String.format(VIEW_URL_XML, accession), PROVIDER);
         //source.setProviderURI(PROVIDER_URL);
         //document.setSources(source);
@@ -165,51 +149,51 @@ public class EnaHarvester extends AbstractListHarvester<Element>
 
         // get publication date
         try {
-        		cal.setTime(dateFormat.parse(attributes.get("firstPublic")));
+        		cal.setTime(dateFormat.parse(attributes.get(ENAConstants.FIRST_PUBLIC)));
             document.setPublicationYear((short) cal.get(Calendar.YEAR));
 
-            Date publicationDate = new Date(attributes.get("firstPublic"), DateType.Available);
+            Date publicationDate = new Date(attributes.get(ENAConstants.FIRST_PUBLIC), DateType.Available);
             dates.add(publicationDate);
         } catch (ParseException e) { //NOPMD do nothing. just do not add the date if it does not exist
         }
 
-        Date updatedDate = new Date(attributes.get("lastUpdated"), DateType.Updated);
+        Date updatedDate = new Date(attributes.get(ENAConstants.LAST_UPDATED), DateType.Updated);
 		dates.add(updatedDate);
 
         // get web links
         List<WebLink> links = new LinkedList<>();
-        WebLink viewLink = new WebLink(String.format(VIEW_URL, accession));
-        viewLink.setName("View website");
+        WebLink viewLink = new WebLink(String.format(ENAUrlConstants.VIEW_URL, accession));
+        viewLink.setName(ENAUrlConstants.VIEW_URL_NAME);
         viewLink.setType(WebLinkType.ViewURL);
         links.add(viewLink);
 
-        WebLink viewLinkText = new WebLink(String.format(VIEW_URL_TEXT, accession));
-        viewLinkText.setName("View plain text");
+        WebLink viewLinkText = new WebLink(String.format(ENAUrlConstants.VIEW_URL_TEXT, accession));
+        viewLinkText.setName(ENAUrlConstants.VIEW_URL_TXT_NAME);
         viewLinkText.setType(WebLinkType.ViewURL);
         links.add(viewLinkText);
 
-        WebLink viewLinkXml = new WebLink(String.format(VIEW_URL_XML, accession));
-        viewLinkXml.setName("View XML");
+        WebLink viewLinkXml = new WebLink(String.format(ENAUrlConstants.VIEW_URL_XML, accession));
+        viewLinkXml.setName(ENAUrlConstants.VIEW_URL_XML_NAME);
         viewLinkXml.setType(WebLinkType.ViewURL);
         links.add(viewLinkXml);
 
-        WebLink viewLinkFasta = new WebLink(String.format(VIEW_URL_FASTA, accession));
-        viewLinkFasta.setName("View FASTA");
+        WebLink viewLinkFasta = new WebLink(String.format(ENAUrlConstants.VIEW_URL_FASTA, accession));
+        viewLinkFasta.setName(ENAUrlConstants.VIEW_URL_FASTA_NAME);
         viewLinkFasta.setType(WebLinkType.ViewURL);
         links.add(viewLinkFasta);
 
-        WebLink versionHistoryLink = new WebLink(String.format(VERSION_HISTORY_URL, accession));
-        versionHistoryLink.setName("Version History");
+        WebLink versionHistoryLink = new WebLink(String.format(ENAUrlConstants.VERSION_HISTORY_URL, accession));
+        versionHistoryLink.setName(ENAUrlConstants.VERSION_HISTORY_URL_NAME);
         versionHistoryLink.setType(WebLinkType.Related);
         links.add(versionHistoryLink);
 
-        WebLink previewImage = new WebLink(String.format(THUMBNAIL_URL, accession, attributes.get("sequenceLength")));
-        previewImage.setName("Overview");
+        WebLink previewImage = new WebLink(String.format(ENAUrlConstants.THUMBNAIL_URL, accession, attributes.get(ENAConstants.SEQUENCE_LENGTH)));
+        previewImage.setName(ENAUrlConstants.PREVIEW_IMAGE_NAME);
         previewImage.setType(WebLinkType.ThumbnailURL);
         links.add(previewImage);
 
-        WebLink logoLink = new WebLink(LOGO_URL);
-        logoLink.setName("Logo");
+        WebLink logoLink = new WebLink(ENAUrlConstants.LOGO_URL);
+        logoLink.setName(ENAUrlConstants.LOGO_URL_NAME);
         logoLink.setType(WebLinkType.ProviderLogoURL);
         links.add(logoLink);
 
@@ -218,13 +202,13 @@ public class EnaHarvester extends AbstractListHarvester<Element>
         // get downloads
         List<ResearchData> files = new LinkedList<>();
 
-        ResearchData downloadLinkText = new ResearchData(String.format(DOWNLOAD_URL_TEXT, accession, accession), "TXT");
+        ResearchData downloadLinkText = new ResearchData(String.format(ENAUrlConstants.DOWNLOAD_URL_TEXT, accession, accession), ENAConstants.TXT);
         files.add(downloadLinkText);
 
-        ResearchData downloadLinkXml = new ResearchData(String.format(DOWNLOAD_URL_XML, accession, accession), "XML");
+        ResearchData downloadLinkXml = new ResearchData(String.format(ENAUrlConstants.DOWNLOAD_URL_XML, accession, accession), ENAConstants.XML);
         files.add(downloadLinkXml);
 
-        ResearchData downloadLinkFasta = new ResearchData(String.format(DOWNLOAD_URL_FASTA, accession, accession), "FASTA");
+        ResearchData downloadLinkFasta = new ResearchData(String.format(ENAUrlConstants.DOWNLOAD_URL_FASTA, accession, accession), ENAConstants.FASTA);
         files.add(downloadLinkFasta);
 
         document.setResearchDataList(files);
@@ -232,14 +216,14 @@ public class EnaHarvester extends AbstractListHarvester<Element>
         // get descriptions
         List<Description> descriptions = new LinkedList<>();
 
-        Elements descriptionElements = children.select("description");
+        Elements descriptionElements = children.select(ENAConstants.DESCRIPTION);
 
         for (Element descElement : descriptionElements) {
             Description description = new Description(descElement.text(), DescriptionType.Abstract);
             descriptions.add(description);
         }
 
-        Elements commentElements = children.select("comment");
+        Elements commentElements = children.select(ENAConstants.COMMENT);
 
         for (Element commentElement : commentElements) {
             Description description = new Description(commentElement.text(), DescriptionType.Other);
@@ -250,7 +234,7 @@ public class EnaHarvester extends AbstractListHarvester<Element>
 
         // get keyword subjects
         List<Subject> subjects = new LinkedList<>();
-        Elements keywordElements = children.select("keyword");
+        Elements keywordElements = children.select(ENAConstants.KEYWORD);
 
         for (Element keywordElement : keywordElements) {
             Subject subject = new Subject(keywordElement.text());
@@ -258,32 +242,32 @@ public class EnaHarvester extends AbstractListHarvester<Element>
         }
 
         // get attribute subjects
-        subjects.add(new Subject(attributes.get("dataClass")));
-        subjects.add(new Subject(attributes.get("taxonomicDivision")));
-        subjects.add(new Subject(attributes.get("moleculeType")));
+        subjects.add(new Subject(attributes.get(ENAConstants.DATACLASS)));
+        subjects.add(new Subject(attributes.get(ENAConstants.TAX_DIVISION)));
+        subjects.add(new Subject(attributes.get(ENAConstants.MOLECULETYPE)));
 
         document.setSubjects(subjects);
 
         List<RelatedIdentifier> relatedIdentifiers = new LinkedList<>();
 
         // parse references
-        Elements referenceElements = children.select("reference");
+        Elements referenceElements = children.select(ENAConstants.REFERENCE);
 
         for (Element refElement : referenceElements) {
-            String type = refElement.attr("type");
+            String type = refElement.attr(ENAConstants.REF_TYPE);
 
             switch (type) {
                 default:
                     break;
 
-                case "article":
+                case ENAConstants.REF_ARTICLE:
 
                     // get DOIs
                     Elements doiRefs = refElement.getElementsByAttributeValue("db", "DOI");
 
                     for (Element doiRef : doiRefs) {
                         relatedIdentifiers.add(new RelatedIdentifier(
-                                                   doiRef.attr("id"),
+                                                   doiRef.attr(ENAConstants.REF_ATTR_ID),
                                                    RelatedIdentifierType.DOI,
                                                    RelationType.IsReferencedBy));
                     }
@@ -293,19 +277,19 @@ public class EnaHarvester extends AbstractListHarvester<Element>
 
                     for (Element pmidRef : pmidRefs) {
                         relatedIdentifiers.add(new RelatedIdentifier(
-                                                   pmidRef.attr("id"),
+                                                   pmidRef.attr(ENAConstants.REF_ATTR_ID),
                                                    RelatedIdentifierType.PMID,
                                                    RelationType.IsReferencedBy));
                     }
 
                     break;
 
-                case "submission":
+                case ENAConstants.REF_SUBMISSION:
 
                     // get submission date
                     try {
                         Date submissionDate = new Date(
-                            refElement.children().select("submissionDate").get(0).text(),
+                            refElement.children().select(ENAConstants.REF_SUBMISSION_DATE).get(0).text(),
                             DateType.Submitted);
                         dates.add(submissionDate);
                     } catch (NullPointerException e) { //NOPMD skip this date, if it does not exist or is malformed
@@ -316,17 +300,17 @@ public class EnaHarvester extends AbstractListHarvester<Element>
         }
 
         // parse features
-        Elements taxonElements = children.select("taxon");
+        Elements taxonElements = children.select(ENAConstants.TAXON);
 
         for (Element taxonElement : taxonElements) {
 
-            String taxonName = taxonElement.attr("scientificName");
+            String taxonName = taxonElement.attr(ENAConstants.TAX_SCIENTIFIC_NAME);
             // add taxon link
-            String taxId = taxonElement.attr("taxId");
+            String taxId = taxonElement.attr(ENAConstants.TAX_ID);
 
             if (!taxId.isEmpty()) {
-                WebLink taxonLink = new WebLink(String.format(TAXON_URL, taxonElement.attr("taxId")));
-                taxonLink.setName("View Organism: " + taxonName);
+                WebLink taxonLink = new WebLink(String.format(ENAUrlConstants.TAXON_URL, taxonElement.attr(ENAConstants.TAX_ID)));
+                taxonLink.setName(ENAUrlConstants.TAXON_URL_NAME + taxonName);
                 taxonLink.setType(WebLinkType.Related);
                 links.add(taxonLink);
             }
@@ -334,7 +318,7 @@ public class EnaHarvester extends AbstractListHarvester<Element>
             // add name and common name to subjects
             subjects.add(new Subject(taxonName));
 
-            String commonName = taxonElement.attr("commonName");
+            String commonName = taxonElement.attr(ENAConstants.TAX_COMMON_NAME);
 
             if (!commonName.isEmpty())
                 subjects.add(new Subject(commonName));
