@@ -44,7 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * A harvester for the ENA Database 
+ * A harvester for the ENA Database
  * There are parameters to setup a harvestable range: accfrom and accto. See ENAParameterConstants
  * (https://www.ebi.ac.uk/ena/data/view/Taxon:Human,Taxon:Cat,Taxon:Mouse,Taxon:Zebrafish,Taxon:Bacillus%20Subtilis).
  * To harvest only house mouse taxon: https://www.ebi.ac.uk/ena/data/view/Taxon:10090&portal=sequence_release&display=xml
@@ -76,9 +76,9 @@ public class EnaHarvester extends AbstractListHarvester<Element>
     {
         super.setProperty(key, value);
 
-        if (getProperty(ENAParameterConstants.PROPERTY_FROM_KEY ) != null 
-        		&& getProperty(ENAParameterConstants.PROPERTY_TO_KEY ) != null 
-        		&& (key.equals(ENAParameterConstants.PROPERTY_FROM_KEY) || key.equals(ENAParameterConstants.PROPERTY_TO_KEY)))
+        if (getProperty(ENAParameterConstants.PROPERTY_FROM_KEY) != null
+            && getProperty(ENAParameterConstants.PROPERTY_TO_KEY) != null
+            && (key.equals(ENAParameterConstants.PROPERTY_FROM_KEY) || key.equals(ENAParameterConstants.PROPERTY_TO_KEY)))
             init();
     }
 
@@ -109,10 +109,10 @@ public class EnaHarvester extends AbstractListHarvester<Element>
     /**
      * Harvest the ENA DB
      * This method creates a searchable gerdi-json-datacite-document for each entry-element
-     * example entry: <entry accession="BC003740" version="1" entryVersion="15" dataClass="STD" 
+     * example entry: <entry accession="BC003740" version="1" entryVersion="15" dataClass="STD"
      * taxonomicDivision="MUS" moleculeType="mRNA" sequenceLength="2141" topology="linear"
      * firstPublic="2001-03-17" firstPublicRelease="67" lastUpdated="2008-09-24" lastUpdatedRelease="97">
-     * 
+     *
      * @param entry, An single entry-Element derived from the collection via loadEntries() with its sub-Elements
      * @return
      */
@@ -149,7 +149,7 @@ public class EnaHarvester extends AbstractListHarvester<Element>
 
         // get publication date
         try {
-        		cal.setTime(dateFormat.parse(attributes.get(ENAConstants.FIRST_PUBLIC)));
+            cal.setTime(dateFormat.parse(attributes.get(ENAConstants.FIRST_PUBLIC)));
             document.setPublicationYear((short) cal.get(Calendar.YEAR));
 
             Date publicationDate = new Date(attributes.get(ENAConstants.FIRST_PUBLIC), DateType.Available);
@@ -158,7 +158,7 @@ public class EnaHarvester extends AbstractListHarvester<Element>
         }
 
         Date updatedDate = new Date(attributes.get(ENAConstants.LAST_UPDATED), DateType.Updated);
-		dates.add(updatedDate);
+        dates.add(updatedDate);
 
         // get web links
         List<WebLink> links = new LinkedList<>();

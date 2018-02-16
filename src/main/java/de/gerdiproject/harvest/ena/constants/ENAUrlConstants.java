@@ -26,7 +26,7 @@ package de.gerdiproject.harvest.ena.constants;
 public class ENAUrlConstants
 {
     // URLs
-	//private static final String PROVIDER_URL = "https://www.ebi.ac.uk/ena";
+    //private static final String PROVIDER_URL = "https://www.ebi.ac.uk/ena";
     public final static String BASE_URL = "https://www.ebi.ac.uk/ena/data/view/%s-%s&display=xml&header=true";
     public static final String VIEW_URL = "https://www.ebi.ac.uk/ena/data/view/%s";
     public static final String VIEW_URL_TEXT = "https://www.ebi.ac.uk/ena/data/view/%s&display=text";
@@ -42,7 +42,7 @@ public class ENAUrlConstants
 
     public static final String THUMBNAIL_URL = "https://www.ebi.ac.uk/ena/data/view/graphics/%s&showSequence=false&featureRange=1-%s";
     public static final String LOGO_URL = "https://www.ebi.ac.uk/web_guidelines/images/logos/ena/ENA-logo.png";
-    
+
     //NAMES
     public final static String VIEW_URL_NAME = "View website";
     public final static String TAXON_URL_NAME = "View Organism: ";
@@ -51,8 +51,8 @@ public class ENAUrlConstants
     public final static String VIEW_URL_FASTA_NAME = "View FASTA";
     public final static String VERSION_HISTORY_URL_NAME = "Version History";
     public final static String PREVIEW_IMAGE_NAME = "Overview";
-    public final static String LOGO_URL_NAME= "Logo";
-    
+    public final static String LOGO_URL_NAME = "Logo";
+
     /**
      * Private Constructor, because this is a static class.
      */

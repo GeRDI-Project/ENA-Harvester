@@ -34,11 +34,11 @@ public class ENAConstants
     public static final String TITLE = "Sequence: %s.%s";
     public static final String SIZE_PREFIX = "Sequence length: ";
     public static final String SEQ_DATA = "Sequencing Data";
-    
+
     public static final String XML = "XML";
     public static final String FASTA = "FASTA";
     public static final String TXT = "TEXT";
-    
+
     public static final List<String> FORMATS = Collections.unmodifiableList(Arrays.asList(XML, FASTA, TXT));
 
     public static final String VERSION = "version";
@@ -50,22 +50,22 @@ public class ENAConstants
     public static final String COMMENT = "comment";
     public static final String KEYWORD = "keyword";
     public static final String DATACLASS = "dataClass";
-    
+
     public static final String MOLECULETYPE = "moleculeType";
-    
+
     public static final String REFERENCE = "reference";
     public static final String REF_TYPE = "type";
     public static final String REF_ARTICLE = "article";
     public static final String REF_SUBMISSION = "submission";
     public static final String REF_SUBMISSION_DATE = "submissionDate";
     public static final String REF_ATTR_ID = "id";
-    
+
     public static final String TAXON = "taxon";
     public static final String TAX_DIVISION = "taxonomicDivision";
     public static final String TAX_SCIENTIFIC_NAME = "scientificName";
     public static final String TAX_ID = "taxId";
     public static final String TAX_COMMON_NAME = "commonName";
-    
+
     /**
      * Private Constructor, because this is a static class.
      */
