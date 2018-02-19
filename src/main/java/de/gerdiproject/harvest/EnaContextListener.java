@@ -35,7 +35,7 @@ import javax.servlet.annotation.WebListener;
  */
 @WebListener
 public class EnaContextListener extends ContextListener<EnaHarvester>
-{	
+{
     @Override
     protected List<AbstractParameter<?>> getHarvesterSpecificParameters()
     {
@@ -49,5 +49,5 @@ public class EnaContextListener extends ContextListener<EnaHarvester>
 
         return Arrays.asList(propertyFrom, propertyTo);
     }
-	
+
 }
