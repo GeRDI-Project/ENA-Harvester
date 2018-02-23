@@ -25,11 +25,11 @@ Base-URL: [http://localhost:8080/ena](http://localhost:8080/ena)
 
 Requests on Resource : /harvest
 
-    * GET			      Overview
-    * POST			    Starts the harvest
-    * POST/abort		Aborts an ongoing harvest
-    * POST/submit		Submits harvested documents to a DataBase
-    * POST/save		  Saves harvested documents to disk
+    * GET			Overview
+    * POST			Starts the harvest
+    * POST/abort	Aborts an ongoing harvest, save, or submission
+    * POST/submit	Submits harvested documents to a DataBase
+    * POST/save		Saves harvested documents to disk
 
 Request on Resource : /harvest/config
 
