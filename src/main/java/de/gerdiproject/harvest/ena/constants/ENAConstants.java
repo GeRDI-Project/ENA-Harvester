@@ -22,6 +22,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import de.gerdiproject.json.datacite.extension.abstr.AbstractResearch;
+import de.gerdiproject.json.datacite.extension.constants.ResearchDisciplineConstants;
+
 /**
  * A static collection of constant parameters for configuring the ENA Harvester.
  *
@@ -40,6 +43,7 @@ public class ENAConstants
     public static final String TXT = "TEXT";
 
     public static final List<String> FORMATS = Collections.unmodifiableList(Arrays.asList(XML, FASTA, TXT));
+    public static final List<AbstractResearch> DISCIPLINES = createResearchDisciplines();
 
     public static final String VERSION = "version";
     public static final String ACCESSION = "accession";
@@ -71,5 +75,19 @@ public class ENAConstants
      */
     private ENAConstants()
     {
+    }
+
+    /**
+    * Create a list of research disciplines.
+    *
+    * @return a list of research disciplines that fits ENA.
+    */
+    private static List<AbstractResearch> createResearchDisciplines()
+    {
+        return Collections.unmodifiableList(Arrays.asList(
+                                                ResearchDisciplineConstants.STRUCTURAL_BIOLOGY,
+                                                ResearchDisciplineConstants.BIOINFORMATICS_AND_THEORETICAL_BIOLOGY,
+                                                ResearchDisciplineConstants.CELL_BIOLOGY
+                                            ));
     }
 }

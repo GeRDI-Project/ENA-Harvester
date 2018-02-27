@@ -130,6 +130,7 @@ public class EnaHarvester extends AbstractListHarvester<Element>
         document.setPublisher(ENAConstants.PROVIDER);
         document.setFormats(ENAConstants.FORMATS);
         document.setResourceType(RESOURCE_TYPE);
+        document.setResearchDisciplines(ENAConstants.DISCIPLINES);
 
         // get size
         String sequenceLength = ENAConstants.SIZE_PREFIX + attributes.get(ENAConstants.SEQUENCE_LENGTH);
