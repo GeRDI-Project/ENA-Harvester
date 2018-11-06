@@ -20,7 +20,7 @@ package de.gerdiproject.harvest.ena.constants;
  *
  * @author Jan Frömberg
  */
-public class ENAUrlConstants
+public class EnaUrlConstants
 {
     // URLs
     //private static final String PROVIDER_URL = "https://www.ebi.ac.uk/ena";
@@ -53,7 +53,7 @@ public class ENAUrlConstants
     /**
      * Private Constructor, because this is a static class.
      */
-    private ENAUrlConstants()
+    private EnaUrlConstants()
     {
     }
 }

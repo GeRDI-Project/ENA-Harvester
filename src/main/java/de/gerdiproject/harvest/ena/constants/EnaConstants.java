@@ -28,7 +28,7 @@ import de.gerdiproject.json.datacite.extension.constants.ResearchDisciplineConst
  * @author Jan Frömberg
  *
  */
-public class ENAConstants
+public class EnaConstants
 {
     public static final String PROVIDER = "European Nucleotide Archive (ENA)";
     public static final String TITLE = "Sequence: %s.%s";
@@ -70,7 +70,7 @@ public class ENAConstants
     /**
      * Private Constructor, because this is a static class.
      */
-    private ENAConstants()
+    private EnaConstants()
     {
     }
 
