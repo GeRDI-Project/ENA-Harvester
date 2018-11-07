@@ -15,15 +15,14 @@
  */
 package de.gerdiproject.harvest;
 
-import de.gerdiproject.harvest.config.parameters.AbstractParameter;
-import de.gerdiproject.harvest.config.parameters.StringParameter;
-import de.gerdiproject.harvest.ena.constants.EnaParameterConstants;
-import de.gerdiproject.harvest.etl.EnaETL;
-
 import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.annotation.WebListener;
+
+import de.gerdiproject.harvest.application.ContextListener;
+import de.gerdiproject.harvest.etl.EnaETL;
+import de.gerdiproject.harvest.etls.AbstractETL;
 
 /**
  * This class initializes the ENA harvester and a logger
@@ -31,20 +30,12 @@ import javax.servlet.annotation.WebListener;
  * @author Jan Frömberg
  */
 @WebListener
-public class EnaContextListener extends ContextListener<EnaETL>
+public class EnaContextListener extends ContextListener
 {
+
     @Override
-    protected List<AbstractParameter<?>> getHarvesterSpecificParameters()
+    protected List<? extends AbstractETL<?, ?>> createETLs()
     {
-        StringParameter propertyFrom = new StringParameter(
-            EnaParameterConstants.PROPERTY_FROM_KEY,
-            EnaParameterConstants.ENTRY_DEFAULT_FROM);
-
-        StringParameter propertyTo = new StringParameter(
-            EnaParameterConstants.PROPERTY_TO_KEY,
-            EnaParameterConstants.ENTRY_DEFAULT_TO);
-
-        return Arrays.asList(propertyFrom, propertyTo);
+        return Arrays.asList(new EnaETL());
     }
-
 }

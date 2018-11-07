@@ -23,12 +23,11 @@ package de.gerdiproject.harvest.ena.constants;
 public class EnaParameterConstants
 {
     // KEYS
-    public static final String PROPERTY_FROM_KEY = "accfrom";
-    public static final String PROPERTY_TO_KEY = "accto";
+    public static final String PROPERTY_FROM_KEY = "accFrom";
 
     // DEFAULT VALUES
-    public static final String ENTRY_DEFAULT_FROM = "BC003738";
-    public static final String ENTRY_DEFAULT_TO = "BC004738";
+    public static final String ENTRY_DEFAULT_FROM = "BC000001";
+
 
     /**
      * Private Constructor, because this is a static class.

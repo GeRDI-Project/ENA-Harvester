@@ -24,7 +24,8 @@ public class EnaUrlConstants
 {
     // URLs
     //private static final String PROVIDER_URL = "https://www.ebi.ac.uk/ena";
-    public final static String BASE_URL = "https://www.ebi.ac.uk/ena/data/view/%s-%s&display=xml&header=true";
+    public final static String RANGE_ACCESSION_URL = "https://www.ebi.ac.uk/ena/data/view/%s-%s&display=xml&header=true";
+    public final static String SINGLE_ACCESSION_URL = "https://www.ebi.ac.uk/ena/data/view/%s&display=xml&header=true";
     public static final String VIEW_URL = "https://www.ebi.ac.uk/ena/data/view/%s";
     public static final String VIEW_URL_TEXT = "https://www.ebi.ac.uk/ena/data/view/%s&display=text";
     public static final String VIEW_URL_XML = "https://www.ebi.ac.uk/ena/data/view/%s&display=xml";
@@ -49,6 +50,7 @@ public class EnaUrlConstants
     public final static String VERSION_HISTORY_URL_NAME = "Version History";
     public final static String PREVIEW_IMAGE_NAME = "Overview";
     public final static String LOGO_URL_NAME = "Logo";
+
 
     /**
      * Private Constructor, because this is a static class.
