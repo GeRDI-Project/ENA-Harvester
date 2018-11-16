@@ -16,9 +16,9 @@
  */
 
 /**
- * This package contains {@linkplain de.gerdiproject.harvest.etls.extractors.IExtractor} implementations
- * for extracting ENA (meta-)data.
+ * This package contains {@linkplain de.gerdiproject.harvest.etls.transformers.ITransformer} implementations
+ * for transforming ENA (meta-)data to search documents.
  *
  * @author Robin Weiss
  */
-package de.gerdiproject.harvest.etl.extractors;
+package de.gerdiproject.harvest.etls.transformers;

@@ -14,7 +14,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package de.gerdiproject.harvest.etl.transformers;
+package de.gerdiproject.harvest.etls.transformers;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,8 +29,6 @@ import org.jsoup.select.Elements;
 
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.ena.constants.EnaUrlConstants;
-import de.gerdiproject.harvest.etls.transformers.AbstractIteratorTransformer;
-import de.gerdiproject.harvest.etls.transformers.TransformerException;
 import de.gerdiproject.json.datacite.DataCiteJson;
 import de.gerdiproject.json.datacite.Date;
 import de.gerdiproject.json.datacite.Description;
@@ -67,17 +65,17 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
         DataCiteJson document = new DataCiteJson(accession);
         document.setVersion(version);
         document.setPublisher(EnaConstants.PROVIDER);
-        document.setFormats(EnaConstants.FORMATS);
+        document.addFormats(EnaConstants.FORMATS);
         document.setResourceType(EnaConstants.RESOURCE_TYPE);
-        document.setResearchDisciplines(EnaConstants.DISCIPLINES);
+        document.addResearchDisciplines(EnaConstants.DISCIPLINES);
 
         // get size
         String sequenceLength = EnaConstants.SIZE_PREFIX + attributes.get(EnaConstants.SEQUENCE_LENGTH);
-        document.setSizes(Arrays.asList(sequenceLength));
+        document.addSizes(Arrays.asList(sequenceLength));
 
         // get titles
         Title mainTitle = new Title(String.format(EnaConstants.TITLE, accession, version));
-        document.setTitles(Arrays.asList(mainTitle));
+        document.addTitles(Arrays.asList(mainTitle));
 
         // get source ; TODO: what to do? include it in a further release
         //Source source = new Source(String.format(VIEW_URL_XML, accession), PROVIDER);
@@ -138,7 +136,7 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
         logoLink.setType(WebLinkType.ProviderLogoURL);
         links.add(logoLink);
 
-        document.setWebLinks(links);
+        document.addWebLinks(links);
 
         // get downloads
         List<ResearchData> files = new LinkedList<>();
@@ -158,7 +156,7 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
             EnaConstants.FASTA);
         files.add(downloadLinkFasta);
 
-        document.setResearchDataList(files);
+        document.addResearchDataList(files);
 
         // get descriptions
         List<Description> descriptions = new LinkedList<>();
@@ -177,7 +175,7 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
             descriptions.add(description);
         }
 
-        document.setDescriptions(descriptions);
+        document.addDescriptions(descriptions);
 
         // get keyword subjects
         List<Subject> subjects = new LinkedList<>();
@@ -193,7 +191,7 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
         subjects.add(new Subject(attributes.get(EnaConstants.TAX_DIVISION)));
         subjects.add(new Subject(attributes.get(EnaConstants.MOLECULETYPE)));
 
-        document.setSubjects(subjects);
+        document.addSubjects(subjects);
 
         List<RelatedIdentifier> relatedIdentifiers = new LinkedList<>();
 
@@ -274,13 +272,8 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
                 subjects.add(new Subject(commonName));
         }
 
-        // add dates if there are any
-        if (!dates.isEmpty())
-            document.setDates(dates);
-
-        // add related identifiers if there are any
-        if (!relatedIdentifiers.isEmpty())
-            document.setRelatedIdentifiers(relatedIdentifiers);
+        document.addDates(dates);
+        document.addRelatedIdentifiers(relatedIdentifiers);
 
         return document;
     }

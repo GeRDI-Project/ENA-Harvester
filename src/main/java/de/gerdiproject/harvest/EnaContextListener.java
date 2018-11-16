@@ -21,8 +21,8 @@ import java.util.List;
 import javax.servlet.annotation.WebListener;
 
 import de.gerdiproject.harvest.application.ContextListener;
-import de.gerdiproject.harvest.etl.EnaETL;
 import de.gerdiproject.harvest.etls.AbstractETL;
+import de.gerdiproject.harvest.etls.EnaETL;
 
 /**
  * This class initializes the ENA harvester and a logger

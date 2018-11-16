@@ -14,7 +14,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package de.gerdiproject.harvest.etl.extractors;
+package de.gerdiproject.harvest.etls.extractors;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
@@ -27,10 +27,8 @@ import com.google.gson.Gson;
 
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.ena.constants.EnaUrlConstants;
-import de.gerdiproject.harvest.etl.EnaETL;
 import de.gerdiproject.harvest.etls.AbstractETL;
-import de.gerdiproject.harvest.etls.extractors.AbstractIteratorExtractor;
-import de.gerdiproject.harvest.etls.extractors.ExtractorException;
+import de.gerdiproject.harvest.etls.EnaETL;
 import de.gerdiproject.harvest.utils.data.HttpRequester;
 
 

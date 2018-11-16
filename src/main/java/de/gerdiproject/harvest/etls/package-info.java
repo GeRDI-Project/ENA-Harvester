@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 /**
- * This package contains the harvester implementation {@linkplain de.gerdiproject.harvest.etl.EnaETL}.
+ * This package contains the harvester implementation {@linkplain de.gerdiproject.harvest.etls.EnaETL}.
  *
  * @author Jan Frömberg
  */
-package de.gerdiproject.harvest.etl;
+package de.gerdiproject.harvest.etls;

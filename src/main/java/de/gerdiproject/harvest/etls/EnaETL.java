@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.gerdiproject.harvest.etl;
+package de.gerdiproject.harvest.etls;
 
 import java.util.function.Function;
 
@@ -25,9 +25,8 @@ import de.gerdiproject.harvest.config.parameters.StringParameter;
 import de.gerdiproject.harvest.config.parameters.constants.ParameterMappingFunctions;
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.ena.constants.EnaParameterConstants;
-import de.gerdiproject.harvest.etl.extractors.EnaExtractor;
-import de.gerdiproject.harvest.etl.transformers.EnaTransformer;
-import de.gerdiproject.harvest.etls.StaticIteratorETL;
+import de.gerdiproject.harvest.etls.extractors.EnaExtractor;
+import de.gerdiproject.harvest.etls.transformers.EnaTransformer;
 import de.gerdiproject.json.datacite.DataCiteJson;
 
 /**
