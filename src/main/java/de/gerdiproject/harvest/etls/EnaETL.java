@@ -30,13 +30,13 @@ import de.gerdiproject.harvest.etls.transformers.EnaTransformer;
 import de.gerdiproject.json.datacite.DataCiteJson;
 
 /**
- * An ETL for the ENA Database There are parameters to setup a harvestable
- * range: accfrom and accto. See ENAParameterConstants
- * (https://www.ebi.ac.uk/ena/data/view/Taxon:Human,Taxon:Cat,Taxon:Mouse,Taxon:Zebrafish,Taxon:Bacillus%20Subtilis).
- * To harvest only house mouse taxon:
- * https://www.ebi.ac.uk/ena/data/view/Taxon:10090&portal=sequence_release&display=xml
- * usage hint: how many records are available for a single result set -> use the
- * "resultcount" parameter
+ * An ETL for the ENA Database. The parameter 'accfrom' sets the startIndex of the harvested
+ * accessions (see {@linkplain EnaParameterConstants}).<br>
+ *
+ * E.g. https://www.ebi.ac.uk/ena/data/view/Taxon:Human,Taxon:Cat,Taxon:Mouse,Taxon:Zebrafish,Taxon:Bacillus%20Subtilis.<br>
+ *
+ * To harvest only house mouse taxa:<br>
+ * https://www.ebi.ac.uk/ena/data/view/Taxon:10090&portal=sequence_release&display=xml<br>
  *
  * @author Jan Frömberg, Robin Weiss
  */
