@@ -156,7 +156,7 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
             EnaConstants.FASTA);
         files.add(downloadLinkFasta);
 
-        document.addResearchDataList(files);
+        document.addResearchData(files);
 
         // get descriptions
         List<Description> descriptions = new LinkedList<>();

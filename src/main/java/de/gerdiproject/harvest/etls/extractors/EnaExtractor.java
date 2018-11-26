@@ -16,14 +16,11 @@
  */
 package de.gerdiproject.harvest.etls.extractors;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import com.google.gson.Gson;
 
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.ena.constants.EnaUrlConstants;
@@ -115,7 +112,7 @@ public class EnaExtractor extends AbstractIteratorExtractor<Element>
                                               accessionPrefix,
                                               firstAccessionNumber.length() - accessionPrefix.length());
 
-            this.httpRequester = new HttpRequester(new Gson(), StandardCharsets.UTF_8);
+            this.httpRequester = new HttpRequester();
             this.batchSize = batchSize;
             retrieveNextBatch();
         }
