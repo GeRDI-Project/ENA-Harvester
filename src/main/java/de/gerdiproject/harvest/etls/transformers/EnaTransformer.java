@@ -88,7 +88,7 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
         // get publication date
         try {
             cal.setTime(dateFormat.parse(attributes.get(EnaConstants.FIRST_PUBLIC)));
-            document.setPublicationYear((short) cal.get(Calendar.YEAR));
+            document.setPublicationYear(cal.get(Calendar.YEAR));
 
             Date publicationDate = new Date(attributes.get(EnaConstants.FIRST_PUBLIC), DateType.Available);
             dates.add(publicationDate);
