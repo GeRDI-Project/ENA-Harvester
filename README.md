@@ -21,7 +21,8 @@ There is also a utility script for building and running a Jetty docker container
 
 ## How to run?
 
-Base-URL: [http://localhost:8080/ena](http://localhost:8080/ena)
+Base-URL: [http://localhost:8080/ena](http://localhost:8080/ena). 
+You have two options for harvesting the ENA DB. Option 1 is by Accession-Number und Option 2 is by Taxonomy via a Taxon-Key like 10088.
 
 Requests on Resource : /harvest
 
