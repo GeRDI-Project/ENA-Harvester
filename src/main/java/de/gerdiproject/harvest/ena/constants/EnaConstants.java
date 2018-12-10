@@ -21,8 +21,8 @@ import java.util.List;
 
 import de.gerdiproject.json.datacite.ResourceType;
 import de.gerdiproject.json.datacite.enums.ResourceTypeGeneral;
-import de.gerdiproject.json.datacite.extension.abstr.AbstractResearch;
-import de.gerdiproject.json.datacite.extension.constants.ResearchDisciplineConstants;
+import de.gerdiproject.json.datacite.extension.generic.AbstractResearch;
+import de.gerdiproject.json.datacite.extension.generic.constants.ResearchDisciplineConstants;
 
 /**
  * A static collection of constant parameters for configuring the ENA Harvester.
