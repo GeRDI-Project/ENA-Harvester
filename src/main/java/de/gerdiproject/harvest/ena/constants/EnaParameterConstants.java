@@ -24,10 +24,11 @@ public class EnaParameterConstants
 {
     // KEYS
     public static final String PROPERTY_FROM_KEY = "accFrom";
+    public static final String PROPERTY_TAXON_KEY = "taxon";
 
     // DEFAULT VALUES
     public static final String ENTRY_DEFAULT_FROM = "BC000001";
-
+    public static final String ENTRY_DEFAULT_TAXON = "10088";
 
     /**
      * Private Constructor, because this is a static class.

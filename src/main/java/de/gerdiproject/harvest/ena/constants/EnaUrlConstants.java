@@ -25,7 +25,8 @@ public class EnaUrlConstants
     // URLs
     //private static final String PROVIDER_URL = "https://www.ebi.ac.uk/ena";
     public final static String RANGE_ACCESSION_URL = "https://www.ebi.ac.uk/ena/data/view/%s-%s&display=xml&header=true";
-    public final static String SINGLE_ACCESSION_URL = "https://www.ebi.ac.uk/ena/data/view/%s&display=xml&header=true";
+    public final static String SINGLE_ACCESSION_URL = "https://www.ebi.ac.uk/ena/data/view/%s&display=xml&header=true";  
+    public final static String TAXON_MD_URL = "https://www.ebi.ac.uk/ena/data/view/Taxon:%s&portal=sequence_update&display=xml&header=true";
     public static final String VIEW_URL = "https://www.ebi.ac.uk/ena/data/view/%s";
     public static final String VIEW_URL_TEXT = "https://www.ebi.ac.uk/ena/data/view/%s&display=text";
     public static final String VIEW_URL_XML = "https://www.ebi.ac.uk/ena/data/view/%s&display=xml";
