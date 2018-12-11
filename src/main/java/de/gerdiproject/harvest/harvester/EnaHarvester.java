@@ -115,7 +115,7 @@ public class EnaHarvester extends AbstractListHarvester<Element>
         }
 
         Document doc = httpRequester.getHtmlFromUrl(domainsUrl);
-        logger.debug("Doamins URL: " + domainsUrl);
+        // logger.debug("Doamins URL: " + domainsUrl);
 
         return doc.select("entry");
     }
