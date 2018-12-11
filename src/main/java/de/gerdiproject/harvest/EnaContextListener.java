@@ -44,7 +44,11 @@ public class EnaContextListener extends ContextListener<EnaHarvester>
             ENAParameterConstants.PROPERTY_TO_KEY,
             ENAParameterConstants.ENTRY_DEFAULT_TO);
 
-        return Arrays.asList(propertyFrom, propertyTo);
+        StringParameter propertyTaxon = new StringParameter(
+            ENAParameterConstants.PROPERTY_TAXON_KEY,
+            ENAParameterConstants.ENTRY_DEFAULT_TAXON);
+
+        return Arrays.asList(propertyFrom, propertyTo, propertyTaxon);
     }
 
 }

@@ -67,7 +67,6 @@ public class EnaHarvester extends AbstractListHarvester<Element>
     private static final ResourceType RESOURCE_TYPE = createResourceType();
     private final SimpleDateFormat dateFormat;
 
-
     /**
      * This is the constructor to initialize the Harvester.
      */
@@ -79,10 +78,9 @@ public class EnaHarvester extends AbstractListHarvester<Element>
         dateFormat = new SimpleDateFormat("yyyy'-'MM'-'dd");
     }
 
-
     /**
-     * Set the ENA ACCESSION-Range Properties (e.g. BC003740-BC093740) and check
-     * if they are set. If not, run init() to reset the parameters.
+     * Set the ENA ACCESSION-Range Properties (e.g. BC003740-BC093740) and check if
+     * they are set. If not, run init() to reset the parameters.
      */
     @Override
     public void setProperty(String key, String value)
@@ -91,11 +89,12 @@ public class EnaHarvester extends AbstractListHarvester<Element>
 
         if (getProperty(ENAParameterConstants.PROPERTY_FROM_KEY) != null
             && getProperty(ENAParameterConstants.PROPERTY_TO_KEY) != null
+            && getProperty(ENAParameterConstants.PROPERTY_TAXON_KEY) != null
             && (key.equals(ENAParameterConstants.PROPERTY_FROM_KEY)
-                || key.equals(ENAParameterConstants.PROPERTY_TO_KEY)))
+                || key.equals(ENAParameterConstants.PROPERTY_TO_KEY)
+                || key.equals(ENAParameterConstants.PROPERTY_TAXON_KEY)))
             init();
     }
-
 
     /**
      * Grab ENA-DB-Entries from a parameterized (properties) domain URL (XML)
@@ -105,15 +104,21 @@ public class EnaHarvester extends AbstractListHarvester<Element>
     @Override
     protected Collection<Element> loadEntries()
     {
-        String domainsUrl = String.format(
-                                ENAUrlConstants.BASE_URL,
-                                getProperty(ENAParameterConstants.PROPERTY_FROM_KEY),
-                                getProperty(ENAParameterConstants.PROPERTY_TO_KEY));
+        String domainsUrl;
+
+        if (getProperty(ENAParameterConstants.PROPERTY_TAXON_KEY).equals("")) {
+            domainsUrl = String.format(ENAUrlConstants.BASE_URL, getProperty(ENAParameterConstants.PROPERTY_FROM_KEY),
+                                       getProperty(ENAParameterConstants.PROPERTY_TO_KEY));
+        } else {
+            domainsUrl = String.format(ENAUrlConstants.TAXON_MD_URL,
+                                       getProperty(ENAParameterConstants.PROPERTY_TAXON_KEY));
+        }
+
         Document doc = httpRequester.getHtmlFromUrl(domainsUrl);
+        // logger.debug("Doamins URL: " + domainsUrl);
 
         return doc.select("entry");
     }
-
 
     /**
      * Function for creating the ENA Resource Type
@@ -127,17 +132,16 @@ public class EnaHarvester extends AbstractListHarvester<Element>
         return resourceType;
     }
 
-
     /**
      * Harvest the ENA DB This method creates a searchable
      * gerdi-json-datacite-document for each entry-element example entry:
      * <entry accession="BC003740" version="1" entryVersion="15" dataClass="STD"
-     * taxonomicDivision="MUS" moleculeType="mRNA" sequenceLength="2141"
-     * topology="linear" firstPublic="2001-03-17" firstPublicRelease="67"
-     * lastUpdated="2008-09-24" lastUpdatedRelease="97">
+     * taxonomicDivision="MUS" moleculeType="mRNA" sequenceLength="2141" topology=
+     * "linear" firstPublic="2001-03-17" firstPublicRelease="67" lastUpdated=
+     * "2008-09-24" lastUpdatedRelease="97">
      *
      * @param entry, An single entry-Element derived from the collection via
-     *            loadEntries() with its sub-Elements
+     *        loadEntries() with its sub-Elements
      * @return
      */
     @Override
@@ -165,9 +169,9 @@ public class EnaHarvester extends AbstractListHarvester<Element>
         document.setTitles(Arrays.asList(mainTitle));
 
         // get source ; TODO: what to do? include it in a further release
-        //Source source = new Source(String.format(VIEW_URL_XML, accession), PROVIDER);
-        //source.setProviderURI(PROVIDER_URL);
-        //document.setSources(source);
+        // Source source = new Source(String.format(VIEW_URL_XML, accession), PROVIDER);
+        // source.setProviderURI(PROVIDER_URL);
+        // document.setSources(source);
 
         List<AbstractDate> dates = new LinkedList<>();
         Calendar cal = Calendar.getInstance();
@@ -179,7 +183,7 @@ public class EnaHarvester extends AbstractListHarvester<Element>
 
             Date publicationDate = new Date(attributes.get(ENAConstants.FIRST_PUBLIC), DateType.Available);
             dates.add(publicationDate);
-        } catch (ParseException e) { //NOPMD do nothing. just do not add the date if it does not exist
+        } catch (ParseException e) { // NOPMD do nothing. just do not add the date if it does not exist
         }
 
         Date updatedDate = new Date(attributes.get(ENAConstants.LAST_UPDATED), DateType.Updated);
@@ -229,18 +233,15 @@ public class EnaHarvester extends AbstractListHarvester<Element>
         List<ResearchData> files = new LinkedList<>();
 
         ResearchData downloadLinkText = new ResearchData(
-            String.format(ENAUrlConstants.DOWNLOAD_URL_TEXT, accession, accession),
-            ENAConstants.TXT);
+            String.format(ENAUrlConstants.DOWNLOAD_URL_TEXT, accession, accession), ENAConstants.TXT);
         files.add(downloadLinkText);
 
         ResearchData downloadLinkXml = new ResearchData(
-            String.format(ENAUrlConstants.DOWNLOAD_URL_XML, accession, accession),
-            ENAConstants.XML);
+            String.format(ENAUrlConstants.DOWNLOAD_URL_XML, accession, accession), ENAConstants.XML);
         files.add(downloadLinkXml);
 
         ResearchData downloadLinkFasta = new ResearchData(
-            String.format(ENAUrlConstants.DOWNLOAD_URL_FASTA, accession, accession),
-            ENAConstants.FASTA);
+            String.format(ENAUrlConstants.DOWNLOAD_URL_FASTA, accession, accession), ENAConstants.FASTA);
         files.add(downloadLinkFasta);
 
         document.setResearchDataList(files);
@@ -298,22 +299,16 @@ public class EnaHarvester extends AbstractListHarvester<Element>
                     Elements doiRefs = refElement.getElementsByAttributeValue("db", "DOI");
 
                     for (Element doiRef : doiRefs) {
-                        relatedIdentifiers.add(
-                            new RelatedIdentifier(
-                                doiRef.attr(ENAConstants.REF_ATTR_ID),
-                                RelatedIdentifierType.DOI,
-                                RelationType.IsReferencedBy));
+                        relatedIdentifiers.add(new RelatedIdentifier(doiRef.attr(ENAConstants.REF_ATTR_ID),
+                                                                     RelatedIdentifierType.DOI, RelationType.IsReferencedBy));
                     }
 
                     // get PMIDs
                     Elements pmidRefs = refElement.getElementsByAttributeValue("db", "PUBMED");
 
                     for (Element pmidRef : pmidRefs) {
-                        relatedIdentifiers.add(
-                            new RelatedIdentifier(
-                                pmidRef.attr(ENAConstants.REF_ATTR_ID),
-                                RelatedIdentifierType.PMID,
-                                RelationType.IsReferencedBy));
+                        relatedIdentifiers.add(new RelatedIdentifier(pmidRef.attr(ENAConstants.REF_ATTR_ID),
+                                                                     RelatedIdentifierType.PMID, RelationType.IsReferencedBy));
                     }
 
                     break;
@@ -326,7 +321,7 @@ public class EnaHarvester extends AbstractListHarvester<Element>
                             refElement.children().select(ENAConstants.REF_SUBMISSION_DATE).get(0).text(),
                             DateType.Submitted);
                         dates.add(submissionDate);
-                    } catch (NullPointerException e) { //NOPMD skip this date, if it does not exist or is malformed
+                    } catch (NullPointerException e) { // NOPMD skip this date, if it does not exist or is malformed
                     }
 
                     break;
@@ -343,8 +338,8 @@ public class EnaHarvester extends AbstractListHarvester<Element>
             String taxId = taxonElement.attr(ENAConstants.TAX_ID);
 
             if (!taxId.isEmpty()) {
-                WebLink taxonLink =
-                    new WebLink(String.format(ENAUrlConstants.TAXON_URL, taxonElement.attr(ENAConstants.TAX_ID)));
+                WebLink taxonLink = new WebLink(
+                    String.format(ENAUrlConstants.TAXON_URL, taxonElement.attr(ENAConstants.TAX_ID)));
                 taxonLink.setName(ENAUrlConstants.TAXON_URL_NAME + taxonName);
                 taxonLink.setType(WebLinkType.Related);
                 links.add(taxonLink);
@@ -370,7 +365,6 @@ public class EnaHarvester extends AbstractListHarvester<Element>
         return Arrays.asList(document);
     }
 
-
     @Override
     protected String initHash() throws NoSuchAlgorithmException, NullPointerException
     {
@@ -380,6 +374,5 @@ public class EnaHarvester extends AbstractListHarvester<Element>
 
         return HashGenerator.instance().getShaHash(updateDates.toString());
     }
-
 
 }
