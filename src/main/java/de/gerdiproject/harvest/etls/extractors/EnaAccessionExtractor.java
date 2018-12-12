@@ -25,19 +25,19 @@ import org.jsoup.select.Elements;
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.ena.constants.EnaUrlConstants;
 import de.gerdiproject.harvest.etls.AbstractETL;
-import de.gerdiproject.harvest.etls.EnaETL;
+import de.gerdiproject.harvest.etls.EnaAccessionETL;
 import de.gerdiproject.harvest.utils.data.HttpRequester;
 
 
 /**
  * This extractor retrieves a specified range of entries from ENA,
- * in specified batches, in order to not run out of memory.
+ * using accession keys in specified batches, in order to prevent OOM exceptions.
  *
  * @author Robin Weiss
  */
-public class EnaExtractor extends AbstractIteratorExtractor<Element>
+public class EnaAccessionExtractor extends AbstractIteratorExtractor<Element>
 {
-    private EnaETL dedicatedEtl;
+    private EnaAccessionETL dedicatedEtl;
     private String accFrom;
 
 
@@ -45,7 +45,7 @@ public class EnaExtractor extends AbstractIteratorExtractor<Element>
     public void init(AbstractETL<?, ?> etl)
     {
         super.init(etl);
-        this.dedicatedEtl = (EnaETL)etl;
+        this.dedicatedEtl = (EnaAccessionETL)etl;
 
         this.accFrom = dedicatedEtl.getStartingAccessionNumber();
     }
@@ -145,14 +145,14 @@ public class EnaExtractor extends AbstractIteratorExtractor<Element>
         private void retrieveNextBatch()
         {
             final int nextNumber = Math.min(maxNumber, currentNumber + batchSize - 1);
-            final String domainsUrl = String.format(
-                                          EnaUrlConstants.RANGE_ACCESSION_URL,
-                                          String.format(accessionNumberPattern, currentNumber),
-                                          String.format(accessionNumberPattern, nextNumber));
-            final Document doc = httpRequester.getHtmlFromUrl(domainsUrl);
+            final String url = String.format(
+                                   EnaUrlConstants.RANGE_ACCESSION_URL,
+                                   String.format(accessionNumberPattern, currentNumber),
+                                   String.format(accessionNumberPattern, nextNumber));
+            final Document doc = httpRequester.getHtmlFromUrl(url);
 
             if (doc == null)
-                throw new ExtractorException(String.format(EnaConstants.URL_ERROR, domainsUrl));
+                throw new ExtractorException(String.format(EnaConstants.URL_ERROR, url));
 
             // retrieve all entries with fitting accession numbers
             final Elements entries = doc.select("entry");

@@ -257,7 +257,7 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
 
             if (!taxId.isEmpty()) {
                 WebLink taxonLink =
-                    new WebLink(String.format(EnaUrlConstants.TAXON_URL, taxonElement.attr(EnaConstants.TAX_ID)));
+                    new WebLink(String.format(EnaUrlConstants.TAXON_VIEW_URL, taxonElement.attr(EnaConstants.TAX_ID)));
                 taxonLink.setName(EnaUrlConstants.TAXON_URL_NAME + taxonName);
                 taxonLink.setType(WebLinkType.Related);
                 links.add(taxonLink);

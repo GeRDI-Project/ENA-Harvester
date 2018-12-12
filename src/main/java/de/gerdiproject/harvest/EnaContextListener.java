@@ -22,7 +22,8 @@ import javax.servlet.annotation.WebListener;
 
 import de.gerdiproject.harvest.application.ContextListener;
 import de.gerdiproject.harvest.etls.AbstractETL;
-import de.gerdiproject.harvest.etls.EnaETL;
+import de.gerdiproject.harvest.etls.EnaAccessionETL;
+import de.gerdiproject.harvest.etls.EnaTaxonETL;
 
 /**
  * This class initializes the ENA harvester and a logger
@@ -36,6 +37,8 @@ public class EnaContextListener extends ContextListener
     @Override
     protected List<? extends AbstractETL<?, ?>> createETLs()
     {
-        return Arrays.asList(new EnaETL());
+        return Arrays.asList(
+                   new EnaAccessionETL(),
+                   new EnaTaxonETL());
     }
 }

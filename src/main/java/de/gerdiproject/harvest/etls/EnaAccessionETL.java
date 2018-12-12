@@ -25,22 +25,19 @@ import de.gerdiproject.harvest.config.parameters.StringParameter;
 import de.gerdiproject.harvest.config.parameters.constants.ParameterMappingFunctions;
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.ena.constants.EnaParameterConstants;
-import de.gerdiproject.harvest.etls.extractors.EnaExtractor;
+import de.gerdiproject.harvest.etls.extractors.EnaAccessionExtractor;
 import de.gerdiproject.harvest.etls.transformers.EnaTransformer;
 import de.gerdiproject.json.datacite.DataCiteJson;
 
 /**
- * An ETL for the ENA Database. The parameter 'accfrom' sets the startIndex of the harvested
+ * An ETL for harvesting ENA accessions. The parameter 'accfrom' sets the startIndex of the harvested
  * accessions (see {@linkplain EnaParameterConstants}).<br>
  *
- * E.g. https://www.ebi.ac.uk/ena/data/view/Taxon:Human,Taxon:Cat,Taxon:Mouse,Taxon:Zebrafish,Taxon:Bacillus%20Subtilis.<br>
- *
- * To harvest only house mouse taxa:<br>
- * https://www.ebi.ac.uk/ena/data/view/Taxon:10090&portal=sequence_release&display=xml<br>
+ * E.g. https://www.ebi.ac.uk/ena/data/view/BC000001&display=xml&header=true
  *
  * @author Jan Frömberg, Robin Weiss
  */
-public class EnaETL extends StaticIteratorETL<Element, DataCiteJson>
+public class EnaAccessionETL extends StaticIteratorETL<Element, DataCiteJson>
 {
     private StringParameter accFromParam;
 
@@ -48,9 +45,9 @@ public class EnaETL extends StaticIteratorETL<Element, DataCiteJson>
     /**
      * Constructor.
      */
-    public EnaETL()
+    public EnaAccessionETL()
     {
-        super(new EnaExtractor(), new EnaTransformer());
+        super(new EnaAccessionExtractor(), new EnaTransformer());
     }
 
 
@@ -60,7 +57,7 @@ public class EnaETL extends StaticIteratorETL<Element, DataCiteJson>
         super.registerParameters();
 
         final Function<String, String> accessionNumberChecker =
-            ParameterMappingFunctions.createMapperForETL(EnaETL::mapStringToAccessionNumber, this);
+            ParameterMappingFunctions.createMapperForETL(EnaAccessionETL::mapStringToAccessionNumber, this);
 
         this.accFromParam = Configuration.registerParameter(
                                 new StringParameter(
