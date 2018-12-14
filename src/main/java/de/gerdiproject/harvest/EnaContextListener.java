@@ -15,15 +15,15 @@
  */
 package de.gerdiproject.harvest;
 
-import de.gerdiproject.harvest.config.parameters.AbstractParameter;
-import de.gerdiproject.harvest.config.parameters.StringParameter;
-import de.gerdiproject.harvest.ena.constants.ENAParameterConstants;
-import de.gerdiproject.harvest.harvester.EnaHarvester;
-
 import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.annotation.WebListener;
+
+import de.gerdiproject.harvest.application.ContextListener;
+import de.gerdiproject.harvest.etls.AbstractETL;
+import de.gerdiproject.harvest.etls.EnaAccessionETL;
+import de.gerdiproject.harvest.etls.EnaTaxonETL;
 
 /**
  * This class initializes the ENA harvester and a logger
@@ -31,24 +31,14 @@ import javax.servlet.annotation.WebListener;
  * @author Jan Frömberg
  */
 @WebListener
-public class EnaContextListener extends ContextListener<EnaHarvester>
+public class EnaContextListener extends ContextListener
 {
+
     @Override
-    protected List<AbstractParameter<?>> getHarvesterSpecificParameters()
+    protected List<? extends AbstractETL<?, ?>> createETLs()
     {
-        StringParameter propertyFrom = new StringParameter(
-            ENAParameterConstants.PROPERTY_FROM_KEY,
-            ENAParameterConstants.ENTRY_DEFAULT_FROM);
-
-        StringParameter propertyTo = new StringParameter(
-            ENAParameterConstants.PROPERTY_TO_KEY,
-            ENAParameterConstants.ENTRY_DEFAULT_TO);
-
-        StringParameter propertyTaxon = new StringParameter(
-            ENAParameterConstants.PROPERTY_TAXON_KEY,
-            ENAParameterConstants.ENTRY_DEFAULT_TAXON);
-
-        return Arrays.asList(propertyFrom, propertyTo, propertyTaxon);
+        return Arrays.asList(
+                   new EnaAccessionETL(),
+                   new EnaTaxonETL());
     }
-
 }
