@@ -13,9 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package de.gerdiproject.harvest.ena.constants;
+
 /**
- * This package contains the harvester implementation {@linkplain de.gerdiproject.harvest.harvester.EnaHarvester}.
+ * A static collection of constant parameters for configuring the ENA harvester.
  *
  * @author Jan Frömberg
  */
-package de.gerdiproject.harvest.harvester;
+public class EnaParameterConstants
+{
+    // KEYS
+    public static final String PROPERTY_FROM_KEY = "accFrom";
+    public static final String PROPERTY_TAXON_KEY = "taxon";
+
+    // DEFAULT VALUES
+    public static final String ENTRY_DEFAULT_FROM = "BC000001";
+    public static final String ENTRY_DEFAULT_TAXON = "10088";
+
+    /**
+     * Private Constructor, because this is a static class.
+     */
+    private EnaParameterConstants()
+    {
+    }
+}
