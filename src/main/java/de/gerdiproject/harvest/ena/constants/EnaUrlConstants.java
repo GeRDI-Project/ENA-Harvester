@@ -46,6 +46,9 @@ public class EnaUrlConstants
     public static final String THUMBNAIL_URL = "https://www.ebi.ac.uk/ena/data/view/graphics/%s&showSequence=false&featureRange=1-%s";
     public static final String LOGO_URL = "https://www.ebi.ac.uk/web_guidelines/images/logos/ena/ENA-logo.png";
 
+    public static final String VIEW_URL_FASTQ = "https://www.ebi.ac.uk/ena/data/view/ERR%06d&display=xml";
+    public static final String DOWNLOAD_URL_FASTQ = "https://www.ebi.ac.uk/ena/data/warehouse/filereport?accession=ERR%06d&result=read_run&fields=fastq_ftp";
+
     //NAMES
     public final static String VIEW_URL_NAME = "View website";
     public final static String TAXON_URL_NAME = "View Taxon";
@@ -56,7 +59,7 @@ public class EnaUrlConstants
     public final static String PREVIEW_IMAGE_NAME = "Overview";
     public final static String LOGO_URL_NAME = "Logo";
 
-
+    //public static final String VIEW_URL_FASTQ = "https://www.ebi.ac.uk/ena/data/view/ERR000001&display=xml";
     /**
      * Private Constructor, because this is a static class.
      */

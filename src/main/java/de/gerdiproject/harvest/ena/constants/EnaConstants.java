@@ -74,6 +74,11 @@ public class EnaConstants
     public static final String ACCESSION_FORMAT_BASE = "%s%%0%dd";
     public static final String URL_ERROR = "Could not retrieve entries from: %s";
 
+    public static final String USER_AGENT = "Mozilla/5.0";
+    public static final String TITLE_FASTQ_FILE = "TITLE";
+    public static final int FASTQ_DOCUMENT_COUNT = 999;
+
+
     public static final ResourceType RESOURCE_TYPE = new ResourceType(SEQ_DATA, ResourceTypeGeneral.Dataset);
 
     /**
