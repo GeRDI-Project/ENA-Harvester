@@ -30,7 +30,7 @@ public class EnaParameterConstants
     // DEFAULT VALUES
     public static final String ENTRY_DEFAULT_FROM = "BC000001";
     public static final String ENTRY_DEFAULT_TAXON = "10088";
-    public static final String ENTRY_DEFAULT_FASTQ = "ERR000000";
+    public static final String ENTRY_DEFAULT_FASTQ = "ERR000001";
 
     /**
      * Private Constructor, because this is a static class.
