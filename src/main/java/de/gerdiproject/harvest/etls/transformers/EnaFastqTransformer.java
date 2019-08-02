@@ -32,6 +32,7 @@ import de.gerdiproject.harvest.ena.constants.EnaUrlConstants;
 import de.gerdiproject.harvest.etls.extractors.EnaFastqVO;
 import de.gerdiproject.json.datacite.DataCiteJson;
 import de.gerdiproject.json.datacite.Date;
+import de.gerdiproject.json.datacite.Subject;
 import de.gerdiproject.json.datacite.Title;
 import de.gerdiproject.json.datacite.abstr.AbstractDate;
 import de.gerdiproject.json.datacite.enums.DateType;
@@ -40,6 +41,7 @@ import de.gerdiproject.json.datacite.extension.generic.WebLink;
 
 public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO, DataCiteJson>
 {
+
     @Override
     protected DataCiteJson transformElement(EnaFastqVO vo) throws TransformerException
     {
@@ -50,6 +52,12 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
         document.addTitles(getTitles(vo));
         document.addWebLinks(getWebLinkList(vo));
         document.addDates(getDates(vo));
+
+        //added subject as FASTQ just for filtering
+        List<Subject> subjects = new LinkedList<>();
+        subjects.add(new Subject(EnaConstants.SUBJECT_FASTQ));
+        document.addSubjects(subjects);
+
         return document;
     }
 
@@ -120,6 +128,7 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
     private List<AbstractDate> getDates(EnaFastqVO vo)
     {
         final List<AbstractDate> dates = new LinkedList<>();
+
         // retrieve the dates
         final Elements attributes = vo.getViewPage().select(EnaConstants.RUN_ATTRIBUTE);
 
