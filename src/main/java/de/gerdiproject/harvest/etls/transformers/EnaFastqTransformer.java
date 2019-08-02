@@ -15,24 +15,26 @@
  */
 package de.gerdiproject.harvest.etls.transformers;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.ena.constants.EnaUrlConstants;
 import de.gerdiproject.harvest.etls.extractors.EnaFastqVO;
 import de.gerdiproject.json.datacite.DataCiteJson;
+import de.gerdiproject.json.datacite.Date;
 import de.gerdiproject.json.datacite.Title;
+import de.gerdiproject.json.datacite.abstr.AbstractDate;
+import de.gerdiproject.json.datacite.enums.DateType;
 import de.gerdiproject.json.datacite.extension.generic.WebLink;
 
 
@@ -47,7 +49,7 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
         // add all possible metadata to the document
         document.addTitles(getTitles(vo));
         document.addWebLinks(getWebLinkList(vo));
-
+        document.addDates(getDates(vo));
         return document;
     }
 
@@ -99,21 +101,55 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
             //get only fastq files from result1
             String Result2 = Result1.substring(9);
 
-            final String webLink1 = Result2;
+            final String webLinks = Result2;
 
-            if (webLink1 != null)
-                if (webLink1.contains(";")) {
-                    String[] webLink2 = webLink1.split(";");
-                    webLinkList.add(new WebLink(webLink2[0], webLink2[1], null));
+            if (webLinks != null)
+                if (webLinks.contains(";")) {
+                    String[] webLink1 = webLinks.split(";");
+
+                    for (String webLink2 : webLink1)
+                        webLinkList.add(new WebLink(webLink2, null, null));
                 } else
-                    webLinkList.add(new WebLink(webLink1));
+                    webLinkList.add(new WebLink(webLinks));
 
             return webLinkList;
         } catch (IOException e) {  // skip this page
             return null;
         }
     }
+    private List<AbstractDate> getDates(EnaFastqVO vo)
+    {
+        final List<AbstractDate> dates = new LinkedList<>();
+        // retrieve the dates
+        final Elements attributes = vo.getViewPage().select(EnaConstants.RUN_ATTRIBUTE);
 
+        for (Element attribute : attributes) {
+
+            Elements tags = attribute.children();
+
+            for (Element tagElement : tags) {
+
+                String node = tagElement.text();
+
+                if (node.contains(EnaConstants.ENA_LAST_UPDATE)) {
+                    Date lastUpdated = new Date(attribute.text(), DateType.Updated);
+                    dates.add(lastUpdated);
+
+                }
+
+                if (node.contains(EnaConstants.ENA_FIRST_PUBLIC)) {
+
+                    Date firstPublic = new Date(attribute.text(), DateType.Available);
+                    dates.add(firstPublic);
+                }
+
+            }
+        }
+
+
+        return dates;
+
+    }
 
     /**
      * Creates a unique identifier for a document from MyProject.

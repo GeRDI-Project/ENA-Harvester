@@ -83,6 +83,9 @@ public class EnaConstants
     public static final String SUBMISSION_REF_SELECTION = "reference[type=submission]";
     public static final String USER_AGENT = "Mozilla/5.0";
     public static final String TITLE_FASTQ_FILE = "TITLE";
+    public static final String RUN_ATTRIBUTE = "RUN_ATTRIBUTE";
+    public static final String ENA_LAST_UPDATE = "ENA-LAST-UPDATE";
+    public static final String ENA_FIRST_PUBLIC = "ENA-FIRST-PUBLIC";
     public static final int FASTQ_DOCUMENT_COUNT = 999;
 
     public static final ResourceType RESOURCE_TYPE = new ResourceType(SEQ_DATA, ResourceTypeGeneral.Dataset);
