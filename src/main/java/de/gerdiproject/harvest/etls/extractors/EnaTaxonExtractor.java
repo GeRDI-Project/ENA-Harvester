@@ -54,7 +54,7 @@ public class EnaTaxonExtractor extends AbstractIteratorExtractor<Element>
 
 
     @Override
-    public void init(AbstractETL<?, ?> etl)
+    public void init(final AbstractETL<?, ?> etl)
     {
         super.init(etl);
         this.httpRequester.setCharset(etl.getCharset());
@@ -95,7 +95,7 @@ public class EnaTaxonExtractor extends AbstractIteratorExtractor<Element>
      *
      * @return the number of harvestable taxon documents
      */
-    private int calculateSize(String taxonId)
+    private int calculateSize(final String taxonId)
     {
         /*
          * TODO Use https://www.ebi.ac.uk/ena/data/view/Taxon:10088&portal=sequence_update
@@ -154,7 +154,7 @@ public class EnaTaxonExtractor extends AbstractIteratorExtractor<Element>
          * Constructor.
          * @param batchSize the maximum number of entries that may be extracted at any given time
          */
-        public EnaTaxonIterator(int batchSize)
+        public EnaTaxonIterator(final int batchSize)
         {
             this.offset = 1;
             this.batchSize = batchSize;

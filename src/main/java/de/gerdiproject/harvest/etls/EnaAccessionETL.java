@@ -76,9 +76,9 @@ public class EnaAccessionETL extends StaticIteratorETL<Element, DataCiteJson>
      * @throws RuntimeException if the value is not a valid accession number
      * @return a valid accession number
      */
-    private static String mapStringToAccessionNumber(String accessionNumber) throws RuntimeException
+    private static String mapStringToAccessionNumber(final String accessionNumber) throws RuntimeException
     {
-        for (String regex : EnaConstants.ACCESSION_NUMBER_FORMATS)
+        for (final String regex : EnaConstants.ACCESSION_NUMBER_FORMATS)
             if (accessionNumber.matches(regex))
                 return accessionNumber;
 
@@ -104,7 +104,7 @@ public class EnaAccessionETL extends StaticIteratorETL<Element, DataCiteJson>
      * @param addedDocumentCount the number that is added to the
      * number of harvested documents
      */
-    public void increaseHarvestedDocuments(int addedDocumentCount)
+    public void increaseHarvestedDocuments(final int addedDocumentCount)
     {
         harvestedCount.addAndGet(addedDocumentCount);
     }

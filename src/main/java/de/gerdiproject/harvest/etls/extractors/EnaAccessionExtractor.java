@@ -42,7 +42,7 @@ public class EnaAccessionExtractor extends AbstractIteratorExtractor<Element>
 
 
     @Override
-    public void init(AbstractETL<?, ?> etl)
+    public void init(final AbstractETL<?, ?> etl)
     {
         super.init(etl);
         this.dedicatedEtl = (EnaAccessionETL)etl;
@@ -58,7 +58,7 @@ public class EnaAccessionExtractor extends AbstractIteratorExtractor<Element>
         try {
             return Integer.parseInt(accFrom.replaceAll(EnaConstants.LETTER_PREFIX_REGEX, "").replaceAll(EnaConstants.NUMBER_REGEX, "9"))
                    + 1;
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             // if we cannot parse the accession numbers, we don't know the size
             return -1;
         }
@@ -102,7 +102,7 @@ public class EnaAccessionExtractor extends AbstractIteratorExtractor<Element>
          * @param firstAccessionNumber the accession number of the first entry to be extracted
          * @param batchSize the maximum number of entries that may be extracted at any given time
          */
-        public EnaIterator(String firstAccessionNumber, int batchSize)
+        public EnaIterator(final String firstAccessionNumber, final int batchSize)
         {
             final String accessionPrefix = firstAccessionNumber.replaceAll(EnaConstants.NUMBER_REGEX, "");
             this.currentNumber = Integer.parseInt(firstAccessionNumber.substring(accessionPrefix.length()));

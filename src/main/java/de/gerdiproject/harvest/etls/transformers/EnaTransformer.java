@@ -56,7 +56,7 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
 
 
     @Override
-    public void init(AbstractETL<?, ?> etl)
+    public void init(final AbstractETL<?, ?> etl)
     {
         // nothing to retrieve from the ETL
 
@@ -64,15 +64,15 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
 
 
     @Override
-    protected DataCiteJson transformElement(Element entry) throws TransformerException
+    protected DataCiteJson transformElement(final Element entry) throws TransformerException
     {
         // get attributes
-        Elements children = entry.children();
-        Attributes attributes = entry.attributes();
-        String version = attributes.get(EnaConstants.VERSION);
-        String accession = attributes.get(EnaConstants.ACCESSION);
+        final Elements children = entry.children();
+        final Attributes attributes = entry.attributes();
+        final String version = attributes.get(EnaConstants.VERSION);
+        final String accession = attributes.get(EnaConstants.ACCESSION);
 
-        DataCiteJson document = new DataCiteJson(accession);
+        final DataCiteJson document = new DataCiteJson(accession);
         document.setVersion(version);
         document.setPublisher(EnaConstants.PROVIDER);
         document.addFormats(EnaConstants.FORMATS);
@@ -80,11 +80,11 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
         document.addResearchDisciplines(EnaConstants.DISCIPLINES);
 
         // get size
-        String sequenceLength = EnaConstants.SIZE_PREFIX + attributes.get(EnaConstants.SEQUENCE_LENGTH);
+        final String sequenceLength = EnaConstants.SIZE_PREFIX + attributes.get(EnaConstants.SEQUENCE_LENGTH);
         document.addSizes(Arrays.asList(sequenceLength));
 
         // get titles
-        Title mainTitle = new Title(String.format(EnaConstants.TITLE, accession, version));
+        final Title mainTitle = new Title(String.format(EnaConstants.TITLE, accession, version));
         document.addTitles(Arrays.asList(mainTitle));
 
         // get source ; TODO: what to do? include it in a further release
@@ -92,56 +92,56 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
         //source.setProviderURI(PROVIDER_URL);
         //document.setSources(source);
 
-        List<AbstractDate> dates = new LinkedList<>();
-        Calendar cal = Calendar.getInstance();
+        final List<AbstractDate> dates = new LinkedList<>();
+        final Calendar cal = Calendar.getInstance();
 
         // get publication date
         try {
             cal.setTime(dateFormat.parse(attributes.get(EnaConstants.FIRST_PUBLIC)));
             document.setPublicationYear(cal.get(Calendar.YEAR));
 
-            Date publicationDate = new Date(attributes.get(EnaConstants.FIRST_PUBLIC), DateType.Available);
+            final Date publicationDate = new Date(attributes.get(EnaConstants.FIRST_PUBLIC), DateType.Available);
             dates.add(publicationDate);
-        } catch (ParseException e) { //NOPMD do nothing. just do not add the date if it does not exist
+        } catch (final ParseException e) { //NOPMD do nothing. just do not add the date if it does not exist
         }
 
-        Date updatedDate = new Date(attributes.get(EnaConstants.LAST_UPDATED), DateType.Updated);
+        final Date updatedDate = new Date(attributes.get(EnaConstants.LAST_UPDATED), DateType.Updated);
         dates.add(updatedDate);
 
         // get web links
-        List<WebLink> links = new LinkedList<>();
-        WebLink viewLink = new WebLink(String.format(EnaUrlConstants.VIEW_URL, accession));
+        final List<WebLink> links = new LinkedList<>();
+        final WebLink viewLink = new WebLink(String.format(EnaUrlConstants.VIEW_URL, accession));
         viewLink.setName(EnaUrlConstants.VIEW_URL_NAME);
         viewLink.setType(WebLinkType.ViewURL);
         links.add(viewLink);
 
-        WebLink viewLinkText = new WebLink(String.format(EnaUrlConstants.VIEW_URL_TEXT, accession));
+        final WebLink viewLinkText = new WebLink(String.format(EnaUrlConstants.VIEW_URL_TEXT, accession));
         viewLinkText.setName(EnaUrlConstants.VIEW_URL_TXT_NAME);
         viewLinkText.setType(WebLinkType.ViewURL);
         links.add(viewLinkText);
 
-        WebLink viewLinkXml = new WebLink(String.format(EnaUrlConstants.VIEW_URL_XML, accession));
+        final WebLink viewLinkXml = new WebLink(String.format(EnaUrlConstants.VIEW_URL_XML, accession));
         viewLinkXml.setName(EnaUrlConstants.VIEW_URL_XML_NAME);
         viewLinkXml.setType(WebLinkType.ViewURL);
         links.add(viewLinkXml);
 
-        WebLink viewLinkFasta = new WebLink(String.format(EnaUrlConstants.VIEW_URL_FASTA, accession));
+        final WebLink viewLinkFasta = new WebLink(String.format(EnaUrlConstants.VIEW_URL_FASTA, accession));
         viewLinkFasta.setName(EnaUrlConstants.VIEW_URL_FASTA_NAME);
         viewLinkFasta.setType(WebLinkType.ViewURL);
         links.add(viewLinkFasta);
 
-        WebLink versionHistoryLink = new WebLink(String.format(EnaUrlConstants.VERSION_HISTORY_URL, accession));
+        final WebLink versionHistoryLink = new WebLink(String.format(EnaUrlConstants.VERSION_HISTORY_URL, accession));
         versionHistoryLink.setName(EnaUrlConstants.VERSION_HISTORY_URL_NAME);
         versionHistoryLink.setType(WebLinkType.Related);
         links.add(versionHistoryLink);
 
-        WebLink previewImage = new WebLink(
+        final WebLink previewImage = new WebLink(
             String.format(EnaUrlConstants.THUMBNAIL_URL, accession, attributes.get(EnaConstants.SEQUENCE_LENGTH)));
         previewImage.setName(EnaUrlConstants.PREVIEW_IMAGE_NAME);
         previewImage.setType(WebLinkType.ThumbnailURL);
         links.add(previewImage);
 
-        WebLink logoLink = new WebLink(EnaUrlConstants.LOGO_URL);
+        final WebLink logoLink = new WebLink(EnaUrlConstants.LOGO_URL);
         logoLink.setName(EnaUrlConstants.LOGO_URL_NAME);
         logoLink.setType(WebLinkType.ProviderLogoURL);
         links.add(logoLink);
@@ -149,19 +149,19 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
         document.addWebLinks(links);
 
         // get downloads
-        List<ResearchData> files = new LinkedList<>();
+        final List<ResearchData> files = new LinkedList<>();
 
-        ResearchData downloadLinkText = new ResearchData(
+        final ResearchData downloadLinkText = new ResearchData(
             String.format(EnaUrlConstants.DOWNLOAD_URL_TEXT, accession, accession),
             EnaConstants.TXT);
         files.add(downloadLinkText);
 
-        ResearchData downloadLinkXml = new ResearchData(
+        final ResearchData downloadLinkXml = new ResearchData(
             String.format(EnaUrlConstants.DOWNLOAD_URL_XML, accession, accession),
             EnaConstants.XML);
         files.add(downloadLinkXml);
 
-        ResearchData downloadLinkFasta = new ResearchData(
+        final ResearchData downloadLinkFasta = new ResearchData(
             String.format(EnaUrlConstants.DOWNLOAD_URL_FASTA, accession, accession),
             EnaConstants.FASTA);
         files.add(downloadLinkFasta);
@@ -169,30 +169,30 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
         document.addResearchData(files);
 
         // get descriptions
-        List<Description> descriptions = new LinkedList<>();
+        final List<Description> descriptions = new LinkedList<>();
 
-        Elements descriptionElements = children.select(EnaConstants.DESCRIPTION);
+        final Elements descriptionElements = children.select(EnaConstants.DESCRIPTION);
 
-        for (Element descElement : descriptionElements) {
-            Description description = new Description(descElement.text(), DescriptionType.Abstract);
+        for (final Element descElement : descriptionElements) {
+            final Description description = new Description(descElement.text(), DescriptionType.Abstract);
             descriptions.add(description);
         }
 
-        Elements commentElements = children.select(EnaConstants.COMMENT);
+        final Elements commentElements = children.select(EnaConstants.COMMENT);
 
-        for (Element commentElement : commentElements) {
-            Description description = new Description(commentElement.text(), DescriptionType.Other);
+        for (final Element commentElement : commentElements) {
+            final Description description = new Description(commentElement.text(), DescriptionType.Other);
             descriptions.add(description);
         }
 
         document.addDescriptions(descriptions);
 
         // get keyword subjects
-        List<Subject> subjects = new LinkedList<>();
-        Elements keywordElements = children.select(EnaConstants.KEYWORD);
+        final List<Subject> subjects = new LinkedList<>();
+        final Elements keywordElements = children.select(EnaConstants.KEYWORD);
 
-        for (Element keywordElement : keywordElements) {
-            Subject subject = new Subject(keywordElement.text());
+        for (final Element keywordElement : keywordElements) {
+            final Subject subject = new Subject(keywordElement.text());
             subjects.add(subject);
         }
 
@@ -203,13 +203,13 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
 
         document.addSubjects(subjects);
 
-        List<RelatedIdentifier> relatedIdentifiers = new LinkedList<>();
+        final List<RelatedIdentifier> relatedIdentifiers = new LinkedList<>();
 
         // parse references
-        Elements referenceElements = children.select(EnaConstants.REFERENCE);
+        final Elements referenceElements = children.select(EnaConstants.REFERENCE);
 
-        for (Element refElement : referenceElements) {
-            String type = refElement.attr(EnaConstants.REF_TYPE);
+        for (final Element refElement : referenceElements) {
+            final String type = refElement.attr(EnaConstants.REF_TYPE);
 
             switch (type) {
                 default:
@@ -218,9 +218,9 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
                 case EnaConstants.REF_ARTICLE:
 
                     // get DOIs
-                    Elements doiRefs = refElement.getElementsByAttributeValue("db", "DOI");
+                    final Elements doiRefs = refElement.getElementsByAttributeValue("db", "DOI");
 
-                    for (Element doiRef : doiRefs) {
+                    for (final Element doiRef : doiRefs) {
                         relatedIdentifiers.add(
                             new RelatedIdentifier(
                                 doiRef.attr(EnaConstants.REF_ATTR_ID),
@@ -229,9 +229,9 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
                     }
 
                     // get PMIDs
-                    Elements pmidRefs = refElement.getElementsByAttributeValue("db", "PUBMED");
+                    final Elements pmidRefs = refElement.getElementsByAttributeValue("db", "PUBMED");
 
-                    for (Element pmidRef : pmidRefs) {
+                    for (final Element pmidRef : pmidRefs) {
                         relatedIdentifiers.add(
                             new RelatedIdentifier(
                                 pmidRef.attr(EnaConstants.REF_ATTR_ID),
@@ -245,11 +245,11 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
 
                     // get submission date
                     try {
-                        Date submissionDate = new Date(
+                        final Date submissionDate = new Date(
                             refElement.children().select(EnaConstants.REF_SUBMISSION_DATE).get(0).text(),
                             DateType.Submitted);
                         dates.add(submissionDate);
-                    } catch (NullPointerException e) { //NOPMD skip this date, if it does not exist or is malformed
+                    } catch (final NullPointerException e) { //NOPMD skip this date, if it does not exist or is malformed
                     }
 
                     break;
@@ -257,16 +257,16 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
         }
 
         // parse features
-        Elements taxonElements = children.select(EnaConstants.TAXON);
+        final Elements taxonElements = children.select(EnaConstants.TAXON);
 
-        for (Element taxonElement : taxonElements) {
+        for (final Element taxonElement : taxonElements) {
 
-            String taxonName = taxonElement.attr(EnaConstants.TAX_SCIENTIFIC_NAME);
+            final String taxonName = taxonElement.attr(EnaConstants.TAX_SCIENTIFIC_NAME);
             // add taxon link
-            String taxId = taxonElement.attr(EnaConstants.TAX_ID);
+            final String taxId = taxonElement.attr(EnaConstants.TAX_ID);
 
             if (!taxId.isEmpty()) {
-                WebLink taxonLink =
+                final WebLink taxonLink =
                     new WebLink(String.format(EnaUrlConstants.TAXON_VIEW_URL, taxonElement.attr(EnaConstants.TAX_ID)));
                 taxonLink.setName(EnaUrlConstants.TAXON_URL_NAME + taxonName);
                 taxonLink.setType(WebLinkType.Related);
@@ -276,7 +276,7 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
             // add name and common name to subjects
             subjects.add(new Subject(taxonName));
 
-            String commonName = taxonElement.attr(EnaConstants.TAX_COMMON_NAME);
+            final String commonName = taxonElement.attr(EnaConstants.TAX_COMMON_NAME);
 
             if (!commonName.isEmpty())
                 subjects.add(new Subject(commonName));

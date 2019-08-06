@@ -75,7 +75,7 @@ public class EnaTaxonETL extends StaticIteratorETL<Element, DataCiteJson>
      * @throws RuntimeException if the value is not a taxon ID
      * @return a valid taxon ID
      */
-    private static String mapStringToTaxonId(String taxonId) throws RuntimeException
+    private static String mapStringToTaxonId(final String taxonId) throws RuntimeException
     {
         if (taxonId == null || taxonId.isEmpty())
             return "";
@@ -83,7 +83,7 @@ public class EnaTaxonETL extends StaticIteratorETL<Element, DataCiteJson>
         // check if the ID consists of only numbers
         try {
             Integer.parseInt(taxonId);
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             throw new IllegalArgumentException(String.format(EnaConstants.INVALID_TAXON_ID_ERROR, taxonId));
         }
 
