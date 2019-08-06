@@ -2,40 +2,52 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>de.gerdi-project</groupId>
-        <artifactId>GeRDI-parent-harvester</artifactId>
-        <version>7.3.5</version>
-    </parent>
-     
-    <artifactId>ENA-HarvesterService</artifactId>
-    <version>7.3.2</version>
-    <packaging>war</packaging>
-    <name>ENA Harvester Service</name>
-    <description>This is a Harvester implementation for the ENA Database.</description>
-    <inceptionYear>2017</inceptionYear>
-   
-    <developers>
-        <developer>
-            <name>Jan Frömberg</name>
-            <email>jan.froemberg@tu-dresden.de</email>
-            <organization>TU Dresden - ZIH</organization>
-            <organizationUrl>www.tu-dresden.de/zih</organizationUrl>
-        </developer>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>de.gerdi-project</groupId>
+		<artifactId>GeRDI-parent</artifactId>
+		<version>4.0.0</version>
+	</parent>
+
+	<artifactId>ENA-HarvesterService</artifactId>
+	<version>7.4.0-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>ENA Harvester Service</name>
+	<description>This is a Harvester implementation for the ENA Database.</description>
+	<inceptionYear>2017</inceptionYear>
+
+	<properties>
+		<restfulharvester.dependency.version>7.4.0</restfulharvester.dependency.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>de.gerdi-project</groupId>
+			<artifactId>RestfulHarvester-Library</artifactId>
+			<version>${restfulharvester.dependency.version}</version>
+		</dependency>
+	</dependencies>
+
+	<developers>
+		<developer>
+			<name>Jan Frömberg</name>
+			<email>jan.froemberg@tu-dresden.de</email>
+			<organization>TU Dresden - ZIH</organization>
+			<organizationUrl>www.tu-dresden.de/zih</organizationUrl>
+		</developer>
 		<developer>
 			<name>Robin Weiss</name>
 			<email>row@informatik.uni-kiel.de</email>
 			<organization>Kiel University</organization>
 			<organizationUrl>http://www.uni-kiel.de/index-e.shtml</organizationUrl>
 		</developer>
-    </developers>
-     
-    <!-- Define Sonatype repository for retrieving SNAPSHOT versions -->
-    <repositories>
-        <repository>
-            <id>Sonatype</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-        </repository>
-    </repositories>
+	</developers>
+
+	<!-- Define Sonatype repository for retrieving SNAPSHOT versions -->
+	<repositories>
+		<repository>
+			<id>Sonatype</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+		</repository>
+	</repositories>
 </project>

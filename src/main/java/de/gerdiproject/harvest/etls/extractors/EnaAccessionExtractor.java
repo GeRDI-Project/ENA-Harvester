@@ -166,4 +166,11 @@ public class EnaAccessionExtractor extends AbstractIteratorExtractor<Element>
             this.currentNumber += batchSize;
         }
     }
+
+
+    @Override
+    public void clear()
+    {
+        // nothing to clean up
+    }
 }

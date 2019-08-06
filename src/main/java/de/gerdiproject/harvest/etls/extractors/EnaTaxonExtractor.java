@@ -207,4 +207,11 @@ public class EnaTaxonExtractor extends AbstractIteratorExtractor<Element>
             this.offset += batchSize;
         }
     }
+
+
+    @Override
+    public void clear()
+    {
+        // nothing to clean up
+    }
 }

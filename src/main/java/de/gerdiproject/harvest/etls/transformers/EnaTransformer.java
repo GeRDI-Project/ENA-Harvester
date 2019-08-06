@@ -29,6 +29,7 @@ import org.jsoup.select.Elements;
 
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.ena.constants.EnaUrlConstants;
+import de.gerdiproject.harvest.etls.AbstractETL;
 import de.gerdiproject.json.datacite.DataCiteJson;
 import de.gerdiproject.json.datacite.Date;
 import de.gerdiproject.json.datacite.Description;
@@ -52,6 +53,15 @@ import de.gerdiproject.json.datacite.extension.generic.enums.WebLinkType;
 public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCiteJson>
 {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy'-'MM'-'dd");
+
+
+    @Override
+    public void init(AbstractETL<?, ?> etl)
+    {
+        // nothing to retrieve from the ETL
+
+    }
+
 
     @Override
     protected DataCiteJson transformElement(Element entry) throws TransformerException
@@ -276,6 +286,13 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
         document.addRelatedIdentifiers(relatedIdentifiers);
 
         return document;
+    }
+
+
+    @Override
+    public void clear()
+    {
+        // nothing to clean up
     }
 
 }

@@ -20,7 +20,7 @@ import java.util.function.Function;
 import org.jsoup.nodes.Element;
 
 import de.gerdiproject.harvest.config.Configuration;
-import de.gerdiproject.harvest.config.parameters.AbstractParameter;
+import de.gerdiproject.harvest.config.events.ParameterChangedEvent;
 import de.gerdiproject.harvest.config.parameters.StringParameter;
 import de.gerdiproject.harvest.config.parameters.constants.ParameterMappingFunctions;
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
@@ -115,11 +115,11 @@ public class EnaAccessionETL extends StaticIteratorETL<Element, DataCiteJson>
     //////////////////////////////
 
     @Override
-    protected void onParameterChanged(AbstractParameter<?> param)
+    protected void onParameterChanged(final ParameterChangedEvent event)
     {
-        super.onParameterChanged(param);
+        super.onParameterChanged(event);
 
-        final String paramKey = param.getCompositeKey();
+        final String paramKey = event.getParameter().getCompositeKey();
 
         // if the accession number changed, re-init the extractor to recalculate the max
         // number of harvestable documents
