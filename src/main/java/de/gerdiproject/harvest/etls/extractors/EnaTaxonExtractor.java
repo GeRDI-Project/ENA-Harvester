@@ -47,10 +47,9 @@ public class EnaTaxonExtractor extends AbstractIteratorExtractor<Element>
      * to retrieve all TaxonIDs and harvest all taxa
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(EnaTaxonExtractor.class);
-    private final HttpRequester httpRequester = new HttpRequester();
-    private EnaTaxonETL dedicatedEtl;
-    private String taxonId;
-    private int size = -1;
+    protected final HttpRequester httpRequester = new HttpRequester();
+    protected String taxonId;
+    protected int taxonAmount = -1;
 
 
     @Override
@@ -58,17 +57,17 @@ public class EnaTaxonExtractor extends AbstractIteratorExtractor<Element>
     {
         super.init(etl);
         this.httpRequester.setCharset(etl.getCharset());
-        this.dedicatedEtl = (EnaTaxonETL)etl;
 
+        final EnaTaxonETL dedicatedEtl = (EnaTaxonETL)etl;
         this.taxonId = dedicatedEtl.getTaxonId();
-        this.size = calculateSize(taxonId);
+        this.taxonAmount = calculateSize(taxonId);
     }
 
 
     @Override
     public int size()
     {
-        return size;
+        return taxonAmount;
     }
 
 
@@ -117,12 +116,12 @@ public class EnaTaxonExtractor extends AbstractIteratorExtractor<Element>
                 final String url = String.format(EnaUrlConstants.TAXON_SIZE_URL, taxonId, offset);
 
                 // check if the URL is valid and within the taxon range
-                if (!httpRequester.getRestResponse(RestRequestType.GET, url, null).equals(EnaConstants.INVALID_ENTRY_RESPONSE)) {
-                    minOffest = offset;
-                    offset = Math.min(2 * offset, maxOffset / 2 + minOffest / 2);
-                } else {
+                if (httpRequester.getRestResponse(RestRequestType.GET, url, null).equals(EnaConstants.INVALID_ENTRY_RESPONSE)) {
                     maxOffset = offset;
                     offset = (minOffest + maxOffset) / 2;
+                } else {
+                    minOffest = offset;
+                    offset = Math.min(2 * offset, maxOffset / 2 + minOffest / 2);
                 }
 
             }
@@ -165,7 +164,7 @@ public class EnaTaxonExtractor extends AbstractIteratorExtractor<Element>
         @Override
         public boolean hasNext()
         {
-            return currentBatch.hasNext() || offset <= size;
+            return currentBatch.hasNext() || offset <= taxonAmount;
         }
 
 
@@ -175,7 +174,7 @@ public class EnaTaxonExtractor extends AbstractIteratorExtractor<Element>
             final Element nextElement =  currentBatch.next();
 
             // batches may be completely empty, thus this needs to be a while-loop
-            while (!currentBatch.hasNext() && offset <= size)
+            while (!currentBatch.hasNext() && offset <= taxonAmount)
                 retrieveNextBatch();
 
             return nextElement;

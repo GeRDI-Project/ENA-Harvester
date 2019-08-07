@@ -23,6 +23,8 @@ import de.gerdiproject.json.datacite.ResourceType;
 import de.gerdiproject.json.datacite.enums.ResourceTypeGeneral;
 import de.gerdiproject.json.datacite.extension.generic.AbstractResearch;
 import de.gerdiproject.json.datacite.extension.generic.constants.ResearchDisciplineConstants;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * A static collection of constant parameters for configuring the ENA Harvester.
@@ -30,6 +32,7 @@ import de.gerdiproject.json.datacite.extension.generic.constants.ResearchDiscipl
  * @author Jan Frömberg
  *
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EnaConstants
 {
     public static final String PROVIDER = "European Nucleotide Archive (ENA)";
@@ -50,7 +53,7 @@ public class EnaConstants
     public static final String FIRST_PUBLIC = "firstPublic";
     public static final String LAST_UPDATED = "lastUpdated";
     public static final String DESCRIPTION = "description";
-    public static final String COMMENT = "comment";
+    public static final String ENTRY_COMMENT = "entry > comment";
     public static final String KEYWORD = "keyword";
     public static final String DATACLASS = "dataClass";
 
@@ -61,6 +64,7 @@ public class EnaConstants
     public static final String REF_ARTICLE = "article";
     public static final String REF_SUBMISSION = "submission";
     public static final String REF_SUBMISSION_DATE = "submissionDate";
+    public static final String REF_SUBMISSION_COMMENT = "comment";
     public static final String REF_ATTR_ID = "id";
 
     public static final String TAXON = "taxon";
@@ -73,6 +77,10 @@ public class EnaConstants
     public static final String NUMBER_REGEX = "[0-9]";
     public static final String ACCESSION_FORMAT_BASE = "%s%%0%dd";
     public static final String URL_ERROR = "Could not retrieve entries from: %s";
+
+    public static final String DOI_REF_SELECTION = "reference[type=article] > xref[db=DOI]";
+    public static final String PUBMED_REF_SELECTION = "reference[type=article] > xref[db=PUBMED]";
+    public static final String SUBMISSION_REF_SELECTION = "reference[type=submission]";
 
     public static final ResourceType RESOURCE_TYPE = new ResourceType(SEQ_DATA, ResourceTypeGeneral.Dataset);
 
@@ -119,13 +127,6 @@ public class EnaConstants
                                                          + "https://www.ebi.ac.uk/ena/submit/accession-number-formats";
     public static final String TAXON_SIZE_ERROR = "Could not estimate the max number of documents for harvesting the taxon: %s";
 
-
-    /**
-     * Private Constructor, because this is a static class.
-     */
-    private EnaConstants()
-    {
-    }
 
     /**
     * Create a list of research disciplines.

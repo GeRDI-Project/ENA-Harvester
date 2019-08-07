@@ -15,11 +15,17 @@
  */
 package de.gerdiproject.harvest.ena.constants;
 
+import de.gerdiproject.json.datacite.extension.generic.WebLink;
+import de.gerdiproject.json.datacite.extension.generic.enums.WebLinkType;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * A static collection of constant parameters for assembling ENA URLs.
  *
  * @author Jan Frömberg
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EnaUrlConstants
 {
     // URLs
@@ -44,7 +50,6 @@ public class EnaUrlConstants
     public static final String VERSION_HISTORY_URL = "https://www.ebi.ac.uk/cgi-bin/sva/sva.pl?search=Go&amp;query=%s";
 
     public static final String THUMBNAIL_URL = "https://www.ebi.ac.uk/ena/data/view/graphics/%s&showSequence=false&featureRange=1-%s";
-    public static final String LOGO_URL = "https://www.ebi.ac.uk/web_guidelines/images/logos/ena/ENA-logo.png";
 
     //NAMES
     public final static String VIEW_URL_NAME = "View website";
@@ -54,13 +59,9 @@ public class EnaUrlConstants
     public final static String VIEW_URL_FASTA_NAME = "View FASTA";
     public final static String VERSION_HISTORY_URL_NAME = "Version History";
     public final static String PREVIEW_IMAGE_NAME = "Overview";
-    public final static String LOGO_URL_NAME = "Logo";
 
-
-    /**
-     * Private Constructor, because this is a static class.
-     */
-    private EnaUrlConstants()
-    {
-    }
+    public static final WebLink LOGO_LINK = new WebLink(
+        "https://www.ebi.ac.uk/web_guidelines/images/logos/ena/ENA-logo.png",
+        "Logo",
+        WebLinkType.ProviderLogoURL);
 }

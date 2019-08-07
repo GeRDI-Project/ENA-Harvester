@@ -84,7 +84,7 @@ public class EnaTaxonETL extends StaticIteratorETL<Element, DataCiteJson>
         try {
             Integer.parseInt(taxonId);
         } catch (final NumberFormatException e) {
-            throw new IllegalArgumentException(String.format(EnaConstants.INVALID_TAXON_ID_ERROR, taxonId));
+            throw new IllegalArgumentException(String.format(EnaConstants.INVALID_TAXON_ID_ERROR, taxonId)); // NOPMD stack trace not needed
         }
 
         return taxonId;
