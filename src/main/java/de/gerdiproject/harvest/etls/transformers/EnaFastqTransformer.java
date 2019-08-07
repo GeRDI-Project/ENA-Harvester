@@ -21,6 +21,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,7 +44,7 @@ import de.gerdiproject.json.datacite.extension.generic.WebLink;
 
 public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO, DataCiteJson>
 {
-
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     @Override
     protected DataCiteJson transformElement(EnaFastqVO vo) throws TransformerException
     {
@@ -51,13 +54,53 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
         // add all possible metadata to the document
         document.addTitles(getTitles(vo));
         document.addWebLinks(getWebLinkList(vo));
-        document.addDates(getDates(vo));
 
         //added subject as FASTQ just for filtering
         List<Subject> subjects = new LinkedList<>();
         subjects.add(new Subject(EnaConstants.SUBJECT_FASTQ));
         document.addSubjects(subjects);
 
+
+        // get publication year and Dates
+        Calendar cal = Calendar.getInstance();
+
+        final List<AbstractDate> dates = new LinkedList<>();
+
+        final Elements attributes = vo.getViewPage().select(EnaConstants.RUN_ATTRIBUTE);
+
+        for (Element attribute : attributes) {
+
+            Elements tags = attribute.children();
+
+            for (Element tagElement : tags) {
+
+                String node = tagElement.text();
+
+                if (node.contains(EnaConstants.ENA_LAST_UPDATE)) {
+                    Date lastUpdated = new Date(attribute.text(), DateType.Updated);
+                    dates.add(lastUpdated);
+                }
+
+                if (node.contains(EnaConstants.ENA_FIRST_PUBLIC)) {
+
+                    Date firstPublic = new Date(attribute.text(), DateType.Available);
+                    dates.add(firstPublic);
+
+                    try {
+                        String tagValue = attribute.text();
+                        String publicationDate = tagValue.substring(17);
+                        cal.setTime(dateFormat.parse(publicationDate));
+                        document.setPublicationYear(cal.get(Calendar.YEAR));
+
+                    } catch (ParseException e) { //do nothing. just do not add the publication year if it does not exist
+                        return null;
+                    }
+                }
+
+            }
+        }
+
+        document.addDates(dates);
         return document;
     }
 
@@ -125,40 +168,7 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
             return null;
         }
     }
-    private List<AbstractDate> getDates(EnaFastqVO vo)
-    {
-        final List<AbstractDate> dates = new LinkedList<>();
 
-        // retrieve the dates
-        final Elements attributes = vo.getViewPage().select(EnaConstants.RUN_ATTRIBUTE);
-
-        for (Element attribute : attributes) {
-
-            Elements tags = attribute.children();
-
-            for (Element tagElement : tags) {
-
-                String node = tagElement.text();
-
-                if (node.contains(EnaConstants.ENA_LAST_UPDATE)) {
-                    Date lastUpdated = new Date(attribute.text(), DateType.Updated);
-                    dates.add(lastUpdated);
-
-                }
-
-                if (node.contains(EnaConstants.ENA_FIRST_PUBLIC)) {
-
-                    Date firstPublic = new Date(attribute.text(), DateType.Available);
-                    dates.add(firstPublic);
-                }
-
-            }
-        }
-
-
-        return dates;
-
-    }
 
     /**
      * Creates a unique identifier for a document from MyProject.
