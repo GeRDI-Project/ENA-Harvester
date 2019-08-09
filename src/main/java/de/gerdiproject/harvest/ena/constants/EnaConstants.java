@@ -80,6 +80,8 @@ public class EnaConstants
     public static final String ENA_LAST_UPDATE = "ENA-LAST-UPDATE";
     public static final String ENA_FIRST_PUBLIC = "ENA-FIRST-PUBLIC";
     public static final String SUBJECT_FASTQ = "FASTQ";
+    public static final String ALTERNATE_ID = "PRIMARY_ID";
+    public static final String ERR_ID = "ERR";
     public static final int FASTQ_DOCUMENT_COUNT = 999;
 
 
