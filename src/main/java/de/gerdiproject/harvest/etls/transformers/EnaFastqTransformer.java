@@ -40,6 +40,7 @@ import de.gerdiproject.json.datacite.Title;
 import de.gerdiproject.json.datacite.abstr.AbstractDate;
 import de.gerdiproject.json.datacite.enums.DateType;
 import de.gerdiproject.json.datacite.extension.generic.WebLink;
+import de.gerdiproject.json.datacite.extension.generic.enums.WebLinkType;
 
 
 public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO, DataCiteJson>
@@ -54,12 +55,8 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
         // add all possible metadata to the document
         document.addTitles(getTitles(vo));
         document.addWebLinks(getWebLinkList(vo));
-
-        //added subject as FASTQ just for filtering
-        List<Subject> subjects = new LinkedList<>();
-        subjects.add(new Subject(EnaConstants.SUBJECT_FASTQ));
-        document.addSubjects(subjects);
-
+        document.setPublisher(EnaConstants.PROVIDER);
+        document.addSubjects(getSubjects(vo));
 
         // get publication year and Dates
         Calendar cal = Calendar.getInstance();
@@ -104,6 +101,9 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
         return document;
     }
 
+
+
+
     private List<Title> getTitles(EnaFastqVO vo)
     {
         final List<Title> titleLists = new LinkedList<>();
@@ -125,10 +125,9 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
     {
         final List<WebLink> webLinkList = new LinkedList<>();
 
-
         try {
-
-            String url = String.format(EnaUrlConstants.DOWNLOAD_URL_FASTQ, vo.getId());
+            final String url = String.format(EnaUrlConstants.DOWNLOAD_URL_FASTQ, vo.getId());
+            final Elements identifiers = vo.getViewPage().select(EnaConstants.ALTERNATE_ID);
 
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -154,20 +153,54 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
 
             final String webLinks = Result2;
 
-            if (webLinks != null)
-                if (webLinks.contains(";")) {
-                    String[] webLink1 = webLinks.split(";");
+            //fetch only weblinks for valid id
+            for (Element identifier : identifiers) {
+                String node = identifier.text();
 
-                    for (String webLink2 : webLink1)
-                        webLinkList.add(new WebLink(webLink2, null, null));
-                } else
-                    webLinkList.add(new WebLink(webLinks));
+                if (node.contains(EnaConstants.ERR_ID)) {
+                    if (webLinks.contains(";")) {
+                        String[] webLink1 = webLinks.split(";");
 
-            return webLinkList;
+                        for (String webLink2 : webLink1)
+                            webLinkList.add(new WebLink(webLink2, EnaUrlConstants.VIEW_URL_FASTQ_NAME, WebLinkType.Related));
+
+                    } else
+                        webLinkList.add(new WebLink(webLinks, EnaUrlConstants.VIEW_URL_FASTQ_NAME, WebLinkType.Related));
+                }
+            }
+
+
         } catch (IOException e) {  // skip this page
             return null;
         }
+
+        return webLinkList;
+
     }
+
+
+    private List<Subject> getSubjects(EnaFastqVO vo)
+    {
+
+        final List<Subject> subjects = new LinkedList<>();
+
+        final Elements identifiers = vo.getViewPage().select(EnaConstants.ALTERNATE_ID);
+
+        for (Element identifier : identifiers) {
+            String node = identifier.text();
+
+            if (node.contains(EnaConstants.ERR_ID)) {
+                Subject identifierList = new Subject(identifier.text(), null);
+                subjects.add(identifierList);
+                subjects.add(new Subject(EnaConstants.SUBJECT_FASTQ, null));
+
+            }
+        }
+
+        return subjects;
+    }
+
+
 
 
     /**

@@ -16,7 +16,10 @@
 package de.gerdiproject.harvest.etls.extractors;
 
 import org.jsoup.nodes.Document;
+
+
 import lombok.Value;
+
 
 /**
  * This class is a value object that contains all extracted (meta-) data from

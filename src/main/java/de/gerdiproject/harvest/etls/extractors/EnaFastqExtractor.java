@@ -30,6 +30,7 @@ import de.gerdiproject.harvest.etls.AbstractETL;
 
 
 
+
 /**
  * This {@linkplain AbstractIteratorExtractor} implementation extracts all
  * (meta-)data from ClinicalTrials and bundles it into a {@linkplain ClinicalTrialsVO}.
@@ -84,7 +85,7 @@ public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
      */
     private class EnaFastqIterator implements Iterator<EnaFastqVO>
     {
-        int id = 0;
+        int id = 24;
 
         @Override
         public boolean hasNext()
@@ -94,9 +95,10 @@ public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
 
         @Override
         public EnaFastqVO next()
+
         {
-            final String url = String.format(EnaUrlConstants.VIEW_URL_FASTQ, id);
             id++;
+            final String url = String.format(EnaUrlConstants.VIEW_URL_FASTQ, id);
 
             try {
                 // suppress expected warning messages by retrieving the string response first
@@ -107,6 +109,8 @@ public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
             } catch (IOException e) {  // skip this page
                 return null;
             }
+
         }
     }
+
 }
