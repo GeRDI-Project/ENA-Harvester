@@ -147,11 +147,10 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
             in.close();
 
             //get result
-            String Result1 = response.toString();
-            //get only fastq files from result1
-            String Result2 = Result1.substring(9);
+            String Result = response.toString();
 
-            final String webLinks = Result2;
+            //get only fastq files from result1
+            final String webLinks = Result.substring(9);
 
             //fetch only weblinks for valid id
             for (Element identifier : identifiers) {
@@ -162,10 +161,10 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
                         String[] webLink1 = webLinks.split(";");
 
                         for (String webLink2 : webLink1)
-                            webLinkList.add(new WebLink(webLink2, EnaUrlConstants.VIEW_URL_FASTQ_NAME, WebLinkType.Related));
+                            webLinkList.add(new WebLink("http://" + webLink2, EnaUrlConstants.VIEW_URL_FASTQ_NAME, WebLinkType.Related));
 
                     } else
-                        webLinkList.add(new WebLink(webLinks, EnaUrlConstants.VIEW_URL_FASTQ_NAME, WebLinkType.Related));
+                        webLinkList.add(new WebLink("http://" + webLinks, EnaUrlConstants.VIEW_URL_FASTQ_NAME, WebLinkType.Related));
                 }
             }
 
