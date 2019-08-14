@@ -58,7 +58,7 @@ public class EnaUrlConstants
     public final static String VERSION_HISTORY_URL_NAME = "Version History";
     public final static String PREVIEW_IMAGE_NAME = "Overview";
     public final static String LOGO_URL_NAME = "Logo";
-    public final static String VIEW_URL_FASTQ_NAME = "HasPart";
+    public final static String VIEW_URL_FASTQ_NAME = "URL";
 
     //public static final String VIEW_URL_FASTQ = "https://www.ebi.ac.uk/ena/data/view/ERR000001&display=xml";
     /**
