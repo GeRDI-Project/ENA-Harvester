@@ -20,7 +20,7 @@ import java.util.function.Function;
 import org.jsoup.nodes.Element;
 
 import de.gerdiproject.harvest.config.Configuration;
-import de.gerdiproject.harvest.config.parameters.AbstractParameter;
+import de.gerdiproject.harvest.config.events.ParameterChangedEvent;
 import de.gerdiproject.harvest.config.parameters.StringParameter;
 import de.gerdiproject.harvest.config.parameters.constants.ParameterMappingFunctions;
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
@@ -75,7 +75,7 @@ public class EnaTaxonETL extends StaticIteratorETL<Element, DataCiteJson>
      * @throws RuntimeException if the value is not a taxon ID
      * @return a valid taxon ID
      */
-    private static String mapStringToTaxonId(String taxonId) throws RuntimeException
+    private static String mapStringToTaxonId(final String taxonId) throws RuntimeException
     {
         if (taxonId == null || taxonId.isEmpty())
             return "";
@@ -83,8 +83,8 @@ public class EnaTaxonETL extends StaticIteratorETL<Element, DataCiteJson>
         // check if the ID consists of only numbers
         try {
             Integer.parseInt(taxonId);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(String.format(EnaConstants.INVALID_TAXON_ID_ERROR, taxonId));
+        } catch (final NumberFormatException e) {
+            throw new IllegalArgumentException(String.format(EnaConstants.INVALID_TAXON_ID_ERROR, taxonId)); // NOPMD stack trace not needed
         }
 
         return taxonId;
@@ -107,11 +107,11 @@ public class EnaTaxonETL extends StaticIteratorETL<Element, DataCiteJson>
     //////////////////////////////
 
     @Override
-    protected void onParameterChanged(AbstractParameter<?> param)
+    protected void onParameterChanged(final ParameterChangedEvent event)
     {
-        super.onParameterChanged(param);
+        super.onParameterChanged(event);
 
-        final String paramKey = param.getCompositeKey();
+        final String paramKey = event.getParameter().getCompositeKey();
 
         // if the accession number changed, re-init the extractor to recalculate the max
         // number of harvestable documents

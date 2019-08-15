@@ -37,17 +37,14 @@ import de.gerdiproject.harvest.utils.data.HttpRequester;
  */
 public class EnaAccessionExtractor extends AbstractIteratorExtractor<Element>
 {
-    private EnaAccessionETL dedicatedEtl;
-    private String accFrom;
+    protected EnaAccessionETL dedicatedEtl;
 
 
     @Override
-    public void init(AbstractETL<?, ?> etl)
+    public void init(final AbstractETL<?, ?> etl)
     {
         super.init(etl);
         this.dedicatedEtl = (EnaAccessionETL)etl;
-
-        this.accFrom = dedicatedEtl.getStartingAccessionNumber();
     }
 
 
@@ -56,9 +53,12 @@ public class EnaAccessionExtractor extends AbstractIteratorExtractor<Element>
     {
         // remove the letter prefixes and calculate the max value
         try {
-            return Integer.parseInt(accFrom.replaceAll(EnaConstants.LETTER_PREFIX_REGEX, "").replaceAll(EnaConstants.NUMBER_REGEX, "9"))
+            return Integer.parseInt(dedicatedEtl
+                                    .getStartingAccessionNumber()
+                                    .replaceAll(EnaConstants.LETTER_PREFIX_REGEX, "")
+                                    .replaceAll(EnaConstants.NUMBER_REGEX, "9"))
                    + 1;
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             // if we cannot parse the accession numbers, we don't know the size
             return -1;
         }
@@ -76,7 +76,7 @@ public class EnaAccessionExtractor extends AbstractIteratorExtractor<Element>
     @Override
     protected Iterator<Element> extractAll() throws ExtractorException
     {
-        return new EnaIterator(accFrom, 50);
+        return new EnaIterator(50);
     }
 
 
@@ -99,11 +99,11 @@ public class EnaAccessionExtractor extends AbstractIteratorExtractor<Element>
 
         /**
          * Constructor.
-         * @param firstAccessionNumber the accession number of the first entry to be extracted
          * @param batchSize the maximum number of entries that may be extracted at any given time
          */
-        public EnaIterator(String firstAccessionNumber, int batchSize)
+        public EnaIterator(final int batchSize)
         {
+            final String firstAccessionNumber = dedicatedEtl.getStartingAccessionNumber();
             final String accessionPrefix = firstAccessionNumber.replaceAll(EnaConstants.NUMBER_REGEX, "");
             this.currentNumber = Integer.parseInt(firstAccessionNumber.substring(accessionPrefix.length()));
             this.maxNumber = Integer.parseInt(firstAccessionNumber.substring(accessionPrefix.length()).replaceAll(EnaConstants.NUMBER_REGEX, "9"));
@@ -165,5 +165,12 @@ public class EnaAccessionExtractor extends AbstractIteratorExtractor<Element>
             this.currentBatch = entries.iterator();
             this.currentNumber += batchSize;
         }
+    }
+
+
+    @Override
+    public void clear()
+    {
+        // nothing to clean up
     }
 }
