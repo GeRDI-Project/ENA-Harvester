@@ -68,7 +68,8 @@ public class EnaUrlConstants
         "Logo",
         WebLinkType.ProviderLogoURL);
     public final static String LOGO_URL_NAME = "Logo";
-    public final static String VIEW_URL_FASTQ_NAME = "HasPart";
+    public final static String VIEW_URL_FASTQ_NAME = "FASTQ File";
+
 
     //public static final String VIEW_URL_FASTQ = "https://www.ebi.ac.uk/ena/data/view/ERR000001&display=xml";
     /**
