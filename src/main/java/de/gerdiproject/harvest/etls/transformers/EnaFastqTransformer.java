@@ -124,6 +124,7 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
     private List<WebLink> getWebLinkList(EnaFastqVO vo) throws TransformerException
     {
         final List<WebLink> webLinkList = new LinkedList<>();
+        int count = 0;
 
         try {
             final String url = String.format(EnaUrlConstants.DOWNLOAD_URL_FASTQ, vo.getId());
@@ -160,8 +161,10 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
                     if (webLinks.contains(";")) {
                         String[] webLink1 = webLinks.split(";");
 
-                        for (String webLink2 : webLink1)
-                            webLinkList.add(new WebLink("http://" + webLink2, EnaUrlConstants.VIEW_URL_FASTQ_NAME, WebLinkType.Related));
+                        for (String webLink2 : webLink1) {
+                            count++;
+                            webLinkList.add(new WebLink("http://" + webLink2, EnaUrlConstants.VIEW_URL_FASTQ_NAME + count, WebLinkType.Related));
+                        }
 
                     } else
                         webLinkList.add(new WebLink("http://" + webLinks, EnaUrlConstants.VIEW_URL_FASTQ_NAME, WebLinkType.Related));

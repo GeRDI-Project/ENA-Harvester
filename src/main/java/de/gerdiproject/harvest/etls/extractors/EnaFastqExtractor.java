@@ -85,7 +85,7 @@ public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
      */
     private class EnaFastqIterator implements Iterator<EnaFastqVO>
     {
-        int id = 24;
+        int id = 0;
 
         @Override
         public boolean hasNext()
