@@ -81,6 +81,7 @@ public class EnaConstants
     public static final String DOI_REF_SELECTION = "reference[type=article] > xref[db=DOI]";
     public static final String PUBMED_REF_SELECTION = "reference[type=article] > xref[db=PUBMED]";
     public static final String SUBMISSION_REF_SELECTION = "reference[type=submission]";
+
     public static final String USER_AGENT = "Mozilla/5.0";
     public static final String TITLE_FASTQ_FILE = "TITLE";
     public static final String RUN_ATTRIBUTE = "RUN_ATTRIBUTE";

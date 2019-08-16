@@ -70,8 +70,6 @@ public class EnaUrlConstants
     public final static String LOGO_URL_NAME = "Logo";
     public final static String VIEW_URL_FASTQ_NAME = "FASTQ File";
 
-
-    //public static final String VIEW_URL_FASTQ = "https://www.ebi.ac.uk/ena/data/view/ERR000001&display=xml";
     /**
      * Private Constructor, because this is a static class.
      */
