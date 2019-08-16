@@ -82,7 +82,7 @@ public class EnaConstants
     public static final String SUBJECT_FASTQ = "FASTQ";
     public static final String ALTERNATE_ID = "PRIMARY_ID";
     public static final String ERR_ID = "ERR";
-    public static final int FASTQ_DOCUMENT_COUNT = 999;
+    public static final int FASTQ_DOCUMENT_COUNT = 999999;
 
 
     public static final ResourceType RESOURCE_TYPE = new ResourceType(SEQ_DATA, ResourceTypeGeneral.Dataset);
