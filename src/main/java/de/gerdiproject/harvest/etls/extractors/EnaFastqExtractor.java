@@ -28,32 +28,20 @@ import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.ena.constants.EnaUrlConstants;
 import de.gerdiproject.harvest.etls.AbstractETL;
 
-
-
-
 /**
- * This {@linkplain AbstractIteratorExtractor} implementation extracts all
- * (meta-)data from ClinicalTrials and bundles it into a {@linkplain ClinicalTrialsVO}.
+ * This {@linkplain AbstractIteratorExtractor} implementation extracts all FASTQ
+ * (meta-)data from ENA and bundles it into a {@linkplain EnaFastqVO}.
  *
  * @author Komal Ahir
  */
 public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
 {
-    private final HttpRequester httpRequester;
-
-    /**
-     * Simple constructor.
-     */
-    public EnaFastqExtractor()
-    {
-        this.httpRequester = new HttpRequester();
-    }
+    protected final HttpRequester httpRequester = new HttpRequester();
 
     @Override
-    public void init(AbstractETL<?, ?> etl)
+    public void init(final AbstractETL<?, ?> etl)
     {
         super.init(etl);
-
         this.httpRequester.setCharset(etl.getCharset());
     }
 
@@ -78,14 +66,14 @@ public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
 
     /**
      * This class represents an {@linkplain Iterator} that iterates through
-     * {@linkplain ClinicalTrialsVO}s used for harvesting Ena Fastq datasets by
+     * {@linkplain EnaFastqVO}s used for harvesting Ena Fastq datasets by
      * trying out all IDs in a range of 000 to 999.
      *
      * @author Komal Ahir
      */
     private class EnaFastqIterator implements Iterator<EnaFastqVO>
     {
-        int id = 0;
+        private int id = 0; // NOPMD field is intentionally initialized with 0
 
         @Override
         public boolean hasNext()
@@ -95,22 +83,40 @@ public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
 
         @Override
         public EnaFastqVO next()
-
         {
             id++;
-            final String url = String.format(EnaUrlConstants.VIEW_URL_FASTQ, id);
+            final String viewUrl = String.format(EnaUrlConstants.VIEW_URL_FASTQ, id);
+            final Document viewPage;
 
             try {
                 // suppress expected warning messages by retrieving the string response first
-                final String response = httpRequester.getRestResponse(RestRequestType.GET, url, null);
+                final String viewResponse = httpRequester.getRestResponse(RestRequestType.GET, viewUrl, null);
+
                 // parse HTML from String
-                final Document viewPage = Jsoup.parse(response);
-                return new EnaFastqVO(id, viewPage);
-            } catch (IOException e) {  // skip this page
+                viewPage = Jsoup.parse(viewResponse);
+            } catch (IOException e) {
+                // skip this page
                 return null;
             }
 
+            // attempt to retrieve the file report
+            final String fileReportUrl = String.format(EnaUrlConstants.DOWNLOAD_URL_FASTQ, id);
+
+            try {
+                final String fileReport = httpRequester.getRestResponse(RestRequestType.GET, fileReportUrl, null);
+                return new EnaFastqVO(viewPage, fileReport);
+
+            } catch (IOException e) {
+                return new EnaFastqVO(viewPage, null);
+            }
         }
+    }
+
+    @Override
+    public void clear()
+    {
+        // nothing to clean up
+
     }
 
 }

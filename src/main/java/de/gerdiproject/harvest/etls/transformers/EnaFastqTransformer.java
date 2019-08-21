@@ -15,202 +15,119 @@
  */
 package de.gerdiproject.harvest.etls.transformers;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.ena.constants.EnaUrlConstants;
+import de.gerdiproject.harvest.etls.AbstractETL;
 import de.gerdiproject.harvest.etls.extractors.EnaFastqVO;
+import de.gerdiproject.harvest.utils.HtmlUtils;
+import de.gerdiproject.json.datacite.AlternateIdentifier;
 import de.gerdiproject.json.datacite.DataCiteJson;
 import de.gerdiproject.json.datacite.Date;
 import de.gerdiproject.json.datacite.Subject;
 import de.gerdiproject.json.datacite.Title;
-import de.gerdiproject.json.datacite.abstr.AbstractDate;
 import de.gerdiproject.json.datacite.enums.DateType;
 import de.gerdiproject.json.datacite.extension.generic.WebLink;
 import de.gerdiproject.json.datacite.extension.generic.enums.WebLinkType;
 
-
 public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO, DataCiteJson>
 {
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     @Override
-    protected DataCiteJson transformElement(EnaFastqVO vo) throws TransformerException
+    public void init(final AbstractETL<?, ?> etl)
+    {
+        // nothing to retrieve from the ETL
+    }
+
+    @Override
+    protected DataCiteJson transformElement(final EnaFastqVO vo) throws TransformerException
     {
         // create the document
-        final DataCiteJson document = new DataCiteJson(String.valueOf(vo.getId()));
+        final Document viewPage = vo.getViewPage();
+        final String identifierString = HtmlUtils.getString(viewPage, EnaConstants.ID);
+        final DataCiteJson document = new DataCiteJson(identifierString);
 
         // add all possible metadata to the document
-        document.addTitles(getTitles(vo));
+        document.addTitles(getTitles(viewPage));
         document.addWebLinks(getWebLinkList(vo));
         document.setPublisher(EnaConstants.PROVIDER);
-        document.addSubjects(getSubjects(vo));
+        document.addSubjects(getSubjects());
+        document.addAlternateIdentifiers(getAlternateIdentifiers(viewPage));
 
-        // get publication year and Dates
-        Calendar cal = Calendar.getInstance();
+        final Date publicationDate = getPublicationDate(viewPage);
+        final Date updateDate = getUpdateDate(viewPage);
+        document.addDates(Arrays.asList(publicationDate, updateDate));
 
-        final List<AbstractDate> dates = new LinkedList<>();
-
-        final Elements attributes = vo.getViewPage().select(EnaConstants.RUN_ATTRIBUTE);
-
-        for (Element attribute : attributes) {
-
-            Elements tags = attribute.children();
-
-            for (Element tagElement : tags) {
-
-                String node = tagElement.text();
-
-                if (node.contains(EnaConstants.ENA_LAST_UPDATE)) {
-                    Date lastUpdated = new Date(attribute.text(), DateType.Updated);
-                    dates.add(lastUpdated);
-                }
-
-                if (node.contains(EnaConstants.ENA_FIRST_PUBLIC)) {
-
-                    Date firstPublic = new Date(attribute.text(), DateType.Available);
-                    dates.add(firstPublic);
-
-                    try {
-                        String tagValue = attribute.text();
-                        String publicationDate = tagValue.substring(17);
-                        cal.setTime(dateFormat.parse(publicationDate));
-                        document.setPublicationYear(cal.get(Calendar.YEAR));
-
-                    } catch (ParseException e) { //do nothing. just do not add the publication year if it does not exist
-                        return null;
-                    }
-                }
-
-            }
+        if (publicationDate != null) {
+            final int publicationYear = publicationDate.getValueAsDateTime().getYear();
+            document.setPublicationYear(publicationYear);
         }
 
-        document.addDates(dates);
         return document;
     }
 
-
-
-
-    private List<Title> getTitles(EnaFastqVO vo)
+    private Date getPublicationDate(final Document viewPage)
     {
-        final List<Title> titleLists = new LinkedList<>();
-
-        // get the title
-        final Elements titles = vo.getViewPage().select(EnaConstants.TITLE_FASTQ_FILE);
-
-        // verify that there is data
-        for (Element title : titles) {
-            Title titleList = new Title(title.text());
-            titleLists.add(titleList);
-        }
-
-        return titleLists;
+        final String dateString = HtmlUtils.getString(viewPage, "RUN_ATTRIBUTE > TAG:contains(ENA-FIRST-PUBLIC) + VALUE");
+        return dateString == null ? null : new Date(dateString, DateType.Available);
     }
 
+    private Date getUpdateDate(final Document viewPage)
+    {
+        final String dateString = HtmlUtils.getString(viewPage, "RUN_ATTRIBUTE > TAG:contains(ENA-LAST-UPDATE) + VALUE");
+        return dateString == null ? null : new Date(dateString, DateType.Updated);
+    }
 
-    private List<WebLink> getWebLinkList(EnaFastqVO vo) throws TransformerException
+    private List<Title> getTitles(final Document viewPage)
+    {
+        return HtmlUtils.getObjects(
+                   viewPage,
+                   EnaConstants.TITLE_FASTQ_FILE,
+                   (Element ele) -> new Title(ele.text()));
+    }
+
+    private List<AlternateIdentifier> getAlternateIdentifiers(final Document viewPage)
+    {
+
+        return HtmlUtils.getObjects(
+                   viewPage,
+                   EnaConstants.ALTERNATE_ID,
+                   (Element ele)-> new AlternateIdentifier(ele.text(), null));
+    }
+
+    private List<WebLink> getWebLinkList(final EnaFastqVO vo)
     {
         final List<WebLink> webLinkList = new LinkedList<>();
-        int count = 0;
 
-        try {
-            final String url = String.format(EnaUrlConstants.DOWNLOAD_URL_FASTQ, vo.getId());
-            final Elements identifiers = vo.getViewPage().select(EnaConstants.ALTERNATE_ID);
+        if (vo.getFileReport() != null) {
+            final String[] fileReportElements = vo.getFileReport().split("\\s|;");
 
-            URL obj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-            // optional default is GET
-            con.setRequestMethod("GET");
-
-            //add request header
-            con.setRequestProperty("User-Agent", EnaConstants.USER_AGENT);
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null)
-                response.append(inputLine);
-
-            in.close();
-
-            //get result
-            String Result = response.toString();
-
-            //get only fastq files from result1
-            final String webLinks = Result.substring(9);
-
-            //fetch only weblinks for valid id
-            for (Element identifier : identifiers) {
-                String node = identifier.text();
-
-                if (node.contains(EnaConstants.ERR_ID)) {
-                    if (webLinks.contains(";")) {
-                        String[] webLink1 = webLinks.split(";");
-
-                        for (String webLink2 : webLink1) {
-                            count++;
-                            webLinkList.add(new WebLink("http://" + webLink2, EnaUrlConstants.VIEW_URL_FASTQ_NAME + count, WebLinkType.Related));
-                        }
-
-                    } else
-                        webLinkList.add(new WebLink("http://" + webLinks, EnaUrlConstants.VIEW_URL_FASTQ_NAME, WebLinkType.Related));
-                }
-            }
-
-
-        } catch (IOException e) {  // skip this page
-            return null;
+            // the index starts with 1, because the first element is a prefix
+            for (int i = 1; i < fileReportElements.length; i++)
+                webLinkList.add(new WebLink("http://" + fileReportElements[i], EnaUrlConstants.VIEW_URL_FASTQ_NAME + i, WebLinkType.Related));
         }
 
         return webLinkList;
-
     }
 
-
-    private List<Subject> getSubjects(EnaFastqVO vo)
+    private List<Subject> getSubjects()
     {
-
+        // a static subject called “FASTQ” added for better findability
         final List<Subject> subjects = new LinkedList<>();
-
-        final Elements identifiers = vo.getViewPage().select(EnaConstants.ALTERNATE_ID);
-
-        for (Element identifier : identifiers) {
-            String node = identifier.text();
-
-            if (node.contains(EnaConstants.ERR_ID)) {
-                Subject identifierList = new Subject(identifier.text(), null);
-                subjects.add(identifierList);
-                subjects.add(new Subject(EnaConstants.SUBJECT_FASTQ, null));
-
-            }
-        }
-
+        subjects.add(new Subject(EnaConstants.SUBJECT_FASTQ, null));
         return subjects;
     }
 
+    @Override
+    public void clear()
+    {
+        // nothing to clean up
 
-
-
-    /**
-     * Creates a unique identifier for a document from MyProject.
-     *
-     * @param source the source object that contains all metadata that is needed
-     *
-     * @return a unique identifier of this document
-     */
+    }
 
 }

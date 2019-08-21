@@ -69,11 +69,4 @@ public class EnaUrlConstants
         WebLinkType.ProviderLogoURL);
     public final static String LOGO_URL_NAME = "Logo";
     public final static String VIEW_URL_FASTQ_NAME = "FASTQ File";
-
-    /**
-     * Private Constructor, because this is a static class.
-     */
-    private EnaUrlConstants()
-    {
-    }
 }

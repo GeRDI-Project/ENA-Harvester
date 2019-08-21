@@ -16,21 +16,18 @@
 package de.gerdiproject.harvest.etls.extractors;
 
 import org.jsoup.nodes.Document;
-
-
 import lombok.Value;
-
 
 /**
  * This class is a value object that contains all extracted (meta-) data from
- * ClinicalTrials that is required to generate a document.
+ * ENA that is required to generate a document.
  *
  * @author Komal Ahir
  */
 @Value
 public class EnaFastqVO
 {
-    private int id;
     private Document viewPage;
+    private String fileReport;
 
 }
