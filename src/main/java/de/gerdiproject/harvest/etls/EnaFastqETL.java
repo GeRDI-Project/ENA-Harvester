@@ -20,6 +20,12 @@ import de.gerdiproject.harvest.etls.extractors.EnaFastqVO;
 import de.gerdiproject.harvest.etls.transformers.EnaFastqTransformer;
 import de.gerdiproject.json.datacite.DataCiteJson;
 
+/**
+ * An ETL for harvesting ENA FASTQ data<br>
+ * Example : https://www.ebi.ac.uk/ena/data/view/ERR000001&display=xml<br>
+ *
+ * @author Komal Ahir, Jan Frömberg
+ */
 
 public class EnaFastqETL extends StaticIteratorETL<EnaFastqVO, DataCiteJson>
 {

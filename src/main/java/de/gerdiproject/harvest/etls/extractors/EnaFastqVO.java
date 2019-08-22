@@ -29,5 +29,4 @@ public class EnaFastqVO
 {
     private Document viewPage;
     private String fileReport;
-
 }

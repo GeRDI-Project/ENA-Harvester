@@ -67,7 +67,7 @@ public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
     /**
      * This class represents an {@linkplain Iterator} that iterates through
      * {@linkplain EnaFastqVO}s used for harvesting Ena Fastq datasets by
-     * trying out all IDs in a range of 000 to 999.
+     * trying out all IDs in a range of 000000 to 999999.
      *
      * @author Komal Ahir
      */
@@ -116,7 +116,5 @@ public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
     public void clear()
     {
         // nothing to clean up
-
     }
-
 }

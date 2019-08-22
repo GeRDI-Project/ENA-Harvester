@@ -27,10 +27,9 @@ import de.gerdiproject.harvest.ena.constants.EnaUrlConstants;
 import de.gerdiproject.harvest.etls.AbstractETL;
 import de.gerdiproject.harvest.etls.extractors.EnaFastqVO;
 import de.gerdiproject.harvest.utils.HtmlUtils;
-import de.gerdiproject.json.datacite.AlternateIdentifier;
 import de.gerdiproject.json.datacite.DataCiteJson;
 import de.gerdiproject.json.datacite.Date;
-import de.gerdiproject.json.datacite.Subject;
+import de.gerdiproject.json.datacite.Identifier;
 import de.gerdiproject.json.datacite.Title;
 import de.gerdiproject.json.datacite.enums.DateType;
 import de.gerdiproject.json.datacite.extension.generic.WebLink;
@@ -53,11 +52,11 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
         final DataCiteJson document = new DataCiteJson(identifierString);
 
         // add all possible metadata to the document
+        document.setIdentifier(new Identifier(identifierString));
         document.addTitles(getTitles(viewPage));
         document.addWebLinks(getWebLinkList(vo));
         document.setPublisher(EnaConstants.PROVIDER);
-        document.addSubjects(getSubjects());
-        document.addAlternateIdentifiers(getAlternateIdentifiers(viewPage));
+        document.addSubjects(EnaConstants.SUBJECT_FASTQ);
 
         final Date publicationDate = getPublicationDate(viewPage);
         final Date updateDate = getUpdateDate(viewPage);
@@ -73,13 +72,13 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
 
     private Date getPublicationDate(final Document viewPage)
     {
-        final String dateString = HtmlUtils.getString(viewPage, "RUN_ATTRIBUTE > TAG:contains(ENA-FIRST-PUBLIC) + VALUE");
+        final String dateString = HtmlUtils.getString(viewPage, EnaConstants.ENA_FIRST_PUBLIC);
         return dateString == null ? null : new Date(dateString, DateType.Available);
     }
 
     private Date getUpdateDate(final Document viewPage)
     {
-        final String dateString = HtmlUtils.getString(viewPage, "RUN_ATTRIBUTE > TAG:contains(ENA-LAST-UPDATE) + VALUE");
+        final String dateString = HtmlUtils.getString(viewPage, EnaConstants.ENA_LAST_UPDATE);
         return dateString == null ? null : new Date(dateString, DateType.Updated);
     }
 
@@ -89,15 +88,6 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
                    viewPage,
                    EnaConstants.TITLE_FASTQ_FILE,
                    (Element ele) -> new Title(ele.text()));
-    }
-
-    private List<AlternateIdentifier> getAlternateIdentifiers(final Document viewPage)
-    {
-
-        return HtmlUtils.getObjects(
-                   viewPage,
-                   EnaConstants.ALTERNATE_ID,
-                   (Element ele)-> new AlternateIdentifier(ele.text(), null));
     }
 
     private List<WebLink> getWebLinkList(final EnaFastqVO vo)
@@ -115,19 +105,9 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
         return webLinkList;
     }
 
-    private List<Subject> getSubjects()
-    {
-        // a static subject called “FASTQ” added for better findability
-        final List<Subject> subjects = new LinkedList<>();
-        subjects.add(new Subject(EnaConstants.SUBJECT_FASTQ, null));
-        return subjects;
-    }
-
     @Override
     public void clear()
     {
         // nothing to clean up
-
     }
-
 }
