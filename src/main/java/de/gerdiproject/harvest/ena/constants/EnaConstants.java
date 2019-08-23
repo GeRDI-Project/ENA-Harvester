@@ -17,9 +17,11 @@ package de.gerdiproject.harvest.ena.constants;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.gerdiproject.json.datacite.ResourceType;
+import de.gerdiproject.json.datacite.Subject;
 import de.gerdiproject.json.datacite.enums.ResourceTypeGeneral;
 import de.gerdiproject.json.datacite.extension.generic.AbstractResearch;
 import de.gerdiproject.json.datacite.extension.generic.constants.ResearchDisciplineConstants;
@@ -43,6 +45,7 @@ public class EnaConstants
     public static final String XML = "XML";
     public static final String FASTA = "FASTA";
     public static final String TXT = "TEXT";
+    public static final String FASTQ = "FASTQ";
 
     public static final List<String> FORMATS = Collections.unmodifiableList(Arrays.asList(XML, FASTA, TXT));
     public static final List<AbstractResearch> DISCIPLINES = createResearchDisciplines();
@@ -81,6 +84,16 @@ public class EnaConstants
     public static final String DOI_REF_SELECTION = "reference[type=article] > xref[db=DOI]";
     public static final String PUBMED_REF_SELECTION = "reference[type=article] > xref[db=PUBMED]";
     public static final String SUBMISSION_REF_SELECTION = "reference[type=submission]";
+
+    public static final String USER_AGENT = "Mozilla/5.0";
+    public static final String TITLE_FASTQ_FILE = "TITLE";
+    public static final String RUN_ATTRIBUTE = "RUN_ATTRIBUTE";
+    public static final String ENA_LAST_UPDATE = "RUN_ATTRIBUTE > TAG:contains(ENA-LAST-UPDATE) + VALUE";
+    public static final String ENA_FIRST_PUBLIC = "RUN_ATTRIBUTE > TAG:contains(ENA-FIRST-PUBLIC) + VALUE";
+    public static final String ALTERNATE_ID = "PRIMARY_ID";
+    public static final String ID = "IDENTIFIERS > PRIMARY_ID";
+    public static final int FASTQ_DOCUMENT_COUNT = 999999;
+    public static final List<Subject> SUBJECT_FASTQ = createSubject();
 
     public static final ResourceType RESOURCE_TYPE = new ResourceType(SEQ_DATA, ResourceTypeGeneral.Dataset);
 
@@ -127,7 +140,6 @@ public class EnaConstants
                                                          + "https://www.ebi.ac.uk/ena/submit/accession-number-formats";
     public static final String TAXON_SIZE_ERROR = "Could not estimate the max number of documents for harvesting the taxon: %s";
 
-
     /**
     * Create a list of research disciplines.
     *
@@ -140,5 +152,17 @@ public class EnaConstants
                                                 ResearchDisciplineConstants.BIOINFORMATICS_AND_THEORETICAL_BIOLOGY,
                                                 ResearchDisciplineConstants.CELL_BIOLOGY
                                             ));
+    }
+
+    /**
+     * Create a static subject called “FASTQ” for better findability.
+     *
+     * @return a FASTQ as subject.
+     */
+    private static List<Subject>  createSubject()
+    {
+        final List<Subject> subject = new LinkedList<>();
+        subject.add(new Subject(FASTQ));
+        return subject;
     }
 }

@@ -23,6 +23,7 @@ import javax.servlet.annotation.WebListener;
 import de.gerdiproject.harvest.application.ContextListener;
 import de.gerdiproject.harvest.etls.AbstractETL;
 import de.gerdiproject.harvest.etls.EnaAccessionETL;
+import de.gerdiproject.harvest.etls.EnaFastqETL;
 import de.gerdiproject.harvest.etls.EnaTaxonETL;
 
 /**
@@ -39,6 +40,7 @@ public class EnaContextListener extends ContextListener
     {
         return Arrays.asList(
                    new EnaAccessionETL(),
-                   new EnaTaxonETL());
+                   new EnaTaxonETL(),
+                   new EnaFastqETL());
     }
 }
