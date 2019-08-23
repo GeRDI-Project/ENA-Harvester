@@ -97,7 +97,7 @@ public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
                 viewPage = Jsoup.parse(viewResponse);
 
                 // check if the document is valid
-                if (HtmlUtils.getString(viewPage, EnaConstants.ID)  == null)
+                if (HtmlUtils.getString(viewPage, EnaConstants.ID) == null)
                     return null;
             } catch (IOException e) {
                 // skip this page
