@@ -18,6 +18,7 @@ package de.gerdiproject.harvest.etls.extractors;
 import java.io.IOException;
 import java.util.Iterator;
 
+import de.gerdiproject.harvest.utils.HtmlUtils;
 import de.gerdiproject.harvest.utils.data.HttpRequester;
 import de.gerdiproject.harvest.utils.data.enums.RestRequestType;
 
@@ -94,6 +95,10 @@ public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
 
                 // parse HTML from String
                 viewPage = Jsoup.parse(viewResponse);
+
+                // check if the document is valid
+                if (HtmlUtils.getString(viewPage, EnaConstants.ID)  == null)
+                    return null;
             } catch (IOException e) {
                 // skip this page
                 return null;
