@@ -41,6 +41,8 @@ public class EnaContextListener extends ContextListener
         return Arrays.asList(
                    new EnaAccessionETL(),
                    new EnaTaxonETL(),
-                   new EnaFastqETL());
+                   new EnaFastqETL('E'),
+                   new EnaFastqETL('D'),
+                   new EnaFastqETL('S'));
     }
 }

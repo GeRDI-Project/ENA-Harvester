@@ -21,8 +21,11 @@ import de.gerdiproject.harvest.etls.transformers.EnaFastqTransformer;
 import de.gerdiproject.json.datacite.DataCiteJson;
 
 /**
- * An ETL for harvesting ENA FASTQ data<br>
- * Example : https://www.ebi.ac.uk/ena/data/view/ERR000001&display=xml<br>
+ * An ETL for harvesting ENA FASTQ data
+ * Identify which INSDC partner accepted the original submission by looking at the first letter: ‘E’ for ENA, ‘D’ for DDBJ, or ‘S’ for NCBI<br>
+ * Example : https://www.ebi.ac.uk/ena/data/view/ERR000001&display=xml
+ *           https://www.ebi.ac.uk/ena/data/view/DRR000001&display=xml
+ *           https://www.ebi.ac.uk/ena/data/view/SRR000001&display=xml<br>
  *
  * @author Komal Ahir, Jan Frömberg
  */
@@ -31,9 +34,11 @@ public class EnaFastqETL extends StaticIteratorETL<EnaFastqVO, DataCiteJson>
 {
     /**
      * Constructor
+     * @param enaEDS character to extract fastq data for different ETLs with char 'E', 'D', 'S'
      */
-    public EnaFastqETL()
+    public EnaFastqETL(final char enaEDS)
     {
-        super(new EnaFastqExtractor(), new EnaFastqTransformer());
+        super(new EnaFastqExtractor(enaEDS), new EnaFastqTransformer());
     }
+
 }
