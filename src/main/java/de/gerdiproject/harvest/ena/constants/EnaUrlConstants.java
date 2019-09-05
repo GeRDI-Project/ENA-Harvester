@@ -51,8 +51,8 @@ public class EnaUrlConstants
 
     public static final String THUMBNAIL_URL = "https://www.ebi.ac.uk/ena/data/view/graphics/%s&showSequence=false&featureRange=1-%s";
 
-    public static final String VIEW_URL_FASTQ = "https://www.ebi.ac.uk/ena/data/view/ERR%06d&display=xml";
-    public static final String DOWNLOAD_URL_FASTQ = "https://www.ebi.ac.uk/ena/data/warehouse/filereport?accession=ERR%06d&result=read_run&fields=fastq_ftp";
+    public static final String VIEW_URL_FASTQ = "https://www.ebi.ac.uk/ena/data/view/%cRR%06d&display=xml";
+    public static final String DOWNLOAD_URL_FASTQ = "https://www.ebi.ac.uk/ena/data/warehouse/filereport?accession=%cRR%06d&result=read_run&fields=fastq_ftp";
 
     //NAMES
     public final static String VIEW_URL_NAME = "View website";

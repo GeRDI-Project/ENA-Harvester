@@ -38,6 +38,17 @@ import de.gerdiproject.harvest.etls.AbstractETL;
 public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
 {
     protected final HttpRequester httpRequester = new HttpRequester();
+    protected final char enaEDS;
+
+    /**
+     * Constructor.
+     * @param enaEDS character to extract fastq data for different ETLs with char 'E', 'D', 'S'
+     */
+    public EnaFastqExtractor(final char enaEDS)
+    {
+        super();
+        this.enaEDS = enaEDS;
+    }
 
     @Override
     public void init(final AbstractETL<?, ?> etl)
@@ -86,7 +97,7 @@ public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
         public EnaFastqVO next()
         {
             id++;
-            final String viewUrl = String.format(EnaUrlConstants.VIEW_URL_FASTQ, id);
+            final String viewUrl = String.format(EnaUrlConstants.VIEW_URL_FASTQ, enaEDS, id);
             final Document viewPage;
 
             try {
@@ -105,7 +116,7 @@ public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
             }
 
             // attempt to retrieve the file report
-            final String fileReportUrl = String.format(EnaUrlConstants.DOWNLOAD_URL_FASTQ, id);
+            final String fileReportUrl = String.format(EnaUrlConstants.DOWNLOAD_URL_FASTQ, enaEDS, id);
 
             try {
                 final String fileReport = httpRequester.getRestResponse(RestRequestType.GET, fileReportUrl, null);
