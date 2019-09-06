@@ -16,6 +16,7 @@
 package de.gerdiproject.harvest.etls.transformers;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,6 +33,7 @@ import de.gerdiproject.json.datacite.Date;
 import de.gerdiproject.json.datacite.Identifier;
 import de.gerdiproject.json.datacite.Title;
 import de.gerdiproject.json.datacite.enums.DateType;
+import de.gerdiproject.json.datacite.extension.generic.ResearchData;
 import de.gerdiproject.json.datacite.extension.generic.WebLink;
 import de.gerdiproject.json.datacite.extension.generic.enums.WebLinkType;
 
@@ -54,7 +56,8 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
         // add all possible metadata to the document
         document.setIdentifier(new Identifier(identifierString));
         document.addTitles(getTitles(viewPage));
-        document.addWebLinks(getWebLinkList(vo));
+        document.addWebLinks(getWebLinkList(identifierString));
+        document.addResearchData(getResearchData(vo));
         document.setPublisher(EnaConstants.PROVIDER);
         document.addSubjects(EnaConstants.SUBJECT_FASTQ);
 
@@ -90,19 +93,33 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
                    (Element ele) -> new Title(ele.text()));
     }
 
-    private List<WebLink> getWebLinkList(final EnaFastqVO vo)
+    private List<WebLink> getWebLinkList(final String identifierString)
     {
         final List<WebLink> webLinkList = new LinkedList<>();
+
+        webLinkList.add(new WebLink(
+                            String.format(EnaUrlConstants.VIEW_URL, identifierString),
+                            EnaUrlConstants.VIEW_URL_FASTQ_NAME,
+                            WebLinkType.ViewURL));
+
+        webLinkList.add(EnaUrlConstants.LOGO_LINK);
+
+        return webLinkList;
+    }
+
+    private Collection<ResearchData> getResearchData(final EnaFastqVO vo)
+    {
+        final List<ResearchData> files = new LinkedList<>();
 
         if (vo.getFileReport() != null) {
             final String[] fileReportElements = vo.getFileReport().split("\\s|;");
 
             // the index starts with 1, because the first element is a prefix
             for (int i = 1; i < fileReportElements.length; i++)
-                webLinkList.add(new WebLink("http://" + fileReportElements[i], EnaUrlConstants.VIEW_URL_FASTQ_NAME + i, WebLinkType.Related));
+                files.add(new ResearchData("http://" + fileReportElements[i], EnaUrlConstants.DOWNLOAD_URL_FASTQ_NAME + i));
         }
 
-        return webLinkList;
+        return files;
     }
 
     @Override
