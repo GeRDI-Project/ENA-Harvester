@@ -16,7 +16,6 @@
 package de.gerdiproject.harvest.etls.transformers;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -107,7 +106,7 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
         return webLinkList;
     }
 
-    private Collection<ResearchData> getResearchData(final EnaFastqVO vo)
+    private List<ResearchData> getResearchData(final EnaFastqVO vo)
     {
         final List<ResearchData> files = new LinkedList<>();
 
