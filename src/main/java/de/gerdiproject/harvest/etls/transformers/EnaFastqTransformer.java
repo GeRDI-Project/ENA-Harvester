@@ -55,7 +55,7 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
         document.setIdentifier(new Identifier(identifierString));
         document.addTitles(getTitles(viewPage));
         document.addWebLinks(getWebLinkList(vo));
-        document.setPublisher(EnaConstants.PROVIDER);
+        document.setPublisher(EnaConstants.PUBLISHER);
         document.addSubjects(EnaConstants.SUBJECT_FASTQ);
 
         final Date publicationDate = getPublicationDate(viewPage);

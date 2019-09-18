@@ -25,6 +25,7 @@ import de.gerdiproject.json.datacite.Subject;
 import de.gerdiproject.json.datacite.enums.ResourceTypeGeneral;
 import de.gerdiproject.json.datacite.extension.generic.AbstractResearch;
 import de.gerdiproject.json.datacite.extension.generic.constants.ResearchDisciplineConstants;
+import de.gerdiproject.json.datacite.nested.Publisher;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -37,7 +38,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EnaConstants
 {
-    public static final String PROVIDER = "European Nucleotide Archive (ENA)";
+    public static final Publisher PUBLISHER = new Publisher("European Nucleotide Archive (ENA)", "en");
     public static final String TITLE = "Sequence: %s.%s";
     public static final String SIZE_PREFIX = "Sequence length: ";
     public static final String SEQ_DATA = "Sequencing Data";
