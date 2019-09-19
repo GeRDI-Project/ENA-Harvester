@@ -24,3 +24,4 @@ project.xml
 # Harvester Utilities
 /debug/
 /bamboo-specs/
+/scripts/

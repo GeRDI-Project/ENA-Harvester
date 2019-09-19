@@ -58,8 +58,6 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
 
         document.addWebLinks(getWebLinkList(identifierString));
         document.addResearchData(getResearchData(vo));
-        document.setPublisher(EnaConstants.PROVIDER);
-        document.addWebLinks(getWebLinkList(vo));
         document.setPublisher(EnaConstants.PUBLISHER);
         document.addSubjects(EnaConstants.SUBJECT_FASTQ);
 
