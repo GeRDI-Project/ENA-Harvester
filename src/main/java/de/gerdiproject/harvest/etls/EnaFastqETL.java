@@ -15,6 +15,7 @@
  */
 package de.gerdiproject.harvest.etls;
 
+import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.etls.extractors.EnaFastqExtractor;
 import de.gerdiproject.harvest.etls.extractors.EnaFastqVO;
 import de.gerdiproject.harvest.etls.transformers.EnaFastqTransformer;
@@ -38,7 +39,10 @@ public class EnaFastqETL extends StaticIteratorETL<EnaFastqVO, DataCiteJson>
      */
     public EnaFastqETL(final char enaEDS)
     {
-        super(new EnaFastqExtractor(enaEDS), new EnaFastqTransformer());
+        super(String.format(EnaConstants.FASTQ_ETL_NAME, enaEDS),
+              new EnaFastqExtractor(enaEDS),
+              new EnaFastqTransformer());
     }
-
 }
+
+

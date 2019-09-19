@@ -95,6 +95,7 @@ public class EnaConstants
     public static final String ID = "IDENTIFIERS > PRIMARY_ID";
     public static final int FASTQ_DOCUMENT_COUNT = 999999;
     public static final List<Subject> SUBJECT_FASTQ = createSubject();
+    public static final String FASTQ_ETL_NAME = "Ena%CrrFastqETL";
 
     public static final ResourceType RESOURCE_TYPE = new ResourceType(SEQ_DATA, ResourceTypeGeneral.Dataset);
 
