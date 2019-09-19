@@ -72,7 +72,7 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
 
         final DataCiteJson document = new DataCiteJson(accession);
         document.setVersion(version);
-        document.setPublisher(EnaConstants.PROVIDER);
+        document.setPublisher(EnaConstants.PUBLISHER);
         document.addFormats(EnaConstants.FORMATS);
         document.setResourceType(EnaConstants.RESOURCE_TYPE);
         document.addResearchDisciplines(EnaConstants.DISCIPLINES);
@@ -239,7 +239,7 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
         final String comment = HtmlUtils.getString(ele, EnaConstants.REF_SUBMISSION_COMMENT);
 
         final Date submissionDate = new Date(dateString, DateType.Submitted);
-        submissionDate.setDateInformation(comment);
+        submissionDate.setInformation(comment);
 
         return submissionDate;
     }
