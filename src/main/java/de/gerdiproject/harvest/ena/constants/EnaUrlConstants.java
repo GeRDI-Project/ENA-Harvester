@@ -68,5 +68,6 @@ public class EnaUrlConstants
         "Logo",
         WebLinkType.ProviderLogoURL);
     public final static String LOGO_URL_NAME = "Logo";
-    public final static String VIEW_URL_FASTQ_NAME = "FASTQ File";
+    public final static String DOWNLOAD_URL_FASTQ_NAME = "FASTQ File";
+    public final static String VIEW_URL_FASTQ_NAME = "View FASTQ";
 }
