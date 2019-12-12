@@ -26,7 +26,7 @@ import de.gerdiproject.harvest.config.parameters.constants.ParameterMappingFunct
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.ena.constants.EnaParameterConstants;
 import de.gerdiproject.harvest.etls.extractors.EnaAccessionExtractor;
-import de.gerdiproject.harvest.etls.transformers.EnaTransformer;
+import de.gerdiproject.harvest.etls.transformers.EnaAccessionTransformer;
 import de.gerdiproject.json.datacite.DataCiteJson;
 
 /**
@@ -47,7 +47,7 @@ public class EnaAccessionETL extends StaticIteratorETL<Element, DataCiteJson>
      */
     public EnaAccessionETL()
     {
-        super(new EnaAccessionExtractor(), new EnaTransformer());
+        super(new EnaAccessionExtractor(), new EnaAccessionTransformer());
     }
 
 

@@ -28,6 +28,7 @@ import org.jsoup.nodes.Document;
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.ena.constants.EnaUrlConstants;
 import de.gerdiproject.harvest.etls.AbstractETL;
+import de.gerdiproject.harvest.etls.extractors.vos.EnaFastqVO;
 
 /**
  * This {@linkplain AbstractIteratorExtractor} implementation extracts all FASTQ

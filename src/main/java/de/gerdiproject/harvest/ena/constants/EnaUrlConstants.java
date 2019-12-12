@@ -30,13 +30,8 @@ public class EnaUrlConstants
 {
     // URLs
     //private static final String PROVIDER_URL = "https://www.ebi.ac.uk/ena";
-    public final static String RANGE_ACCESSION_URL = "https://www.ebi.ac.uk/ena/data/view/%s-%s&display=xml&header=true";
-    public final static String SINGLE_ACCESSION_URL = "https://www.ebi.ac.uk/ena/data/view/%s&display=xml&header=true";
-
-    public final static String TAXON_CSV_URL = "ftp://ftp.ebi.ac.uk/pub/databases/ena/taxonomy/sdwca/ENA_120913vsCoL_150813_xmapping_result.csv";
-    public static final String TAXON_VIEW_URL = "https://www.ebi.ac.uk/ena/data/view/Taxon:%s";
-    public final static String TAXON_URL = "https://www.ebi.ac.uk/ena/data/view/Taxon:%s&portal=sequence_update&display=xml&header=true&offset=%d&length=%3$d&limit=%3$d&display=xml";
-    public final static String TAXON_SIZE_URL = "https://www.ebi.ac.uk/ena/data/view/Taxon:%s&result=sequence_update&header=false&offset=%d&length=2&display=txt";
+    public static final String RANGE_ACCESSION_URL = "https://www.ebi.ac.uk/ena/data/view/%s-%s&display=xml&header=true";
+    public static final String SINGLE_ACCESSION_URL = "https://www.ebi.ac.uk/ena/data/view/%s&display=xml&header=true";
 
     public static final String VIEW_URL = "https://www.ebi.ac.uk/ena/data/view/%s";
     public static final String VIEW_URL_TEXT = "https://www.ebi.ac.uk/ena/data/view/%s&display=text";
@@ -55,19 +50,18 @@ public class EnaUrlConstants
     public static final String DOWNLOAD_URL_FASTQ = "https://www.ebi.ac.uk/ena/data/warehouse/filereport?accession=%cRR%06d&result=read_run&fields=fastq_ftp";
 
     //NAMES
-    public final static String VIEW_URL_NAME = "View website";
-    public final static String TAXON_URL_NAME = "View Taxon";
-    public final static String VIEW_URL_TXT_NAME = "View plain text";
-    public final static String VIEW_URL_XML_NAME = "View XML";
-    public final static String VIEW_URL_FASTA_NAME = "View FASTA";
-    public final static String VERSION_HISTORY_URL_NAME = "Version History";
-    public final static String PREVIEW_IMAGE_NAME = "Overview";
+    public static final String VIEW_URL_NAME = "View website";
+    public static final String VIEW_URL_TXT_NAME = "View plain text";
+    public static final String VIEW_URL_XML_NAME = "View XML";
+    public static final String VIEW_URL_FASTA_NAME = "View FASTA";
+    public static final String VERSION_HISTORY_URL_NAME = "Version History";
+    public static final String PREVIEW_IMAGE_NAME = "Overview";
 
     public static final WebLink LOGO_LINK = new WebLink(
         "https://www.ebi.ac.uk/web_guidelines/images/logos/ena/ENA-logo.png",
         "Logo",
         WebLinkType.ProviderLogoURL);
-    public final static String LOGO_URL_NAME = "Logo";
-    public final static String DOWNLOAD_URL_FASTQ_NAME = "FASTQ File";
-    public final static String VIEW_URL_FASTQ_NAME = "View FASTQ";
+    public static final String LOGO_URL_NAME = "Logo";
+    public static final String DOWNLOAD_URL_FASTQ_NAME = "FASTQ File";
+    public static final String VIEW_URL_FASTQ_NAME = "View FASTQ";
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.gerdiproject.harvest.etls.extractors;
+package de.gerdiproject.harvest.etls.extractors.vos;
 
 import org.jsoup.nodes.Document;
 import lombok.Value;

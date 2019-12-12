@@ -15,11 +15,15 @@
  */
 package de.gerdiproject.harvest.ena.constants;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.gson.reflect.TypeToken;
+
+import de.gerdiproject.harvest.etls.extractors.vos.EnaReferenceVO;
 import de.gerdiproject.json.datacite.ResourceType;
 import de.gerdiproject.json.datacite.Subject;
 import de.gerdiproject.json.datacite.enums.ResourceTypeGeneral;
@@ -77,7 +81,7 @@ public class EnaConstants
     public static final String TAX_ID = "taxId";
     public static final String TAX_COMMON_NAME = "commonName";
 
-    public final static String LETTER_PREFIX_REGEX = "^[a-zA-Z]+";
+    public static final String LETTER_PREFIX_REGEX = "^[a-zA-Z]+";
     public static final String NUMBER_REGEX = "[0-9]";
     public static final String ACCESSION_FORMAT_BASE = "%s%%0%dd";
     public static final String URL_ERROR = "Could not retrieve entries from: %s";
@@ -98,6 +102,8 @@ public class EnaConstants
     public static final String FASTQ_ETL_NAME = "Ena%CrrFastqETL";
 
     public static final ResourceType RESOURCE_TYPE = new ResourceType(SEQ_DATA, ResourceTypeGeneral.Dataset);
+
+    public static final Type REFERENCE_LIST_TYPE = new TypeToken<List<EnaReferenceVO>>() {} .getType();
 
     /**
      * Valid Accession Numbers<br>
@@ -135,12 +141,8 @@ public class EnaConstants
                                                                     "GCA_\\d{9}(?\\.\\d+)?"
                                                                 ));
 
-    public static final String INVALID_ENTRY_RESPONSE = "Entry:  display type is either not supported or entry is not found.";
-
-    public static final String INVALID_TAXON_ID_ERROR = "Invalid taxon id '%s'! It must contain only numbers!";
     public static final String INVALID_ACCESSION_ERROR = "Invalid accession number '%s'! Check valid values at "
                                                          + "https://www.ebi.ac.uk/ena/submit/accession-number-formats";
-    public static final String TAXON_SIZE_ERROR = "Could not estimate the max number of documents for harvesting the taxon: %s";
 
     /**
     * Create a list of research disciplines.

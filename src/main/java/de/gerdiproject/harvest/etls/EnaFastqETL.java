@@ -17,7 +17,7 @@ package de.gerdiproject.harvest.etls;
 
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.etls.extractors.EnaFastqExtractor;
-import de.gerdiproject.harvest.etls.extractors.EnaFastqVO;
+import de.gerdiproject.harvest.etls.extractors.vos.EnaFastqVO;
 import de.gerdiproject.harvest.etls.transformers.EnaFastqTransformer;
 import de.gerdiproject.json.datacite.DataCiteJson;
 

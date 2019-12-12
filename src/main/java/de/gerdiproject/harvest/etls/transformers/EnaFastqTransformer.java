@@ -25,7 +25,7 @@ import org.jsoup.nodes.Element;
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.ena.constants.EnaUrlConstants;
 import de.gerdiproject.harvest.etls.AbstractETL;
-import de.gerdiproject.harvest.etls.extractors.EnaFastqVO;
+import de.gerdiproject.harvest.etls.extractors.vos.EnaFastqVO;
 import de.gerdiproject.harvest.utils.HtmlUtils;
 import de.gerdiproject.json.datacite.DataCiteJson;
 import de.gerdiproject.json.datacite.Date;
