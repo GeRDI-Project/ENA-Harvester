@@ -49,7 +49,7 @@ import de.gerdiproject.json.datacite.extension.generic.WebLink;
 import de.gerdiproject.json.datacite.extension.generic.enums.WebLinkType;
 
 /**
- * Transforms entries from the ENA database to {@linkplain DataCiteJson} objects.
+ * Transforms accession entries from the ENA database to {@linkplain DataCiteJson} objects.
  *
  * @author Jan Frömberg, Robin Weiss
  */
