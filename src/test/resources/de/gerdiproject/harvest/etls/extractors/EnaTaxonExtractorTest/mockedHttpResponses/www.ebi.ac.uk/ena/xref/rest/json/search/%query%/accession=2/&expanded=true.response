@@ -1,0 +1,14 @@
+[
+	{
+		"Source": "Citation",
+		"Source Primary Accession": "Other Source Primary Accession 1",
+		"Source Secondary Accession": "Other Source Secondary Accession 1",
+		"Source URL": "http://www.mo.ck/cite",
+		"Target": "Other Target 1",
+		"Target Primary Accession": "Other Target Primary Accession 1",
+		"Target Secondary Accession": "Other Target Secondary Accession 1",
+		"Target URL": "https://www.mo.ck/taxon/1",
+		"reference": "Other Reference 1",
+		"DOI": ""
+	}
+]

@@ -105,41 +105,61 @@ public class EnaTaxonExtractor extends AbstractIteratorExtractor<EnaTaxonVO>
      */
     private class EnaTaxonIterator implements Iterator<EnaTaxonVO>
     {
-        private String currentTaxonId = EnaTaxonConstants.TAXON_ROOT_ID;
+        /**
+         * Constructor that adds the root element to the queue.
+         */
+        public EnaTaxonIterator()
+        {
+            try {
+                taxonIDs.add(EnaTaxonConstants.TAXON_ROOT_ID);
+            } catch (IOException e) {
+                throw new ExtractorException(e);
+            }
+        }
 
 
         @Override
         public boolean hasNext()
         {
-            return currentTaxonId != null;
+            try {
+                return !taxonIDs.isEmpty();
+            } catch (IOException e) {
+                throw new ExtractorException(e);
+            }
         }
 
 
         @Override
         public EnaTaxonVO next()
         {
-            final String xmlUrl = String.format(EnaTaxonConstants.XML_URL, currentTaxonId);
-            final Document taxonXml =  httpRequester.getHtmlFromUrl(xmlUrl);
+            // get cached taxon ID
+            final String currentTaxonId;
 
             try {
-                // enqueue all child taxa to be extracted later
-                final Element children = taxonXml.selectFirst(EnaTaxonConstants.CHILDREN_ELEMENT);
-
-                if (children != null) {
-                    for (final Element taxon : children.children())
-                        taxonIDs.add(taxon.attr(EnaTaxonConstants.TAXON_ID_ATTRIBUTE));
-                }
-
-                // retrieve next taxon from the queue
-                this.currentTaxonId = taxonIDs.get();
+                currentTaxonId = taxonIDs.get();
             } catch (IOException e) {
                 throw new ExtractorException(e);
             }
 
-            // get references
-            final String refUrl = String.format(EnaTaxonConstants.REFERENCE_URL, currentTaxonId);
-            final List<EnaReferenceVO> references = httpRequester.getObjectFromUrl(refUrl, EnaConstants.REFERENCE_LIST_TYPE);
+            final String xmlUrl = String.format(EnaTaxonConstants.XML_URL, currentTaxonId);
+            final Document taxonXml =  httpRequester.getHtmlFromUrl(xmlUrl);
 
+            // enqueue all child taxa to be extracted later
+            final Element children = taxonXml.selectFirst(EnaTaxonConstants.CHILDREN_ELEMENT);
+
+            if (children != null) {
+                try {
+                    for (final Element taxon : children.children())
+                        taxonIDs.add(taxon.attr(EnaTaxonConstants.TAXON_ID_ATTRIBUTE));
+
+                } catch (IOException e) {
+                    throw new ExtractorException(e);
+                }
+            }
+
+            // get references/publications URL
+            final String refUrl = String.format(EnaTaxonConstants.REFERENCE_URL, currentTaxonId); // NOPMD we must memorize the URL before getting the next ID
+            final List<EnaReferenceVO> references = httpRequester.getObjectFromUrl(refUrl, EnaConstants.REFERENCE_LIST_TYPE);
             return new EnaTaxonVO(taxonXml, references);
         }
     }

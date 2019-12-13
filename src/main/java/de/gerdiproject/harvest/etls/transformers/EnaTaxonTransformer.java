@@ -93,24 +93,28 @@ public class EnaTaxonTransformer extends AbstractIteratorTransformer<EnaTaxonVO,
                                               ? RelationType.IsCitedBy
                                               : RelationType.IsReferencedBy;
 
-            if (ref.getDoi() != null) { // NOPMD != null is intended
+            final String doi = ref.getDoi();
+            final String refTitle = ref.getReference();
+            final String sourceUrl = ref.getSourceUrl();
+
+            if (doi != null && !doi.isEmpty()) { // NOPMD != null is intended
                 relatedIdentifierList.add(
                     new RelatedIdentifier(
-                        ref.getDoi(),
+                        doi,
                         RelatedIdentifierType.DOI,
                         relationType));
 
-            } else if (ref.getReference() != null) { // NOPMD != null is intended
+            } else if (refTitle != null && !refTitle.isEmpty()) { // NOPMD != null is intended
                 relatedIdentifierList.add(
                     new RelatedIdentifier(
-                        ref.getReference(),
+                        refTitle,
                         RelatedIdentifierType.Handle,
                         relationType));
 
-            } else if (ref.getSourceUrl() != null) { // NOPMD != null is intended
+            } else if (sourceUrl != null && !sourceUrl.isEmpty()) { // NOPMD != null is intended
                 relatedIdentifierList.add(
                     new RelatedIdentifier(
-                        ref.getSourceUrl(),
+                        sourceUrl,
                         RelatedIdentifierType.URL,
                         relationType));
             }

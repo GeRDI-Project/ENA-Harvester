@@ -33,4 +33,48 @@ public class EnaTaxonVO
 {
     private Document xml;
     private List<EnaReferenceVO> references;
+
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+            return true;
+
+        if (obj == null)
+            return false;
+
+        if (getClass() != obj.getClass())
+            return false;
+
+        final EnaTaxonVO other = (EnaTaxonVO) obj;
+
+        if (references == null) {
+            if (other.references != null)
+                return false;
+        } else if (!references.equals(other.references))
+            return false;
+
+        if (xml == null) {
+            if (other.xml != null)
+                return false;
+        } else if (!xml.hasSameValue(other.xml))
+            return false;
+
+        return true;
+    }
+
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((references == null) ? 0 : references.hashCode());
+        result = prime * result + ((xml == null) ? 0 : xml.hashCode());
+        return result;
+    }
+
+
+
 }

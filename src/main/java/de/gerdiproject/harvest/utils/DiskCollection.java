@@ -51,7 +51,7 @@ public class DiskCollection
     /**
      * Deletes all files inside the cache folder.
      *
-     * @throws IOException thrown if the parent folders could not be created
+     * @throws IOException if the parent folders could not be created
      */
     public void clear() throws IOException
     {
@@ -75,7 +75,7 @@ public class DiskCollection
      *
      * @param value the value to be added
      *
-     * @throws IOException thrown if the value could not be added
+     * @throws IOException if the value could not be added
      */
     public void add(final String value) throws IOException
     {
@@ -89,7 +89,7 @@ public class DiskCollection
     /**
      * Removes and returns a {@linkplain String} value from the collection.
      *
-     * @throws IOException thrown if there were problems reading or deleting folders
+     * @throws IOException if there were problems reading or deleting folders
      *
      * @return any {@linkplain String} value or null, if no value exists.
      */
@@ -97,12 +97,25 @@ public class DiskCollection
     public String get() throws IOException
     {
         try {
-            final Path firstPath = Files.list(parentPath).findFirst().get();
+            final Path firstPath = Files.list(parentPath).findAny().get();
             Files.delete(firstPath);
             return firstPath.getFileName().toString();
         } catch (NoSuchElementException e) {
             // make the common case fast: retrieve an element from the queue, don't check for every element if it exists
             return null;
         }
+    }
+
+
+    /**
+     * Checks if the collection is empty.
+     *
+     * @throws IOException if there were problems reading files
+     *
+     * @return true if the collection is empty
+     */
+    public boolean isEmpty() throws IOException
+    {
+        return Files.list(parentPath).findAny().isPresent();
     }
 }
