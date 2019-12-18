@@ -17,7 +17,6 @@
 package de.gerdiproject.harvest.etls.extractors;
 
 import java.io.File;
-import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,10 +24,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.junit.Test;
 
-import com.google.gson.reflect.TypeToken;
-
 import de.gerdiproject.harvest.EnaContextListener;
 import de.gerdiproject.harvest.application.ContextListener;
+import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.ena.constants.EnaTaxonConstants;
 import de.gerdiproject.harvest.etls.AbstractIteratorETL;
 import de.gerdiproject.harvest.etls.EnaTaxonETL;
@@ -44,9 +42,6 @@ import de.gerdiproject.json.datacite.DataCiteJson;
  */
 public class EnaTaxonExtractorTest extends AbstractIteratorExtractorTest<EnaTaxonVO>
 {
-    private static final Type REF_LIST_TYPE = new TypeToken<List<EnaReferenceVO>>() {} .getType();
-
-
     @Override
     protected ContextListener getContextListener()
     {
@@ -79,7 +74,7 @@ public class EnaTaxonExtractorTest extends AbstractIteratorExtractorTest<EnaTaxo
         final File referencesResource =  HttpRequesterUtils.urlToFilePath(
                                              String.format(EnaTaxonConstants.REFERENCE_URL, taxId),
                                              getMockedHttpResponseFolder());
-        final List<EnaReferenceVO> references = diskIo.getObject(referencesResource.toString(), REF_LIST_TYPE);
+        final List<EnaReferenceVO> references = diskIo.getObject(referencesResource.toString(), EnaConstants.REFERENCE_LIST_TYPE);
 
         return new EnaTaxonVO(taxonXml, references);
     }

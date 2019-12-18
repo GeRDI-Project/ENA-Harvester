@@ -1,0 +1,106 @@
+{
+	"titles" : [
+		{
+			"value" : "Mocked Common Name 2",
+			"titleType" : "AlternativeTitle",
+			"lang" : "en"
+		},
+		{
+			"value" : "Taxon: 1"
+		},
+		{
+			"value" : "Mocked Common Name 1",
+			"titleType" : "AlternativeTitle",
+			"lang" : "en"
+		}
+	],
+	"publisher" : {
+		"value" : "European Nucleotide Archive (ENA)",
+		"lang" : "en"
+	},
+	"resourceType" : {
+		"value" : "Sequencing Data",
+		"resourceTypeGeneral" : "Dataset"
+	},
+	"subjects" : [
+		{
+			"value" : "Mocked Common Name 2"
+		},
+		{
+			"value" : "MockusNamus"
+		},
+		{
+			"value" : "1"
+		},
+		{
+			"value" : "UNC"
+		},
+		{
+			"value" : "Mocked Common Name 1"
+		}
+	],
+	"relatedIdentifiers" : [
+		{
+			"value" : "Mocked Reference 1",
+			"relatedIdentifierType" : "Handle",
+			"relationType" : "IsCitedBy"
+		},
+		{
+			"value" : "Mocked DOI",
+			"relatedIdentifierType" : "DOI",
+			"relationType" : "IsReferencedBy"
+		},
+		{
+			"value" : "http://www.mo.ck/worms",
+			"relatedIdentifierType" : "URL",
+			"relationType" : "IsReferencedBy"
+		}
+	],
+	"formats" : [
+		"XML"
+	],
+	"webLinks" : [
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/browser/view/Taxon:1",
+			"webLinkName" : "View website",
+			"webLinkType" : "ViewURL"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/browser/api/xml/Taxon:1",
+			"webLinkName" : "View XML",
+			"webLinkType" : "SourceURL"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/web_guidelines/images/logos/ena/ENA-logo.png",
+			"webLinkName" : "Logo",
+			"webLinkType" : "ProviderLogoURL"
+		}
+	],
+	"researchDataList" : [
+		{
+			"researchDataURL" : "https://www.ebi.ac.uk/ena/browser/api/xml/Taxon:1?download\u003dtrue",
+			"researchDataLabel" : "XML",
+			"researchDataIdentifier" : "-783360955"
+		}
+	],
+	"researchDisciplines" : [
+		{
+			"area" : "Basic Research in Biology and Medicine",
+			"category" : "Life Sciences",
+			"rnbr" : "201-04",
+			"discipline" : "Structural Biology"
+		},
+		{
+			"area" : "Basic Research in Biology and Medicine",
+			"category" : "Life Sciences",
+			"rnbr" : "201-03",
+			"discipline" : "Cell Biology"
+		},
+		{
+			"area" : "Basic Research in Biology and Medicine",
+			"category" : "Life Sciences",
+			"rnbr" : "201-07",
+			"discipline" : "Bioinformatics and Theoretical Biology"
+		}
+	]
+}
