@@ -20,7 +20,9 @@ import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -56,14 +58,14 @@ public class DiskCollection
     public void clear() throws IOException
     {
         if (Files.exists(parentPath)) {
-            Files.list(parentPath).forEach((final Path p) -> {
-                try
-                {
-                    Files.delete(p);
-                } catch (IOException ignored)
-                {
-                }
-            });
+            try
+                (Stream<Path> dirStream = Files.list(parentPath)) {
+                final Iterator<Path> dirIter = dirStream.iterator();
+
+                while (dirIter.hasNext())
+                    Files.delete(dirIter.next());
+
+            }
         }
 
         Files.createDirectories(parentPath);
@@ -96,14 +98,19 @@ public class DiskCollection
     @SuppressFBWarnings("NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
     public String get() throws IOException
     {
-        try {
-            final Path firstPath = Files.list(parentPath).findAny().get();
+        String nextValue = null;
+
+        try
+            (Stream<Path> dirStream = Files.list(parentPath)) {
+            final Path firstPath = dirStream.findAny().get();
             Files.delete(firstPath);
-            return firstPath.getFileName().toString();
-        } catch (NoSuchElementException e) {
+            nextValue = firstPath.getFileName().toString();
+
+        } catch (NoSuchElementException ignored) {
             // make the common case fast: retrieve an element from the queue, don't check for every element if it exists
-            return null;
         }
+
+        return nextValue;
     }
 
 
@@ -116,6 +123,13 @@ public class DiskCollection
      */
     public boolean isEmpty() throws IOException
     {
-        return Files.list(parentPath).findAny().isPresent();
+        boolean hasFiles = false;
+
+        try
+            (Stream<Path> dirStream = Files.list(parentPath)) {
+            hasFiles = dirStream.findAny().isPresent();
+        }
+
+        return !hasFiles;
     }
 }

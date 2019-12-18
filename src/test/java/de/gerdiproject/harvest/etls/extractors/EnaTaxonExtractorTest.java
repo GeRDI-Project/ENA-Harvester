@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.junit.Test;
 
 import com.google.gson.reflect.TypeToken;
@@ -73,13 +74,14 @@ public class EnaTaxonExtractorTest extends AbstractIteratorExtractorTest<EnaTaxo
                                      String.format(EnaTaxonConstants.XML_URL, taxId),
                                      getMockedHttpResponseFolder());
         final Document xml = diskIo.getHtml(xmlResource.toString());
+        final Element taxonXml = xml.selectFirst(EnaTaxonConstants.SET_ELEMENT).child(0);
 
         final File referencesResource =  HttpRequesterUtils.urlToFilePath(
                                              String.format(EnaTaxonConstants.REFERENCE_URL, taxId),
                                              getMockedHttpResponseFolder());
         final List<EnaReferenceVO> references = diskIo.getObject(referencesResource.toString(), REF_LIST_TYPE);
 
-        return new EnaTaxonVO(xml, references);
+        return new EnaTaxonVO(taxonXml, references);
     }
 
 
