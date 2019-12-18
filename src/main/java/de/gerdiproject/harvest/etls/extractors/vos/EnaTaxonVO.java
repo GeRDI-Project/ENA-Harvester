@@ -18,7 +18,7 @@ package de.gerdiproject.harvest.etls.extractors.vos;
 
 import java.util.List;
 
-import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import lombok.Value;
 
@@ -31,7 +31,7 @@ import lombok.Value;
 @Value
 public class EnaTaxonVO
 {
-    private Document xml;
+    private Element xml;
     private List<EnaReferenceVO> references;
 
 

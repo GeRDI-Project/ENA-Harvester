@@ -16,6 +16,10 @@
  */
 package de.gerdiproject.harvest.etls;
 
+import de.gerdiproject.harvest.config.Configuration;
+import de.gerdiproject.harvest.config.parameters.IntegerParameter;
+import de.gerdiproject.harvest.config.parameters.constants.ParameterMappingFunctions;
+import de.gerdiproject.harvest.ena.constants.EnaParameterConstants;
 import de.gerdiproject.harvest.etls.extractors.EnaTaxonExtractor;
 import de.gerdiproject.harvest.etls.extractors.vos.EnaTaxonVO;
 import de.gerdiproject.harvest.etls.transformers.EnaTaxonTransformer;
@@ -30,11 +34,37 @@ import de.gerdiproject.json.datacite.DataCiteJson;
  */
 public class EnaTaxonETL extends StaticIteratorETL<EnaTaxonVO, DataCiteJson>
 {
+    private IntegerParameter batchSize;
+
     /**
      * Constructor.
      */
     public EnaTaxonETL()
     {
         super(new EnaTaxonExtractor(), new EnaTaxonTransformer());
+    }
+
+    @Override
+    protected void registerParameters()
+    {
+        super.registerParameters();
+
+        this.batchSize = Configuration.registerParameter(new IntegerParameter(
+                                                             EnaParameterConstants.TAXON_BATCH_SIZE_KEY,
+                                                             getName(),
+                                                             EnaParameterConstants.TAXON_BATCH_SIZE_DEFAULT_VALUE,
+                                                             ParameterMappingFunctions.createMapperForETL(ParameterMappingFunctions::mapToUnsignedInteger, this)));
+    }
+
+
+    /**
+     * Returns the number of taxon responses that may be processed at the same time.
+     * Increasing the value will increase the harvesting speed, but could cause Out-of-Memory-Exceptions.
+     *
+     * @return the number of taxon responses that may be processed at the same time
+     */
+    public int getBatchSize()
+    {
+        return batchSize.getValue();
     }
 }

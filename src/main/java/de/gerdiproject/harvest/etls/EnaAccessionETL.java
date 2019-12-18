@@ -61,9 +61,9 @@ public class EnaAccessionETL extends StaticIteratorETL<Element, DataCiteJson>
 
         this.accFromParam = Configuration.registerParameter(
                                 new StringParameter(
-                                    EnaParameterConstants.PROPERTY_FROM_KEY,
+                                    EnaParameterConstants.FROM_KEY,
                                     getName(),
-                                    EnaParameterConstants.ENTRY_DEFAULT_FROM,
+                                    EnaParameterConstants.FROM_DEFAULT_VALUE,
                                     accessionNumberChecker));
     }
 

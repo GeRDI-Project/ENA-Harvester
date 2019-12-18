@@ -41,6 +41,7 @@ public class EnaTaxonConstants
 
     // Extraction
     public static final String QUEUE_FOLDER = "taxonQueue";
+    public static final String SET_ELEMENT = "TAXON_SET";
     public static final String CHILDREN_ELEMENT = "children";
     public static final String TAXON_ID_ATTRIBUTE = "taxId";
     public static final String TAXON_ROOT_ID = "1";

@@ -28,6 +28,7 @@ import de.gerdiproject.harvest.application.MainContextUtils;
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.ena.constants.EnaTaxonConstants;
 import de.gerdiproject.harvest.etls.AbstractETL;
+import de.gerdiproject.harvest.etls.EnaTaxonETL;
 import de.gerdiproject.harvest.etls.extractors.vos.EnaReferenceVO;
 import de.gerdiproject.harvest.etls.extractors.vos.EnaTaxonVO;
 import de.gerdiproject.harvest.utils.DiskCollection;
@@ -49,6 +50,8 @@ public class EnaTaxonExtractor extends AbstractIteratorExtractor<EnaTaxonVO>
             EnaTaxonConstants.QUEUE_FOLDER));
     protected final HttpRequester httpRequester = new HttpRequester();
 
+    protected int batchSize;
+
 
     @Override
     public void init(final AbstractETL<?, ?> etl)
@@ -61,6 +64,8 @@ public class EnaTaxonExtractor extends AbstractIteratorExtractor<EnaTaxonVO>
         } catch (IOException e) {
             throw new ExtractorException(e);
         }
+
+        this.batchSize = ((EnaTaxonETL)etl).getBatchSize();
     }
 
 
@@ -105,6 +110,9 @@ public class EnaTaxonExtractor extends AbstractIteratorExtractor<EnaTaxonVO>
      */
     private class EnaTaxonIterator implements Iterator<EnaTaxonVO>
     {
+        private Iterator<Element> cachedDocuments;
+
+
         /**
          * Constructor that adds the root element to the queue.
          */
@@ -122,7 +130,7 @@ public class EnaTaxonExtractor extends AbstractIteratorExtractor<EnaTaxonVO>
         public boolean hasNext()
         {
             try {
-                return !taxonIDs.isEmpty();
+                return !taxonIDs.isEmpty() || cachedDocuments.hasNext();
             } catch (IOException e) {
                 throw new ExtractorException(e);
             }
@@ -132,20 +140,14 @@ public class EnaTaxonExtractor extends AbstractIteratorExtractor<EnaTaxonVO>
         @Override
         public EnaTaxonVO next()
         {
-            // get cached taxon ID
-            final String currentTaxonId;
+            if (cachedDocuments == null || !cachedDocuments.hasNext())
+                this.cachedDocuments = getNextBatch();
 
-            try {
-                currentTaxonId = taxonIDs.get();
-            } catch (IOException e) {
-                throw new ExtractorException(e);
-            }
-
-            final String xmlUrl = String.format(EnaTaxonConstants.XML_URL, currentTaxonId);
-            final Document taxonXml =  httpRequester.getHtmlFromUrl(xmlUrl);
+            final Element taxonElement = cachedDocuments.next();
+            final int currentTaxonId = Integer.parseInt(taxonElement.attr(EnaTaxonConstants.TAXON_ID_ATTRIBUTE)); // NOPMD we must remember the current ID
 
             // enqueue all child taxa to be extracted later
-            final Element children = taxonXml.selectFirst(EnaTaxonConstants.CHILDREN_ELEMENT);
+            final Element children = taxonElement.selectFirst(EnaTaxonConstants.CHILDREN_ELEMENT);
 
             if (children != null) {
                 try {
@@ -158,9 +160,36 @@ public class EnaTaxonExtractor extends AbstractIteratorExtractor<EnaTaxonVO>
             }
 
             // get references/publications URL
-            final String refUrl = String.format(EnaTaxonConstants.REFERENCE_URL, currentTaxonId); // NOPMD we must memorize the URL before getting the next ID
+            final String refUrl = String.format(EnaTaxonConstants.REFERENCE_URL, currentTaxonId);
             final List<EnaReferenceVO> references = httpRequester.getObjectFromUrl(refUrl, EnaConstants.REFERENCE_LIST_TYPE);
-            return new EnaTaxonVO(taxonXml, references);
+
+            return new EnaTaxonVO(taxonElement, references);
         }
+
+
+        private Iterator<Element> getNextBatch()
+        {
+            final String xmlUrl;
+
+            // get cached taxon IDs
+            try {
+                final StringBuilder queryBuilder = new StringBuilder();
+                int i = 0;
+
+                while (i < batchSize && !taxonIDs.isEmpty()) {
+                    queryBuilder.append(taxonIDs.get()).append(',');
+                    i++;
+                }
+
+                queryBuilder.deleteCharAt(queryBuilder.length() - 1);
+                xmlUrl = String.format(EnaTaxonConstants.XML_URL, queryBuilder.toString());
+            } catch (IOException e) {
+                throw new ExtractorException(e);
+            }
+
+            final Document taxaXml =  httpRequester.getHtmlFromUrl(xmlUrl);
+            return taxaXml.selectFirst(EnaTaxonConstants.SET_ELEMENT).children().iterator();
+        }
+
     }
 }
