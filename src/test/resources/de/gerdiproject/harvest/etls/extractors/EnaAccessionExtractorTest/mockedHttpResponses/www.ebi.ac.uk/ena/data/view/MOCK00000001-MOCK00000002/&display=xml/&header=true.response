@@ -1,0 +1,47 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<html>
+	<head></head>
+	<body>
+		<root request="MOCK00000001-MOCK00000002&amp;display=xml&amp;header=true"> 
+			<entry accession="MOCK00000001" version="Mocked Version 1" entryversion="8" dataclass="ROFL" taxonomicdivision="LOL" moleculetype="LMAO" sequencelength="7331" topology="Mocked Topo 1" firstpublic="3000-03-03" firstpublicrelease="1" lastupdated="3000-04-04" lastupdatedrelease="2"> 
+				<description>Mocked Description 1</description>
+				<comment>Mocked Comment 2</comment>
+				<keyword>Mocked Keyword 2</keyword>
+				<reference type="article" number="1" location="1-1500"> 
+					<title>Mocked Ref Title 1</title>
+					<author>Mockberg Mock</author>
+					<author>Mockinghausen Mockina</author>
+					<consortium>Mocked Consortium 1</consortium> 
+					<journal>Mocked Journal 1</journal> 
+					<year>3333</year> 
+					<volume>42</volume> 
+					<issue>101</issue> 
+					<firstpage>9000</firstpage> 
+					<lastpage>9001</lastpage> 
+					<referencelocation>Mocked Ref Location 1</referencelocation> 
+					<xref db="DOI" id="12.3456/mock.987654321" /> 
+					<xref db="PUBMED" id="12121212" /> 
+				</reference> 
+				<reference type="submission" number="2" location="1-1500"> 
+					<consortium>Mocked Project 1</consortium> 
+					<submissiondate>4000-04-04</submissiondate> 
+					<comment>Mocked Ref Comment 1</comment> 
+					<referencelocation>Mocked Ref Location 2</referencelocation> 
+				</reference> 
+				<feature name="source" location="1..1500"> 
+					<taxon scientificname="Mocked Scientific Name 1" commonname="Mocked Common Name 1" taxid="1337"> 
+						<lineage>
+							<taxon scientificName="Amaze"/>
+							<taxon scientificName="Much"/>
+							<taxon scientificName="Tax"/>
+							<taxon scientificName="Such"/>
+							<taxon scientificName="Wow"/>
+						</lineage>
+					</taxon>
+				</feature>
+			</entry>
+		   <entry accession="MOCK00000002" version="Mocked Version 2" entryversion="8" dataclass="OMG" taxonomicdivision="WTF" moleculetype="BBQ" sequencelength="1337" topology="Mocked Topo 2" firstpublic="4000-04-04" firstpublicrelease="3" lastupdated="4000-05-05" lastupdatedrelease="4">
+		   </entry>
+		</root>
+	</body>
+</html>
