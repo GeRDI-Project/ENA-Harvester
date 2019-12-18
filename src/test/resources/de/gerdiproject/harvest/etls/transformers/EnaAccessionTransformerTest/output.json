@@ -1,0 +1,176 @@
+{
+	"titles" : [
+		{
+			"value" : "Sequence: MOCK00000001.Mocked Version 1"
+		}
+	],
+	"publisher" : {
+		"value" : "European Nucleotide Archive (ENA)",
+		"lang" : "en"
+	},
+	"publicationYear" : 3000,
+	"resourceType" : {
+		"value" : "Sequencing Data",
+		"resourceTypeGeneral" : "Dataset"
+	},
+	"subjects" : [
+		{
+			"value" : "Mocked Scientific Name 1"
+		},
+		{
+			"value" : "Mocked Keyword 2"
+		},
+		{
+			"value" : "Tax"
+		},
+		{
+			"value" : "Much"
+		},
+		{
+			"value" : "Such"
+		},
+		{
+			"value" : "Amaze"
+		},
+		{
+			"value" : "Wow"
+		},
+		{
+			"value" : "LOL"
+		},
+		{
+			"value" : "ROFL"
+		},
+		{
+			"value" : "Mocked Common Name 1"
+		},
+		{
+			"value" : "LMAO"
+		}
+	],
+	"dates" : [
+		{
+			"value" : "4000-04-04T00:00:00Z",
+			"dateType" : "Submitted",
+			"dateInformation" : "Mocked Ref Comment 1"
+		},
+		{
+			"value" : "3000-03-03T00:00:00Z",
+			"dateType" : "Available"
+		},
+		{
+			"value" : "3000-04-04T00:00:00Z",
+			"dateType" : "Updated"
+		}
+	],
+	"relatedIdentifiers" : [
+		{
+			"value" : "12121212",
+			"relatedIdentifierType" : "PMID",
+			"relationType" : "IsReferencedBy"
+		},
+		{
+			"value" : "12.3456/mock.987654321",
+			"relatedIdentifierType" : "DOI",
+			"relationType" : "IsReferencedBy"
+		}
+	],
+	"sizes" : [
+		"Sequence length: 7331"
+	],
+	"formats" : [
+		"XML",
+		"TEXT",
+		"FASTA"
+	],
+	"version" : "Mocked Version 1",
+	"descriptions" : [
+		{
+			"value" : "Mocked Description 1",
+			"descriptionType" : "Abstract"
+		},
+		{
+			"value" : "Mocked Comment 2",
+			"descriptionType" : "Other"
+		}
+	],
+	"webLinks" : [
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/browser/view/Taxon:1337",
+			"webLinkName" : "View Taxon",
+			"webLinkType" : "Related"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/data/view/MOCK00000001",
+			"webLinkName" : "View website",
+			"webLinkType" : "ViewURL"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/cgi-bin/sva/sva.pl?search\u003dGo\u0026amp;query\u003dMOCK00000001",
+			"webLinkName" : "Version History",
+			"webLinkType" : "Related"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/data/view/MOCK00000001\u0026display\u003dxml",
+			"webLinkName" : "View XML",
+			"webLinkType" : "ViewURL"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/web_guidelines/images/logos/ena/ENA-logo.png",
+			"webLinkName" : "Logo",
+			"webLinkType" : "ProviderLogoURL"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/data/view/MOCK00000001\u0026display\u003dfasta",
+			"webLinkName" : "View FASTA",
+			"webLinkType" : "ViewURL"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/data/view/graphics/MOCK00000001\u0026showSequence\u003dfalse\u0026featureRange\u003d1-7331",
+			"webLinkName" : "Overview",
+			"webLinkType" : "ThumbnailURL"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/data/view/MOCK00000001\u0026display\u003dtext",
+			"webLinkName" : "View plain text",
+			"webLinkType" : "ViewURL"
+		}
+	],
+	"researchDataList" : [
+		{
+			"researchDataURL" : "https://www.ebi.ac.uk/ena/data/view/MOCK00000001\u0026display\u003dtext\u0026download\u003dtxt\u0026filename\u003dMOCK00000001.txt",
+			"researchDataLabel" : "TEXT",
+			"researchDataIdentifier" : "-1626761876"
+		},
+		{
+			"researchDataURL" : "https://www.ebi.ac.uk/ena/data/view/MOCK00000001\u0026display\u003dxml\u0026download\u003dxml\u0026filename\u003dMOCK00000001.xml",
+			"researchDataLabel" : "XML",
+			"researchDataIdentifier" : "-325959814"
+		},
+		{
+			"researchDataURL" : "https://www.ebi.ac.uk/ena/data/view/MOCK00000001\u0026display\u003dfasta\u0026download\u003dfasta\u0026filename\u003dMOCK00000001.fasta",
+			"researchDataLabel" : "FASTA",
+			"researchDataIdentifier" : "-1778535576"
+		}
+	],
+	"researchDisciplines" : [
+		{
+			"area" : "Basic Research in Biology and Medicine",
+			"category" : "Life Sciences",
+			"rnbr" : "201-04",
+			"discipline" : "Structural Biology"
+		},
+		{
+			"area" : "Basic Research in Biology and Medicine",
+			"category" : "Life Sciences",
+			"rnbr" : "201-03",
+			"discipline" : "Cell Biology"
+		},
+		{
+			"area" : "Basic Research in Biology and Medicine",
+			"category" : "Life Sciences",
+			"rnbr" : "201-07",
+			"discipline" : "Bioinformatics and Theoretical Biology"
+		}
+	]
+}
