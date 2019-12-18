@@ -28,9 +28,9 @@ public class EnaParameterConstants
 {
     // KEYS
     public static final String FROM_KEY = "accFrom";
-    public static final String TAXON_BATCH_SIZE_KEY = "batchSize";
+    public static final String BATCH_SIZE_KEY = "batchSize";
 
     // DEFAULT VALUES
     public static final String FROM_DEFAULT_VALUE = "BC000001";
-    public static final int TAXON_BATCH_SIZE_DEFAULT_VALUE = 50;
+    public static final int BATCH_SIZE_DEFAULT_VALUE = 50;
 }

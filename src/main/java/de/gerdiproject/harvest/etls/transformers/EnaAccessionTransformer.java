@@ -177,17 +177,17 @@ public class EnaAccessionTransformer extends AbstractIteratorTransformer<Element
 
         // downloadLink: Text
         files.add(new ResearchData(
-                      String.format(EnaUrlConstants.DOWNLOAD_URL_TEXT, accession, accession),
+                      String.format(EnaUrlConstants.DOWNLOAD_URL_TEXT, accession),
                       EnaConstants.TXT));
 
         // downloadLink: Xml
         files.add(new ResearchData(
-                      String.format(EnaUrlConstants.DOWNLOAD_URL_XML, accession, accession),
+                      String.format(EnaUrlConstants.DOWNLOAD_URL_XML, accession),
                       EnaConstants.XML));
 
         // downloadLink: Fasta
         files.add(new ResearchData(
-                      String.format(EnaUrlConstants.DOWNLOAD_URL_FASTA, accession, accession),
+                      String.format(EnaUrlConstants.DOWNLOAD_URL_FASTA, accession),
                       EnaConstants.FASTA));
 
         return files;

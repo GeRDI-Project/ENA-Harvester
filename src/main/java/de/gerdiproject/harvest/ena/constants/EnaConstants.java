@@ -67,6 +67,7 @@ public class EnaConstants
 
     public static final String MOLECULETYPE = "moleculeType";
 
+    public static final String ENTRY = "entry";
     public static final String REFERENCE = "reference";
     public static final String REF_TYPE = "type";
     public static final String REF_ARTICLE = "article";

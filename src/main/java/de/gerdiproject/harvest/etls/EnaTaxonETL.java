@@ -50,9 +50,9 @@ public class EnaTaxonETL extends StaticIteratorETL<EnaTaxonVO, DataCiteJson>
         super.registerParameters();
 
         this.batchSize = Configuration.registerParameter(new IntegerParameter(
-                                                             EnaParameterConstants.TAXON_BATCH_SIZE_KEY,
+                                                             EnaParameterConstants.BATCH_SIZE_KEY,
                                                              getName(),
-                                                             EnaParameterConstants.TAXON_BATCH_SIZE_DEFAULT_VALUE,
+                                                             EnaParameterConstants.BATCH_SIZE_DEFAULT_VALUE,
                                                              ParameterMappingFunctions.createMapperForETL(ParameterMappingFunctions::mapToUnsignedInteger, this)));
     }
 

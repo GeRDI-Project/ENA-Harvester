@@ -38,9 +38,9 @@ public class EnaUrlConstants
     public static final String VIEW_URL_XML = "https://www.ebi.ac.uk/ena/data/view/%s&display=xml";
     public static final String VIEW_URL_FASTA = "https://www.ebi.ac.uk/ena/data/view/%s&display=fasta";
 
-    public static final String DOWNLOAD_URL_TEXT = VIEW_URL_TEXT + "&download=txt&filename=%s.txt";
-    public static final String DOWNLOAD_URL_XML = VIEW_URL_XML + "&download=xml&filename=%s.xml";
-    public static final String DOWNLOAD_URL_FASTA = VIEW_URL_FASTA + "&download=fasta&filename=%s.fasta";
+    public static final String DOWNLOAD_URL_TEXT = VIEW_URL_TEXT + "&download=txt&filename=%1$s.txt";
+    public static final String DOWNLOAD_URL_XML = VIEW_URL_XML + "&download=xml&filename=%1$s.xml";
+    public static final String DOWNLOAD_URL_FASTA = VIEW_URL_FASTA + "&download=fasta&filename=%1$s.fasta";
 
     public static final String VERSION_HISTORY_URL = "https://www.ebi.ac.uk/cgi-bin/sva/sva.pl?search=Go&amp;query=%s";
 
