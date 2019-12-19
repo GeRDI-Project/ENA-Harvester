@@ -15,20 +15,18 @@
  */
 package de.gerdiproject.harvest.etls.extractors;
 
-import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 
-import de.gerdiproject.harvest.utils.HtmlUtils;
-import de.gerdiproject.harvest.utils.data.HttpRequester;
-import de.gerdiproject.harvest.utils.data.enums.RestRequestType;
+import com.google.gson.Gson;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-import de.gerdiproject.harvest.ena.constants.EnaConstants;
-import de.gerdiproject.harvest.ena.constants.EnaUrlConstants;
+import de.gerdiproject.harvest.ena.constants.EnaFastqConstants;
 import de.gerdiproject.harvest.etls.AbstractETL;
 import de.gerdiproject.harvest.etls.extractors.vos.EnaFastqVO;
+import de.gerdiproject.harvest.utils.data.HttpRequester;
+import de.gerdiproject.json.GsonUtils;
 
 /**
  * This {@linkplain AbstractIteratorExtractor} implementation extracts all FASTQ
@@ -38,18 +36,21 @@ import de.gerdiproject.harvest.etls.extractors.vos.EnaFastqVO;
  */
 public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
 {
-    protected final HttpRequester httpRequester = new HttpRequester();
-    protected final char enaEDS;
+    protected final Gson gson = GsonUtils.createGerdiDocumentGsonBuilder().create();
+    protected final HttpRequester httpRequester = new HttpRequester(gson, StandardCharsets.UTF_8);
+    protected final String accessionPrefix;
+
 
     /**
      * Constructor.
-     * @param enaEDS character to extract fastq data for different ETLs with char 'E', 'D', 'S'
+     * @param accessionPrefix accession prefix for getting FASTQ data
      */
-    public EnaFastqExtractor(final char enaEDS)
+    public EnaFastqExtractor(final String accessionPrefix)
     {
         super();
-        this.enaEDS = enaEDS;
+        this.accessionPrefix = accessionPrefix.toUpperCase(Locale.ENGLISH);
     }
+
 
     @Override
     public void init(final AbstractETL<?, ?> etl)
@@ -58,6 +59,7 @@ public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
         this.httpRequester.setCharset(etl.getCharset());
     }
 
+
     @Override
     public String getUniqueVersionString()
     {
@@ -65,11 +67,13 @@ public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
         return null;
     }
 
+
     @Override
     public int size()
     {
-        return EnaConstants.FASTQ_DOCUMENT_COUNT;
+        return EnaFastqConstants.FASTQ_DOCUMENT_COUNT;
     }
+
 
     @Override
     protected Iterator<EnaFastqVO> extractAll() throws ExtractorException
@@ -77,61 +81,42 @@ public class EnaFastqExtractor extends AbstractIteratorExtractor<EnaFastqVO>
         return new EnaFastqIterator();
     }
 
+
+    @Override
+    public void clear()
+    {
+        // nothing to clean up
+    }
+
+
     /**
      * This class represents an {@linkplain Iterator} that iterates through
      * {@linkplain EnaFastqVO}s used for harvesting Ena Fastq datasets by
      * trying out all IDs in a range of 000000 to 999999.
      *
      * @author Komal Ahir
+     * @author Robin Weiss
      */
     private class EnaFastqIterator implements Iterator<EnaFastqVO>
     {
-        private int id = 0; // NOPMD field is intentionally initialized with 0
+        private int id = 1;
+
 
         @Override
         public boolean hasNext()
         {
-            return id < size();
+            return id <= size();
         }
+
 
         @Override
         public EnaFastqVO next()
         {
+            final String url = String.format(EnaFastqConstants.FASTQ_JSON_URL, accessionPrefix, id);
+            final List<EnaFastqVO> voList = httpRequester.getObjectFromUrl(url, EnaFastqConstants.JSON_TYPE);
             id++;
-            final String viewUrl = String.format(EnaUrlConstants.VIEW_URL_FASTQ, enaEDS, id);
-            final Document viewPage;
 
-            try {
-                // suppress expected warning messages by retrieving the string response first
-                final String viewResponse = httpRequester.getRestResponse(RestRequestType.GET, viewUrl, null);
-
-                // parse HTML from String
-                viewPage = Jsoup.parse(viewResponse);
-
-                // check if the document is valid
-                if (HtmlUtils.getString(viewPage, EnaConstants.ID) == null)
-                    return null;
-            } catch (IOException e) {
-                // skip this page
-                return null;
-            }
-
-            // attempt to retrieve the file report
-            final String fileReportUrl = String.format(EnaUrlConstants.DOWNLOAD_URL_FASTQ, enaEDS, id);
-
-            try {
-                final String fileReport = httpRequester.getRestResponse(RestRequestType.GET, fileReportUrl, null);
-                return new EnaFastqVO(viewPage, fileReport);
-
-            } catch (IOException e) {
-                return new EnaFastqVO(viewPage, null);
-            }
+            return voList == null || voList.isEmpty() ? null : voList.get(0);
         }
-    }
-
-    @Override
-    public void clear()
-    {
-        // nothing to clean up
     }
 }

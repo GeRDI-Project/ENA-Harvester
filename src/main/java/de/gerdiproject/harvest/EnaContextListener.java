@@ -15,12 +15,13 @@
  */
 package de.gerdiproject.harvest;
 
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.annotation.WebListener;
 
 import de.gerdiproject.harvest.application.ContextListener;
+import de.gerdiproject.harvest.ena.constants.EnaFastqConstants;
 import de.gerdiproject.harvest.etls.AbstractETL;
 import de.gerdiproject.harvest.etls.EnaAccessionETL;
 import de.gerdiproject.harvest.etls.EnaFastqETL;
@@ -38,11 +39,13 @@ public class EnaContextListener extends ContextListener
     @Override
     protected List<? extends AbstractETL<?, ?>> createETLs()
     {
-        return Arrays.asList(
-                   new EnaAccessionETL(),
-                   new EnaTaxonETL(),
-                   new EnaFastqETL('E'),
-                   new EnaFastqETL('D'),
-                   new EnaFastqETL('S'));
+        List<AbstractETL<?, ?>> etls = new LinkedList<>();
+        etls.add(new EnaAccessionETL());
+        etls.add(new EnaTaxonETL());
+
+        for (String accessionPrefix :  EnaFastqConstants.ACCESSION_PREFIXES)
+            etls.add(new EnaFastqETL(accessionPrefix));
+
+        return etls;
     }
 }

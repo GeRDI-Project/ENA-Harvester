@@ -18,14 +18,12 @@ package de.gerdiproject.harvest.ena.constants;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
 
 import de.gerdiproject.harvest.etls.extractors.vos.EnaReferenceVO;
 import de.gerdiproject.json.datacite.ResourceType;
-import de.gerdiproject.json.datacite.Subject;
 import de.gerdiproject.json.datacite.enums.ResourceTypeGeneral;
 import de.gerdiproject.json.datacite.extension.generic.AbstractResearch;
 import de.gerdiproject.json.datacite.extension.generic.constants.ResearchDisciplineConstants;
@@ -98,9 +96,6 @@ public class EnaConstants
     public static final String ENA_FIRST_PUBLIC = "RUN_ATTRIBUTE > TAG:contains(ENA-FIRST-PUBLIC) + VALUE";
     public static final String ALTERNATE_ID = "PRIMARY_ID";
     public static final String ID = "IDENTIFIERS > PRIMARY_ID";
-    public static final int FASTQ_DOCUMENT_COUNT = 999999;
-    public static final List<Subject> SUBJECT_FASTQ = createSubject();
-    public static final String FASTQ_ETL_NAME = "Ena%CrrFastqETL";
 
     public static final ResourceType RESOURCE_TYPE = new ResourceType(SEQ_DATA, ResourceTypeGeneral.Dataset);
 
@@ -157,17 +152,5 @@ public class EnaConstants
                                                 ResearchDisciplineConstants.BIOINFORMATICS_AND_THEORETICAL_BIOLOGY,
                                                 ResearchDisciplineConstants.CELL_BIOLOGY
                                             ));
-    }
-
-    /**
-     * Create a static subject called “FASTQ” for better findability.
-     *
-     * @return a FASTQ as subject.
-     */
-    private static List<Subject>  createSubject()
-    {
-        final List<Subject> subject = new LinkedList<>();
-        subject.add(new Subject(FASTQ));
-        return subject;
     }
 }

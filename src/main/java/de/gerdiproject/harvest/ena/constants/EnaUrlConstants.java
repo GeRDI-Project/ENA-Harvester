@@ -33,7 +33,7 @@ public class EnaUrlConstants
     public static final String RANGE_ACCESSION_URL = "https://www.ebi.ac.uk/ena/data/view/%s-%s&display=xml&header=true";
     public static final String SINGLE_ACCESSION_URL = "https://www.ebi.ac.uk/ena/data/view/%s&display=xml&header=true";
 
-    public static final String VIEW_URL = "https://www.ebi.ac.uk/ena/data/view/%s";
+    public static final String VIEW_URL = "https://www.ebi.ac.uk/ena/browser/view/%s";
     public static final String VIEW_URL_TEXT = "https://www.ebi.ac.uk/ena/data/view/%s&display=text";
     public static final String VIEW_URL_XML = "https://www.ebi.ac.uk/ena/data/view/%s&display=xml";
     public static final String VIEW_URL_FASTA = "https://www.ebi.ac.uk/ena/data/view/%s&display=fasta";
@@ -46,10 +46,6 @@ public class EnaUrlConstants
 
     public static final String THUMBNAIL_URL = "https://www.ebi.ac.uk/ena/data/view/graphics/%s&showSequence=false&featureRange=1-%s";
 
-    public static final String VIEW_URL_FASTQ = "https://www.ebi.ac.uk/ena/data/view/%cRR%06d&display=xml";
-    public static final String DOWNLOAD_URL_FASTQ = "https://www.ebi.ac.uk/ena/data/warehouse/filereport?accession=%cRR%06d&result=read_run&fields=fastq_ftp";
-
-    //NAMES
     public static final String VIEW_URL_NAME = "View website";
     public static final String VIEW_URL_TXT_NAME = "View plain text";
     public static final String VIEW_URL_XML_NAME = "View XML";
@@ -62,6 +58,4 @@ public class EnaUrlConstants
         "Logo",
         WebLinkType.ProviderLogoURL);
     public static final String LOGO_URL_NAME = "Logo";
-    public static final String DOWNLOAD_URL_FASTQ_NAME = "FASTQ File";
-    public static final String VIEW_URL_FASTQ_NAME = "View FASTQ";
 }
