@@ -15,15 +15,7 @@
  */
 package de.gerdiproject.harvest;
 
-import java.io.File;
-
 import de.gerdiproject.harvest.application.AbstractContextListenerTest;
-import de.gerdiproject.harvest.application.ContextListenerTestWrapper;
-import de.gerdiproject.harvest.application.MainContextUtils;
-import de.gerdiproject.harvest.etls.AbstractIteratorETL;
-import de.gerdiproject.harvest.etls.EnaAccessionETL;
-import de.gerdiproject.harvest.utils.data.constants.DataOperationConstants;
-import de.gerdiproject.harvest.utils.file.FileUtils;
 
 /**
  * This class provides Unit Tests for the {@linkplain EnaContextListener}.
@@ -32,30 +24,4 @@ import de.gerdiproject.harvest.utils.file.FileUtils;
  */
 public class EnaContextListenerTest extends AbstractContextListenerTest<EnaContextListener>
 {
-    @Override
-    protected EnaContextListener setUpTestObjects()
-    {
-        final EnaContextListener contextListener = super.setUpTestObjects();
-
-        // set up mocked HTTP responses
-        final File httpResourceFolder = getResource("mockedHttpResponses");
-
-        if (httpResourceFolder != null) {
-            final File httpCacheFolder = new File(
-                MainContextUtils.getCacheDirectory(getClass()),
-                DataOperationConstants.CACHE_FOLDER_PATH);
-
-            FileUtils.copyFile(httpResourceFolder, httpCacheFolder);
-        }
-
-        // set up config
-        final File configFileResource = getResource("config.json");
-        final ContextListenerTestWrapper<? extends AbstractIteratorETL<?, ?>> contextInitializer =
-            new ContextListenerTestWrapper<>(contextListener, () -> new EnaAccessionETL());
-
-        final File configFile = contextInitializer.getConfigFile();
-        FileUtils.copyFile(configFileResource, configFile);
-
-        return contextListener;
-    }
 }
