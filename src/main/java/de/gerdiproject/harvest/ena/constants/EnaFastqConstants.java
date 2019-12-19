@@ -16,6 +16,8 @@
 package de.gerdiproject.harvest.ena.constants;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
@@ -34,7 +36,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EnaFastqConstants
 {
-    public static final String[] ACCESSION_PREFIXES = {"ERR", "DRR", "SRR"};
+    public static final List<String> ACCESSION_PREFIXES = Collections.unmodifiableList(Arrays.asList("ERR", "DRR", "SRR"));
     public static final String ALL_FIELDS =
         "study_accession,secondary_study_accession,sample_accession,secondary_sample_accession,"
         + "experiment_accession,run_accession,submission_accession,tax_id,scientific_name,instrument_platform,"

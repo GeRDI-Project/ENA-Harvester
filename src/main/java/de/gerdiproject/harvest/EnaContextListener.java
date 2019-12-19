@@ -39,11 +39,11 @@ public class EnaContextListener extends ContextListener
     @Override
     protected List<? extends AbstractETL<?, ?>> createETLs()
     {
-        List<AbstractETL<?, ?>> etls = new LinkedList<>();
+        final List<AbstractETL<?, ?>> etls = new LinkedList<>();
         etls.add(new EnaAccessionETL());
         etls.add(new EnaTaxonETL());
 
-        for (String accessionPrefix :  EnaFastqConstants.ACCESSION_PREFIXES)
+        for (final String accessionPrefix :  EnaFastqConstants.ACCESSION_PREFIXES)
             etls.add(new EnaFastqETL(accessionPrefix));
 
         return etls;

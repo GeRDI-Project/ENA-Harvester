@@ -101,7 +101,7 @@
 			"webLinkType" : "Related"
 		},
 		{
-			"webLinkURI" : "https://www.ebi.ac.uk/ena/data/view/MOCK00000001",
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/browser/view/MOCK00000001",
 			"webLinkName" : "View website",
 			"webLinkType" : "ViewURL"
 		},

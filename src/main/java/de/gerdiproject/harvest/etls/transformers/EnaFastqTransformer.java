@@ -81,7 +81,7 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
     }
 
 
-    private List<Description> getDescriptions(EnaFastqVO vo)
+    private List<Description> getDescriptions(final EnaFastqVO vo)
     {
         final List<Description> descriptionList = new LinkedList<>();
 
@@ -107,7 +107,7 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
     }
 
 
-    private List<Subject> getSubjects(EnaFastqVO vo)
+    private List<Subject> getSubjects(final EnaFastqVO vo)
     {
         final List<Subject> subjectList = new LinkedList<>();
 
@@ -120,7 +120,7 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
             vo.getScientificName()
         };
 
-        for (String s : subjectStrings) {
+        for (final String s : subjectStrings) {
             if (s != null && !s.isEmpty())
                 subjectList.add(new Subject(s));
         }
@@ -131,7 +131,7 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
     }
 
 
-    private List<WebLink> getWebLinks(EnaFastqVO vo)
+    private List<WebLink> getWebLinks(final EnaFastqVO vo)
     {
         final List<WebLink> webLinkList = new LinkedList<>();
 
@@ -189,7 +189,7 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
     }
 
 
-    private WebLink parseRelatedWebLink(String accession, String title)
+    private WebLink parseRelatedWebLink(final String accession, final String title)
     {
         WebLink webLink = null;
 
