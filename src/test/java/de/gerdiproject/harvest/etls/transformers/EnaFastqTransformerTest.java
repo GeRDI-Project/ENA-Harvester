@@ -20,14 +20,11 @@ import de.gerdiproject.harvest.EnaContextListener;
 import de.gerdiproject.harvest.application.ContextListener;
 import de.gerdiproject.harvest.etls.AbstractIteratorETL;
 import de.gerdiproject.harvest.etls.EnaFastqETL;
-import de.gerdiproject.harvest.etls.extractors.EnaFastqExtractor;
 import de.gerdiproject.harvest.etls.extractors.vos.EnaFastqVO;
 import de.gerdiproject.json.datacite.DataCiteJson;
 
 /**
  * This class provides Unit Tests for the {@linkplain EnaFastqTransformer}.
- * The {@linkplain EnaFastqExtractor} cannot be tested, because the URL required
- * to retrieve FastQ objects is too long for common file formats.
  *
  * @author Robin Weiss
  */

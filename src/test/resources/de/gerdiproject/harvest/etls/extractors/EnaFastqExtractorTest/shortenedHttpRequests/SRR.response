@@ -1,0 +1,30 @@
+[
+	{
+		"fastq_ftp" : "MockedDownload1;MockedDownload2",
+		"submitted_ftp" : "MockedDownload3",
+		"submitted_format" : "FASTQ",
+		"sra_ftp" : "MockedDownload4;MockedDownload5",
+		"cram_index_ftp" : "MockedDownload6",
+		"sample_alias" : "MockedDescription1",
+		"sample_title" : "MockedDescription2",
+		"first_created" : "2000-02-02",
+		"first_public" : "3000-03-03",
+		"last_updated" : "4000-04-04",
+		"experiment_title" : "MockedTitle1",
+		"study_title" : "MockedTitle2",
+		"library_strategy" : "MockedSubject1",
+		"library_source" : "MockedSubject2",
+		"experiment_alias" : "MockedSubject3",
+		"run_alias" : "MockedSubject4",
+		"instrument_platform" : "MockedSubject5",
+		"scientific_name" : "MockedSubject6",
+		"study_accession" : "MOCK0001",
+		"secondary_study_accession" : "MOCK0002",
+		"sample_accession" : "MOCK0003",
+		"secondary_sample_accession" : "MOCK0004",
+		"experiment_accession" : "MOCK0005",
+		"submission_accession" : "MOCK0006",
+		"run_accession" : "MOCK1337",
+		"tax_id" : "123456"
+	}
+]
