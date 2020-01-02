@@ -19,19 +19,21 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
+import de.gerdiproject.harvest.ena.constants.EnaFastqConstants;
+import de.gerdiproject.harvest.ena.constants.EnaTaxonConstants;
 import de.gerdiproject.harvest.ena.constants.EnaUrlConstants;
 import de.gerdiproject.harvest.etls.AbstractETL;
-import de.gerdiproject.harvest.etls.extractors.EnaFastqVO;
-import de.gerdiproject.harvest.utils.HtmlUtils;
+import de.gerdiproject.harvest.etls.extractors.vos.EnaFastqVO;
 import de.gerdiproject.json.datacite.DataCiteJson;
 import de.gerdiproject.json.datacite.Date;
+import de.gerdiproject.json.datacite.Description;
 import de.gerdiproject.json.datacite.Identifier;
+import de.gerdiproject.json.datacite.Subject;
 import de.gerdiproject.json.datacite.Title;
 import de.gerdiproject.json.datacite.enums.DateType;
+import de.gerdiproject.json.datacite.enums.DescriptionType;
+import de.gerdiproject.json.datacite.enums.TitleType;
 import de.gerdiproject.json.datacite.extension.generic.ResearchData;
 import de.gerdiproject.json.datacite.extension.generic.WebLink;
 import de.gerdiproject.json.datacite.extension.generic.enums.WebLinkType;
@@ -44,25 +46,31 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
         // nothing to retrieve from the ETL
     }
 
+
     @Override
     protected DataCiteJson transformElement(final EnaFastqVO vo) throws TransformerException
     {
         // create the document
-        final Document viewPage = vo.getViewPage();
-        final String identifierString = HtmlUtils.getString(viewPage, EnaConstants.ID);
+        final String identifierString = vo.getRunAccession();
         final DataCiteJson document = new DataCiteJson(identifierString);
 
         // add all possible metadata to the document
         document.setIdentifier(new Identifier(identifierString));
-        document.addTitles(getTitles(viewPage));
-        document.addWebLinks(getWebLinkList(identifierString));
-        document.addResearchData(getResearchData(vo));
         document.setPublisher(EnaConstants.PUBLISHER);
-        document.addSubjects(EnaConstants.SUBJECT_FASTQ);
+        document.addTitles(getTitles(vo));
+        document.addWebLinks(getWebLinks(vo));
+        document.addDescriptions(getDescriptions(vo));
+        document.addSubjects(getSubjects(vo));
 
-        final Date publicationDate = getPublicationDate(viewPage);
-        final Date updateDate = getUpdateDate(viewPage);
-        document.addDates(Arrays.asList(publicationDate, updateDate));
+        document.addResearchData(getResearchData(vo.getFastqFtp()));
+        document.addResearchData(getResearchData(vo.getSubmittedFtp()));
+        document.addResearchData(getResearchData(vo.getSraFtp()));
+        document.addResearchData(getResearchData(vo.getCramIndexFtp()));
+
+        final Date creationDate = getDate(vo.getFirstCreated(), DateType.Created);
+        final Date publicationDate = getDate(vo.getFirstPublic(), DateType.Available);
+        final Date updateDate = getDate(vo.getLastUpdated(), DateType.Updated);
+        document.addDates(Arrays.asList(creationDate, publicationDate, updateDate));
 
         if (publicationDate != null) {
             final int publicationYear = publicationDate.getValueAsDateTime().getYear();
@@ -72,54 +80,169 @@ public class EnaFastqTransformer extends AbstractIteratorTransformer<EnaFastqVO,
         return document;
     }
 
-    private Date getPublicationDate(final Document viewPage)
+
+    private List<Description> getDescriptions(final EnaFastqVO vo)
     {
-        final String dateString = HtmlUtils.getString(viewPage, EnaConstants.ENA_FIRST_PUBLIC);
-        return dateString == null ? null : new Date(dateString, DateType.Available);
+        final List<Description> descriptionList = new LinkedList<>();
+
+        final String sampleTitle = vo.getSampleTitle();
+
+        if (sampleTitle != null && !sampleTitle.isEmpty()) {
+            descriptionList.add(new Description(
+                                    sampleTitle,
+                                    DescriptionType.Abstract,
+                                    EnaFastqConstants.LANGUAGE));
+        }
+
+        final String sampleAlias = vo.getSampleAlias();
+
+        if (sampleAlias != null && !sampleAlias.isEmpty()) {
+            descriptionList.add(new Description(
+                                    sampleAlias,
+                                    DescriptionType.Other,
+                                    EnaFastqConstants.LANGUAGE));
+        }
+
+        return descriptionList;
     }
 
-    private Date getUpdateDate(final Document viewPage)
+
+    private List<Subject> getSubjects(final EnaFastqVO vo)
     {
-        final String dateString = HtmlUtils.getString(viewPage, EnaConstants.ENA_LAST_UPDATE);
-        return dateString == null ? null : new Date(dateString, DateType.Updated);
+        final List<Subject> subjectList = new LinkedList<>();
+
+        final String[] subjectStrings = {
+            vo.getLibrarySource(),
+            vo.getLibraryStrategy(),
+            vo.getExperimentAlias(),
+            vo.getRunAlias(),
+            vo.getInstrumentPlatform(),
+            vo.getScientificName()
+        };
+
+        for (final String s : subjectStrings) {
+            if (s != null && !s.isEmpty())
+                subjectList.add(new Subject(s));
+        }
+
+        subjectList.add(EnaFastqConstants.SUBJECT_FASTQ);
+
+        return subjectList;
     }
 
-    private List<Title> getTitles(final Document viewPage)
-    {
-        return HtmlUtils.getObjects(
-                   viewPage,
-                   EnaConstants.TITLE_FASTQ_FILE,
-                   (Element ele) -> new Title(ele.text()));
-    }
 
-    private List<WebLink> getWebLinkList(final String identifierString)
+    private List<WebLink> getWebLinks(final EnaFastqVO vo)
     {
         final List<WebLink> webLinkList = new LinkedList<>();
 
-        webLinkList.add(new WebLink(
-                            String.format(EnaUrlConstants.VIEW_URL, identifierString),
-                            EnaUrlConstants.VIEW_URL_FASTQ_NAME,
-                            WebLinkType.ViewURL));
+        webLinkList.add(parseRelatedWebLink(
+                            vo.getStudyAccession(),
+                            EnaFastqConstants.VIEW_URL_STUDY_NAME));
+
+        webLinkList.add(parseRelatedWebLink(
+                            vo.getSecondaryStudyAccession(),
+                            EnaFastqConstants.VIEW_URL_SECOND_STUDY_NAME));
+
+        webLinkList.add(parseRelatedWebLink(
+                            vo.getSampleAccession(),
+                            EnaFastqConstants.VIEW_URL_SAMPLE_NAME));
+
+        webLinkList.add(parseRelatedWebLink(
+                            vo.getSecondarySampleAccession(),
+                            EnaFastqConstants.VIEW_URL_SECOND_SAMPLE_NAME));
+
+        webLinkList.add(parseRelatedWebLink(
+                            vo.getExperimentAccession(),
+                            EnaFastqConstants.VIEW_URL_EXPERIMENT_NAME));
+
+        webLinkList.add(parseRelatedWebLink(
+                            vo.getSubmissionAccession(),
+                            EnaFastqConstants.VIEW_URL_SUBMISSION_NAME));
 
         webLinkList.add(EnaUrlConstants.LOGO_LINK);
+
+        final String taxId = vo.getTaxId();
+
+        if (taxId != null && !taxId.isEmpty()) {
+            webLinkList.add(new WebLink(
+                                String.format(EnaTaxonConstants.VIEW_URL, taxId),
+                                EnaFastqConstants.VIEW_URL_TAXON_NAME,
+                                WebLinkType.Related));
+        }
+
+        final String runAccession = vo.getRunAccession();
+
+        if (runAccession != null && !runAccession.isEmpty()) {
+
+            webLinkList.add(new WebLink(
+                                String.format(EnaUrlConstants.VIEW_URL, runAccession),
+                                EnaFastqConstants.VIEW_URL_FASTQ_NAME,
+                                WebLinkType.ViewURL));
+
+            webLinkList.add(new WebLink(
+                                String.format(EnaFastqConstants.FASTQ_SOURCE_URL, runAccession),
+                                EnaFastqConstants.SOURCE_URL_NAME,
+                                WebLinkType.SourceURL));
+        }
 
         return webLinkList;
     }
 
-    private List<ResearchData> getResearchData(final EnaFastqVO vo)
+
+    private WebLink parseRelatedWebLink(final String accession, final String title)
+    {
+        WebLink webLink = null;
+
+        if (accession != null && !accession.isEmpty()) {
+            final String url = String.format(EnaUrlConstants.VIEW_URL, accession);
+            webLink = new WebLink(url, title, WebLinkType.Related);
+        }
+
+        return webLink;
+    }
+
+
+    private Date getDate(final String dateString, final DateType dateType)
+    {
+        return dateString == null || dateString.isEmpty()
+               ? null
+               : new Date(dateString, dateType);
+    }
+
+
+    private List<Title> getTitles(final EnaFastqVO vo)
+    {
+        final List<Title> titleList = new LinkedList<>();
+
+        final String mainTitle = vo.getExperimentTitle();
+        final String subTitle = vo.getStudyTitle();
+
+        if (mainTitle != null && !mainTitle.isEmpty())
+            titleList.add(new Title(mainTitle, null, EnaFastqConstants.LANGUAGE));
+
+        if (subTitle != null && !subTitle.isEmpty())
+            titleList.add(new Title(subTitle, TitleType.Subtitle, EnaFastqConstants.LANGUAGE));
+
+        return titleList;
+    }
+
+
+    private List<ResearchData> getResearchData(final String downloadString)
     {
         final List<ResearchData> files = new LinkedList<>();
 
-        if (vo.getFileReport() != null) {
-            final String[] fileReportElements = vo.getFileReport().split("\\s|;");
+        if (downloadString != null && !downloadString.isEmpty()) {
+            final String[] ftpUrls = downloadString.split(";");
 
-            // the index starts with 1, because the first element is a prefix
-            for (int i = 1; i < fileReportElements.length; i++)
-                files.add(new ResearchData("http://" + fileReportElements[i], EnaUrlConstants.DOWNLOAD_URL_FASTQ_NAME + i));
+            for (final String ftpUrl : ftpUrls) {
+                final String fileName = ftpUrl.substring(ftpUrl.lastIndexOf('/') + 1);
+                files.add(new ResearchData(EnaFastqConstants.FTP_URL_PREFIX + ftpUrl, fileName));
+            }
         }
 
         return files;
     }
+
 
     @Override
     public void clear()

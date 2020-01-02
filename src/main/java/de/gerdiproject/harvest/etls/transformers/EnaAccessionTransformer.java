@@ -27,6 +27,7 @@ import java.util.List;
 import org.jsoup.nodes.Element;
 
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
+import de.gerdiproject.harvest.ena.constants.EnaTaxonConstants;
 import de.gerdiproject.harvest.ena.constants.EnaUrlConstants;
 import de.gerdiproject.harvest.etls.AbstractETL;
 import de.gerdiproject.harvest.utils.HtmlUtils;
@@ -48,11 +49,11 @@ import de.gerdiproject.json.datacite.extension.generic.WebLink;
 import de.gerdiproject.json.datacite.extension.generic.enums.WebLinkType;
 
 /**
- * Transforms entries from the ENA database to {@linkplain DataCiteJson} objects.
+ * Transforms accession entries from the ENA database to {@linkplain DataCiteJson} objects.
  *
  * @author Jan Frömberg, Robin Weiss
  */
-public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCiteJson>
+public class EnaAccessionTransformer extends AbstractIteratorTransformer<Element, DataCiteJson>
 {
 
     @Override
@@ -176,17 +177,17 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
 
         // downloadLink: Text
         files.add(new ResearchData(
-                      String.format(EnaUrlConstants.DOWNLOAD_URL_TEXT, accession, accession),
+                      String.format(EnaUrlConstants.DOWNLOAD_URL_TEXT, accession),
                       EnaConstants.TXT));
 
         // downloadLink: Xml
         files.add(new ResearchData(
-                      String.format(EnaUrlConstants.DOWNLOAD_URL_XML, accession, accession),
+                      String.format(EnaUrlConstants.DOWNLOAD_URL_XML, accession),
                       EnaConstants.XML));
 
         // downloadLink: Fasta
         files.add(new ResearchData(
-                      String.format(EnaUrlConstants.DOWNLOAD_URL_FASTA, accession, accession),
+                      String.format(EnaUrlConstants.DOWNLOAD_URL_FASTA, accession),
                       EnaConstants.FASTA));
 
         return files;
@@ -298,14 +299,13 @@ public class EnaTransformer extends AbstractIteratorTransformer<Element, DataCit
 
     private WebLink parseTaxonLink(final Element ele)
     {
-        final String taxonName = HtmlUtils.getAttribute(ele, EnaConstants.TAX_SCIENTIFIC_NAME);
         final String taxonId = HtmlUtils.getAttribute(ele, EnaConstants.TAX_ID);
 
         return taxonId == null
                ? null
                : new WebLink(
-                   String.format(EnaUrlConstants.TAXON_VIEW_URL, taxonId),
-                   EnaUrlConstants.TAXON_URL_NAME + taxonName,
+                   String.format(EnaTaxonConstants.VIEW_URL, taxonId),
+                   EnaTaxonConstants.VIEW_URL_NAME,
                    WebLinkType.Related);
     }
 

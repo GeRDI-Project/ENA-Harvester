@@ -1,0 +1,15 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<html>
+ <head></head>
+ <body>
+	<TAXON_SET>
+		<taxon scientificName="MockusNamus" taxId="1" hidden="true" taxonomicDivision="UNC" geneticCode="1">
+			<children>
+				<taxon scientificName="mocked other" taxId="2"></taxon>
+			</children>
+			<synonym type="common name" name="Mocked Common Name 1"></synonym>
+			<synonym type="common name" name="Mocked Common Name 2"></synonym>
+		</taxon>
+	</TAXON_SET>
+ </body>
+</html>

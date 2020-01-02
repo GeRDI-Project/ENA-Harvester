@@ -1,0 +1,18 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<html>
+ <head></head>
+ <body>
+	<TAXON_SET>
+		<taxon scientificName="mocked other" taxId="2" parentTaxId="1" rank="genus" hidden="false" taxonomicDivision="ROD" geneticCode="1337" mitochondrialGeneticCode="2">
+			<lineage>
+				<taxon scientificName="MockusNamus" taxId="1" hidden="true">
+			</lineage>
+			<children>
+				<taxon scientificName="mocked another" taxId="1337"></taxon>
+			</children>
+			<synonym type="common name" name="Other Common Name 1"></synonym>
+			<synonym type="common name" name="Other Common Name 2"></synonym>
+		</taxon>
+	</TAXON_SET>
+ </body>
+</html>

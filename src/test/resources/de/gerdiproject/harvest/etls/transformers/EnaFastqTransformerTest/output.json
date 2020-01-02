@@ -1,0 +1,154 @@
+{
+	"identifier" : {
+		"value" : "MOCK1337"
+	},
+	"titles" : [
+		{
+			"value" : "MockedTitle2",
+			"titleType" : "Subtitle",
+			"lang" : "en"
+		},
+		{
+			"value" : "MockedTitle1",
+			"lang" : "en"
+		}
+	],
+	"publisher" : {
+		"value" : "European Nucleotide Archive (ENA)",
+		"lang" : "en"
+	},
+	"publicationYear" : 3000,
+	"subjects" : [
+		{
+			"value" : "MockedSubject1"
+		},
+		{
+			"value" : "MockedSubject5"
+		},
+		{
+			"value" : "MockedSubject3"
+		},
+		{
+			"value" : "FASTQ"
+		},
+		{
+			"value" : "MockedSubject2"
+		},
+		{
+			"value" : "MockedSubject4"
+		},
+		{
+			"value" : "MockedSubject6"
+		}
+	],
+	"dates" : [
+		{
+			"value" : "3000-03-03T00:00:00Z",
+			"dateType" : "Available"
+		},
+		{
+			"value" : "2000-02-02T00:00:00Z",
+			"dateType" : "Created"
+		},
+		{
+			"value" : "4000-04-04T00:00:00Z",
+			"dateType" : "Updated"
+		}
+	],
+	"descriptions" : [
+		{
+			"value" : "MockedDescription1",
+			"descriptionType" : "Other",
+			"lang" : "en"
+		},
+		{
+			"value" : "MockedDescription2",
+			"descriptionType" : "Abstract",
+			"lang" : "en"
+		}
+	],
+	"webLinks" : [
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/browser/view/MOCK0004",
+			"webLinkName" : "Secondary Sample",
+			"webLinkType" : "Related"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/browser/view/Taxon:123456",
+			"webLinkName" : "Taxon",
+			"webLinkType" : "Related"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/browser/view/MOCK0002",
+			"webLinkName" : "Secondary Study",
+			"webLinkType" : "Related"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/browser/view/MOCK0006",
+			"webLinkName" : "Submission",
+			"webLinkType" : "Related"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/web_guidelines/images/logos/ena/ENA-logo.png",
+			"webLinkName" : "Logo",
+			"webLinkType" : "ProviderLogoURL"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/browser/view/MOCK0001",
+			"webLinkName" : "Study",
+			"webLinkType" : "Related"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/browser/view/MOCK1337",
+			"webLinkName" : "View FASTQ",
+			"webLinkType" : "ViewURL"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/portal/api/filereport?result\u003dread_run\u0026accession\u003dMOCK1337\u0026offset\u003d0\u0026limit\u003d1\u0026format\u003djson\u0026fields\u003dstudy_accession,secondary_study_accession,sample_accession,secondary_sample_accession,experiment_accession,run_accession,submission_accession,tax_id,scientific_name,instrument_platform,instrument_model,library_name,nominal_length,library_layout,library_strategy,library_source,library_selection,read_count,base_count,center_name,first_public,last_updated,experiment_title,study_title,study_alias,experiment_alias,run_alias,fastq_bytes,fastq_md5,fastq_ftp,fastq_aspera,fastq_galaxy,submitted_bytes,submitted_md5,submitted_ftp,submitted_aspera,submitted_galaxy,submitted_format,sra_bytes,sra_md5,sra_ftp,sra_aspera,sra_galaxy,cram_index_ftp,cram_index_aspera,cram_index_galaxy,sample_alias,broker_name,sample_title,nominal_sdev,first_created",
+			"webLinkName" : "View JSON",
+			"webLinkType" : "SourceURL"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/browser/view/MOCK0003",
+			"webLinkName" : "Sample",
+			"webLinkType" : "Related"
+		},
+		{
+			"webLinkURI" : "https://www.ebi.ac.uk/ena/browser/view/MOCK0005",
+			"webLinkName" : "Experiment",
+			"webLinkType" : "Related"
+		}
+	],
+	"researchDataList" : [
+		{
+			"researchDataURL" : "http://MockedDownload2",
+			"researchDataLabel" : "MockedDownload2",
+			"researchDataIdentifier" : "1748488847"
+		},
+		{
+			"researchDataURL" : "http://MockedDownload4",
+			"researchDataLabel" : "MockedDownload4",
+			"researchDataIdentifier" : "1748488849"
+		},
+		{
+			"researchDataURL" : "http://MockedDownload6",
+			"researchDataLabel" : "MockedDownload6",
+			"researchDataIdentifier" : "1748488851"
+		},
+		{
+			"researchDataURL" : "http://MockedDownload3",
+			"researchDataLabel" : "MockedDownload3",
+			"researchDataIdentifier" : "1748488848"
+		},
+		{
+			"researchDataURL" : "http://MockedDownload1",
+			"researchDataLabel" : "MockedDownload1",
+			"researchDataIdentifier" : "1748488846"
+		},
+		{
+			"researchDataURL" : "http://MockedDownload5",
+			"researchDataLabel" : "MockedDownload5",
+			"researchDataIdentifier" : "1748488850"
+		}
+	]
+}

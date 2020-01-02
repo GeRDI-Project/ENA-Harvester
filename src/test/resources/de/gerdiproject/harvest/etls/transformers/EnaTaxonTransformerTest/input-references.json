@@ -1,0 +1,45 @@
+[
+	{
+		"Source": "Citation",
+		"Source Primary Accession": "Mocked Source Primary Accession 1",
+		"Source Secondary Accession": "Mocked Source Secondary Accession 1",
+		"Source URL": "http://www.mo.ck/cite",
+		"Target": "Mocked Target 1",
+		"Target Primary Accession": "Mocked Target Primary Accession 1",
+		"Target Secondary Accession": "Mocked Target Secondary Accession 1",
+		"Target URL": "https://www.mo.ck/taxon/1",
+		"reference": "Mocked Reference 1",
+		"DOI": ""
+	},
+	{
+		"Source": "WoRMS",
+		"Source Primary Accession": "Mocked Source Primary Accession 2",
+		"Source Secondary Accession": "Mocked Source Secondary Accession 2",
+		"Source URL": "http://www.mo.ck/worms",
+		"Target": "Mocked Target 2",
+		"Target Primary Accession": "Mocked Target Primary Accession 2",
+		"Target Secondary Accession": "Mocked Target Secondary Accession 2",
+		"Target URL": "https://www.mo.ck/taxon/1"
+	},
+	{
+		"Source": "Some DOI Source",
+		"Source Primary Accession": "Mocked Source Primary Accession 3",
+		"Source Secondary Accession": "Mocked Source Secondary Accession 3",
+		"Source URL": "http://www.mo.ck/worms",
+		"Target": "Mocked Target 3",
+		"Target Primary Accession": "Mocked Target Primary Accession 3",
+		"Target Secondary Accession": "Mocked Target Secondary Accession 3",
+		"Target URL": "https://www.mo.ck/taxon/1",
+		"reference": "Mocked Reference 3",
+		"DOI": "Mocked DOI"
+	},
+	{
+		"Source": "Ignored Source",
+		"Source Primary Accession": "Mocked Source Primary Accession 4",
+		"Source Secondary Accession": "Mocked Source Secondary Accession 4",
+		"Target": "Mocked Target 4",
+		"Target Primary Accession": "Mocked Target Primary Accession 4",
+		"Target Secondary Accession": "Mocked Target Secondary Accession 4",
+		"Target URL": "https://www.mo.ck/taxon/1"
+	}
+]

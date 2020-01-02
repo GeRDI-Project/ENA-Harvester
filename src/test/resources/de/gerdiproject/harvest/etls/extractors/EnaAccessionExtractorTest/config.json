@@ -1,0 +1,25 @@
+{
+	"HttpRequests" : {
+		"parameters" : [
+			{
+				"key" : "readFromDisk",
+				"value" : "true",
+				"type" : "BooleanParameter"
+			}
+		]
+	},
+	"EnaAccessionETL" : {
+		"parameters" : [
+			{
+				"key" : "batchSize",
+				"value" : "2",
+				"type" : "IntegerParameter"
+			},
+			{
+				"key" : "accFrom",
+				"value" : "MOCK00000001",
+				"type" : "StringParameter"
+			}
+		]
+	}
+}

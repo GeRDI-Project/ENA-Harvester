@@ -1,5 +1,5 @@
 /**
- * Copyright © 2019 Komal Ahir (http://www.gerdi-project.de)
+ * Copyright © 2019 Robin Weiss (http://www.gerdi-project.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.gerdiproject.harvest.etls.extractors;
+package de.gerdiproject.harvest;
 
-import org.jsoup.nodes.Document;
-import lombok.Value;
+import de.gerdiproject.harvest.application.AbstractContextListenerTest;
 
 /**
- * This class is a value object that contains all extracted (meta-) data from
- * ENA that is required to generate a document.
+ * This class provides Unit Tests for the {@linkplain EnaContextListener}.
  *
- * @author Komal Ahir
+ * @author Robin Weiss
  */
-@Value
-public class EnaFastqVO
+public class EnaContextListenerTest extends AbstractContextListenerTest<EnaContextListener>
 {
-    private Document viewPage;
-    private String fileReport;
 }

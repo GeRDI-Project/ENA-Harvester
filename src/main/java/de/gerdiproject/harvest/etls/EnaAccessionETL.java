@@ -21,12 +21,13 @@ import org.jsoup.nodes.Element;
 
 import de.gerdiproject.harvest.config.Configuration;
 import de.gerdiproject.harvest.config.events.ParameterChangedEvent;
+import de.gerdiproject.harvest.config.parameters.IntegerParameter;
 import de.gerdiproject.harvest.config.parameters.StringParameter;
 import de.gerdiproject.harvest.config.parameters.constants.ParameterMappingFunctions;
 import de.gerdiproject.harvest.ena.constants.EnaConstants;
 import de.gerdiproject.harvest.ena.constants.EnaParameterConstants;
 import de.gerdiproject.harvest.etls.extractors.EnaAccessionExtractor;
-import de.gerdiproject.harvest.etls.transformers.EnaTransformer;
+import de.gerdiproject.harvest.etls.transformers.EnaAccessionTransformer;
 import de.gerdiproject.json.datacite.DataCiteJson;
 
 /**
@@ -39,6 +40,7 @@ import de.gerdiproject.json.datacite.DataCiteJson;
  */
 public class EnaAccessionETL extends StaticIteratorETL<Element, DataCiteJson>
 {
+    private IntegerParameter batchSize;
     private StringParameter accFromParam;
 
 
@@ -47,7 +49,7 @@ public class EnaAccessionETL extends StaticIteratorETL<Element, DataCiteJson>
      */
     public EnaAccessionETL()
     {
-        super(new EnaAccessionExtractor(), new EnaTransformer());
+        super(new EnaAccessionExtractor(), new EnaAccessionTransformer());
     }
 
 
@@ -56,14 +58,21 @@ public class EnaAccessionETL extends StaticIteratorETL<Element, DataCiteJson>
     {
         super.registerParameters();
 
+        this.batchSize = Configuration.registerParameter(
+                             new IntegerParameter(
+                                 EnaParameterConstants.BATCH_SIZE_KEY,
+                                 getName(),
+                                 EnaParameterConstants.BATCH_SIZE_DEFAULT_VALUE,
+                                 ParameterMappingFunctions.createMapperForETL(ParameterMappingFunctions::mapToUnsignedInteger, this)));
+
         final Function<String, String> accessionNumberChecker =
             ParameterMappingFunctions.createMapperForETL(EnaAccessionETL::mapStringToAccessionNumber, this);
 
         this.accFromParam = Configuration.registerParameter(
                                 new StringParameter(
-                                    EnaParameterConstants.PROPERTY_FROM_KEY,
+                                    EnaParameterConstants.FROM_KEY,
                                     getName(),
-                                    EnaParameterConstants.ENTRY_DEFAULT_FROM,
+                                    EnaParameterConstants.FROM_DEFAULT_VALUE,
                                     accessionNumberChecker));
     }
 
@@ -94,6 +103,18 @@ public class EnaAccessionETL extends StaticIteratorETL<Element, DataCiteJson>
     public String getStartingAccessionNumber()
     {
         return accFromParam.getValue();
+    }
+
+
+    /**
+     * Returns the number of accession responses that may be processed at the same time.
+     * Increasing the value will increase the harvesting speed, but could cause Out-of-Memory-Exceptions.
+     *
+     * @return the number of accession responses that may be processed at the same time
+     */
+    public int getBatchSize()
+    {
+        return batchSize.getValue();
     }
 
 

@@ -15,9 +15,9 @@
  */
 package de.gerdiproject.harvest.etls;
 
-import de.gerdiproject.harvest.ena.constants.EnaConstants;
+import de.gerdiproject.harvest.ena.constants.EnaFastqConstants;
 import de.gerdiproject.harvest.etls.extractors.EnaFastqExtractor;
-import de.gerdiproject.harvest.etls.extractors.EnaFastqVO;
+import de.gerdiproject.harvest.etls.extractors.vos.EnaFastqVO;
 import de.gerdiproject.harvest.etls.transformers.EnaFastqTransformer;
 import de.gerdiproject.json.datacite.DataCiteJson;
 
@@ -35,12 +35,12 @@ public class EnaFastqETL extends StaticIteratorETL<EnaFastqVO, DataCiteJson>
 {
     /**
      * Constructor
-     * @param enaEDS character to extract fastq data for different ETLs with char 'E', 'D', 'S'
+     * @param accessionPrefix FASTQ accession prefix
      */
-    public EnaFastqETL(final char enaEDS)
+    public EnaFastqETL(final String accessionPrefix)
     {
-        super(String.format(EnaConstants.FASTQ_ETL_NAME, enaEDS),
-              new EnaFastqExtractor(enaEDS),
+        super(String.format(EnaFastqConstants.ETL_NAME, accessionPrefix.charAt(0), accessionPrefix.substring(1)),
+              new EnaFastqExtractor(accessionPrefix),
               new EnaFastqTransformer());
     }
 }

@@ -37,6 +37,7 @@ import de.gerdiproject.harvest.utils.data.HttpRequester;
  */
 public class EnaAccessionExtractor extends AbstractIteratorExtractor<Element>
 {
+    protected final HttpRequester httpRequester = new HttpRequester();
     protected EnaAccessionETL dedicatedEtl;
 
 
@@ -76,7 +77,7 @@ public class EnaAccessionExtractor extends AbstractIteratorExtractor<Element>
     @Override
     protected Iterator<Element> extractAll() throws ExtractorException
     {
-        return new EnaIterator(50);
+        return new EnaIterator(dedicatedEtl.getBatchSize());
     }
 
 
@@ -88,7 +89,6 @@ public class EnaAccessionExtractor extends AbstractIteratorExtractor<Element>
      */
     private class EnaIterator implements Iterator<Element>
     {
-        private final HttpRequester httpRequester;
         private final int batchSize;
         private final int maxNumber;
         private final String accessionNumberPattern;
@@ -112,9 +112,7 @@ public class EnaAccessionExtractor extends AbstractIteratorExtractor<Element>
                                               accessionPrefix,
                                               firstAccessionNumber.length() - accessionPrefix.length());
 
-            this.httpRequester = new HttpRequester();
             this.batchSize = batchSize;
-            retrieveNextBatch();
         }
 
 
@@ -128,13 +126,11 @@ public class EnaAccessionExtractor extends AbstractIteratorExtractor<Element>
         @Override
         public Element next()
         {
-            final Element nextElement =  currentBatch.next();
-
             // batches may be completely empty, thus this needs to be a while-loop
-            while (!currentBatch.hasNext() && currentNumber < maxNumber)
+            while (currentBatch == null || !currentBatch.hasNext() && currentNumber < maxNumber)
                 retrieveNextBatch();
 
-            return nextElement;
+            return currentBatch.next();
         }
 
 
@@ -155,7 +151,7 @@ public class EnaAccessionExtractor extends AbstractIteratorExtractor<Element>
                 throw new ExtractorException(String.format(EnaConstants.URL_ERROR, url));
 
             // retrieve all entries with fitting accession numbers
-            final Elements entries = doc.select("entry");
+            final Elements entries = doc.select(EnaConstants.ENTRY);
 
             // some accession numbers don't exist, so the entries may be less
             final int missingEntryCount = (1 + nextNumber - currentNumber) - entries.size();
